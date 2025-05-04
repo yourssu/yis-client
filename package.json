@@ -26,6 +26,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
+    "concurrently": "^9.1.2",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-perfectionist": "^4.12.3",
