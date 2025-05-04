@@ -20,13 +20,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Import Aliasis */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
 
-  /* Import Aliasis */
-  "baseUrl": ".",
-  "paths": {
-    "@/*": ["src/*"]
-  },
   "include": ["src"]
 }
