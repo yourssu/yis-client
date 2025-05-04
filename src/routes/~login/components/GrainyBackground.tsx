@@ -1,4 +1,4 @@
-import { vars } from '../../../styles/__generated__/color.gen'
+import { vars } from '@/styles/__generated__/color.gen'
 
 const grainyOptions = {
   filter: {
