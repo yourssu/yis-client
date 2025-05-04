@@ -1,7 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 const Index = () => {
-  return <div>app</div>
+  return (
+    <div>
+      <Link to="/login">로그인</Link>
+    </div>
+  )
 }
 
 export const Route = createFileRoute('/')({
