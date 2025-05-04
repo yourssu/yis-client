@@ -3,4 +3,4 @@ README.md
 
 # generated files
 # src/__generated__/**/*
-# src/**/*.gen.*
+src/**/*.gen.*
