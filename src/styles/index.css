@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './__generated__/color.gen.css';
 @import './typography.css';
+@import './transition.css';
 
 * {
   box-sizing: border-box;

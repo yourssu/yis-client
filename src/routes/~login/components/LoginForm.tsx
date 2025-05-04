@@ -3,9 +3,10 @@ import { tv } from 'tailwind-variants'
 
 const form = tv({
   slots: {
-    input: 'border-grey200 focus:border-brandPrimary rounded-lg border px-4 py-2',
+    input:
+      'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease rounded-lg border px-4 py-2 transition-colors duration-200',
     button:
-      'text-15 bg-brandPrimary hover:bg-brandHover focus:bg-brandHover disabled:bg-brandDisabled mt-4 cursor-pointer rounded-lg px-4 py-2 font-medium disabled:cursor-not-allowed disabled:text-[hsla(0,0%,100%,0.45)]',
+      'text-15 bg-brandPrimary hover:bg-brandHover focus:bg-brandHover disabled:bg-brandDisabled ease-ease mt-4 cursor-pointer rounded-lg px-4 py-2 font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:text-[hsla(0,0%,100%,0.45)]',
   },
 })
 
