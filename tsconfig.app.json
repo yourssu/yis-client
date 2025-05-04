@@ -22,5 +22,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
+
+  /* Import Aliasis */
+  "baseUrl": ".",
+  "paths": {
+    "@/*": ["src/*"]
+  },
   "include": ["src"]
 }
