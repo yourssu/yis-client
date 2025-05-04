@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+@theme {
+  --text-tiny: 11px;
+  --text-tiny--line-height: 1.45;
+
+  --text-13: 13px;
+  --text-13--line-height: 1.45;
+
+  --text-15: 15px;
+  --text-15--line-height: 1.45;
+}
