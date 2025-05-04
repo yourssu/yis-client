@@ -1,7 +1,6 @@
 const config = {
   '**/*.{js,jsx,ts,tsx}': (stagedFiles) => {
-    // const filteredPatterns = ['__generated__', '.gen.']
-    const filteredPatterns = []
+    const filteredPatterns = ['__generated__', '.gen.']
 
     const filteredStagedFiles = stagedFiles
       .filter((file) => {

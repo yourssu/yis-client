@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently 'vite' 'pnpm gen-color:watch'",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "prepare": "husky",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen-color": "pnpm tsx ./scripts/codegen/gen-color.mts",
+    "gen-color:watch": "pnpm tsx watch --clear-screen=false --include ./src/styles/color.variable.css ./scripts/codegen/gen-color.mts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.119.0",
