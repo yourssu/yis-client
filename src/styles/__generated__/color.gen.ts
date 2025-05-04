@@ -116,7 +116,8 @@ export const vars = {
   noiseBackgroundInverted: 'var(--noiseBackgroundInverted)',
   neutral: 'var(--neutral)',
   neutralMuted: 'var(--neutralMuted)',
-  neutralSubtle: 'var(--neutralSubtle)'
+  neutralSubtle: 'var(--neutralSubtle)',
+  brandPrimary: 'var(--brandPrimary)'
 };
 
 export type ColorVars = keyof typeof vars;

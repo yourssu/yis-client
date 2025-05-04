@@ -120,4 +120,5 @@
   --color-neutral: var(--neutral);
   --color-neutralMuted: var(--neutralMuted);
   --color-neutralSubtle: var(--neutralSubtle);
+  --color-brandPrimary: var(--brandPrimary);
 }

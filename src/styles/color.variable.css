@@ -128,4 +128,6 @@
   --neutral: var(--grey800);
   --neutralMuted: var(--grey700);
   --neutralSubtle: var(--grey600);
+
+  --brandPrimary: #5534fa;
 }
