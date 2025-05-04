@@ -130,4 +130,6 @@
   --neutralSubtle: var(--grey600);
 
   --brandPrimary: #5534fa;
+  --brandDisabled: rgba(85, 52, 250, 0.45);
+  --brandHover: #6b4ef8;
 }

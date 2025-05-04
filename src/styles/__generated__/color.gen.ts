@@ -117,7 +117,9 @@ export const vars = {
   neutral: 'var(--neutral)',
   neutralMuted: 'var(--neutralMuted)',
   neutralSubtle: 'var(--neutralSubtle)',
-  brandPrimary: 'var(--brandPrimary)'
+  brandPrimary: 'var(--brandPrimary)',
+  brandDisabled: 'var(--brandDisabled)',
+  brandHover: 'var(--brandHover)'
 };
 
 export type ColorVars = keyof typeof vars;
