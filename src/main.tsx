@@ -9,3 +9,7 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>
 )
+
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload()
+})
