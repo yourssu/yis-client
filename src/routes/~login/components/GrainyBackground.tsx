@@ -1,3 +1,5 @@
+import { vars } from '../../../styles/__generated__/color.gen'
+
 const grainyOptions = {
   filter: {
     contrast: 2,
@@ -29,7 +31,7 @@ export const GrainyBackground = () => {
       className="pointer-events-none fixed -top-[210vh] left-1/2 isolate -z-[1] aspect-square h-[300vh] -translate-x-1/2 mix-blend-screen"
       style={{
         filter: `contrast(${grainyOptions.filter.contrast}) brightness(${grainyOptions.filter.brightness}) invert(1)`,
-        background: `radial-gradient(closest-side, #5e6148, transparent), url("${noiseBackground}")`,
+        background: `radial-gradient(closest-side, ${vars.noiseBackgroundInverted}, transparent), url("${noiseBackground}")`,
       }}
     />
   )
