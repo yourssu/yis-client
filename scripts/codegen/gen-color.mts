@@ -1,11 +1,12 @@
 import { fs } from 'zx'
 
-import { __root, indent, log, sourceBasePath, writeFileEnsureDirectorySync } from './common.mts'
+import { indent, log, sourceBasePath, writeFileEnsureDirectorySync } from './common.mts'
 
 const stylesheetsBasePath = `${sourceBasePath}/styles`
 const variablesFileName = 'color.variable.css'
 const variablesFilePath = `${stylesheetsBasePath}/${variablesFileName}`
 const resultPath = `${stylesheetsBasePath}/__generated__/color.gen.css`
+const moudleResultPath = `${stylesheetsBasePath}/__generated__/color.gen.ts`
 
 function assertFileExist(path: string) {
   if (!fs.existsSync(variablesFilePath)) {
@@ -44,7 +45,7 @@ function convertToTailwindThemeColorTokens(variables: string[]) {
 }
 
 function getGeneratedResult(tokens: string[]) {
-  const comment = '/* scripts/codegen/gen-color.ts에 의해서 자동으로 채워져요. */'
+  const comment = '/* scripts/codegen/gen-color.ts에 의해서 자동으로 채워져요. */\n'
   const importTailwind = "@import 'tailwindcss';"
   const importVariables = `@import '../${variablesFileName}';`
   const themeBlock = `\n@theme {\n${tokens.join('\n')}\n}`
@@ -52,8 +53,21 @@ function getGeneratedResult(tokens: string[]) {
   return [comment, importVariables, importTailwind, themeBlock].join('\n')
 }
 
+function getGeneratedModuleResult(variables: string[]) {
+  const makeKeyVal = (variable: string) => {
+    const name = variable.replace('--', '')
+    return `${indent}${name}: 'var(${variable})'`
+  }
+
+  const comment = '/* scripts/codegen/gen-color.ts에 의해서 자동으로 채워져요. */'
+  const varsModule = `\nexport const vars = {\n${variables.map(makeKeyVal).join(',\n')}\n};`
+  const types = `\nexport type ColorVars = keyof typeof vars;`
+
+  return [comment, varsModule, types].join('\n')
+}
+
 function main() {
-  log.running('@theme 블록에 변수를 생성하고 있어요...\n', { pre: '\n' })
+  log.running('CSS 변수를 Tailwind 토큰과 모듈로 변환하고 있어요...\n', { pre: '\n' })
 
   assertFileExist(variablesFilePath)
 
@@ -63,8 +77,9 @@ function main() {
   const result = getGeneratedResult(tokens)
 
   writeFileEnsureDirectorySync(resultPath, result)
+  writeFileEnsureDirectorySync(moudleResultPath, getGeneratedModuleResult(variables))
 
-  log.success(`${resultPath.replace(__root, '')} 파일에 Tailwind CSS 테마 변수를 추가했어요.`, {
+  log.success(`Tailwind 색상 토큰과 색상 모듈을 추가했어요.`, {
     end: '\n',
   })
 }
