@@ -1,7 +1,5 @@
 :root {
-  --greyBackground: #101013;
-  --background: #17171c;
-
+  /* Primary Colors */
   --opacity50: rgba(209, 209, 253, 0.05);
   --opacity100: rgba(217, 217, 255, 0.11);
   --opacity200: rgba(222, 222, 255, 0.19);
@@ -121,4 +119,12 @@
   --purple700: #d77cf2;
   --purple800: #eaacfc;
   --purple900: #f6d9ff;
+
+  /* Semantic Colors */
+  --greyBackground: #101013;
+  --background: #17171c;
+
+  --neutral: var(var(--grey800));
+  --neutralMuted: var(--grey700);
+  --neutralSubtle: var(--grey600);
 }

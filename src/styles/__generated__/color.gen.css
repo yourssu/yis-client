@@ -3,8 +3,6 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-greyBackground: var(--greyBackground);
-  --color-background: var(--background);
   --color-opacity50: var(--opacity50);
   --color-opacity100: var(--opacity100);
   --color-opacity200: var(--opacity200);
@@ -115,4 +113,9 @@
   --color-purple700: var(--purple700);
   --color-purple800: var(--purple800);
   --color-purple900: var(--purple900);
+  --color-greyBackground: var(--greyBackground);
+  --color-background: var(--background);
+  --color-neutral: var(--neutral);
+  --color-neutralMuted: var(--neutralMuted);
+  --color-neutralSubtle: var(--neutralSubtle);
 }
