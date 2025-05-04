@@ -123,6 +123,7 @@
   /* Semantic Colors */
   --greyBackground: #101013;
   --background: #17171c;
+  --noiseBackgroundInverted: #5e6148;
 
   --neutral: var(var(--grey800));
   --neutralMuted: var(--grey700);

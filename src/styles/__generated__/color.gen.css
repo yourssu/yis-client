@@ -1,4 +1,5 @@
 /* scripts/codegen/gen-color.ts에 의해서 자동으로 채워져요. */
+
 @import '../color.variable.css';
 @import 'tailwindcss';
 
@@ -115,6 +116,7 @@
   --color-purple900: var(--purple900);
   --color-greyBackground: var(--greyBackground);
   --color-background: var(--background);
+  --color-noiseBackgroundInverted: var(--noiseBackgroundInverted);
   --color-neutral: var(--neutral);
   --color-neutralMuted: var(--neutralMuted);
   --color-neutralSubtle: var(--neutralSubtle);
