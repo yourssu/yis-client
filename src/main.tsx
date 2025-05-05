@@ -11,15 +11,18 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import { routeTree } from './routeTree.gen'
 
+const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined!,
+  },
+})
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
-
-const router = createRouter({
-  routeTree,
-})
 
 const App = () => {
   const auth = useAuth()

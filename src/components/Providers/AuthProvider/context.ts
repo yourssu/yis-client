@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-interface AuthContextProps {
+export interface AuthContextProps {
   isAuthenticated: () => void
 }
 
