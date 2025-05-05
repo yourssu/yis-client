@@ -5,6 +5,7 @@ import { z } from 'zod'
 
 import { signup } from '@/apis/auth'
 import { Select } from '@/components/Select'
+import { useNicknameToYourssuEmail } from '@/hooks/useNicknameToYourssuEmail'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { SignForm } from '@/routes/~_sign/components/SignForm'
 import { assertNonNullish } from '@/utils/assertion'
@@ -17,6 +18,7 @@ export const SignupForm = () => {
   const [repliedPassword, setRepliedPassword] = useInputState('')
   const [part, setPart] = useState<PartName | undefined>(undefined)
   const [invalid, setInvalid] = useState(false)
+  const fullEmail = useNicknameToYourssuEmail(email)
 
   const { mutateWithToast, isPending } = useToastedMutation({
     mutationFn: signup,
@@ -38,8 +40,6 @@ export const SignupForm = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const fullEmail = `${email}.urssu@gmail.com`
 
     const { error } = SignupFormSchema.safeParse({
       email: fullEmail,

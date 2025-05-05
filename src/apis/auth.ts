@@ -42,6 +42,10 @@ export const signup = async (props: SignupProps) => {
 }
 
 export const signin = async (props: SigninProps) => {
-  const res = await api.post<SigninResponse>('auth/login', { json: props }).json()
+  const formData = new FormData()
+  formData.append('username', props.email)
+  formData.append('password', props.password)
+
+  const res = await api.post<SigninResponse>('auth/login', { body: formData }).json()
   return camelizeSchema(SigninResponseSchema).parse(res)
 }

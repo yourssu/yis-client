@@ -1,4 +1,4 @@
-import { DefaultError, UseMutationResult } from '@tanstack/react-query'
+import { DefaultError, useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 export const useMutateWithResult = <
   TData = unknown,
@@ -6,8 +6,10 @@ export const useMutateWithResult = <
   TVariables = void,
   TContext = unknown,
 >(
-  mutation: UseMutationResult<TData, TError, TVariables, TContext>
+  props: UseMutationOptions<TData, TError, TVariables, TContext>
 ) => {
+  const mutation = useMutation(props)
+
   const mutateWithResult = async (payload: TVariables) => {
     try {
       await mutation.mutateAsync(payload)
