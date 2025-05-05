@@ -6,9 +6,6 @@ const queryClient = new QueryClient({
     queries: {
       throwOnError: true,
     },
-    mutations: {
-      throwOnError: true,
-    },
   },
 })
 

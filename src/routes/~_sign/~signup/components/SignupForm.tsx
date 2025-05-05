@@ -3,8 +3,12 @@ import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
+import { signup } from '@/apis/auth'
 import { Select } from '@/components/Select'
+import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { SignForm } from '@/routes/~_sign/components/SignForm'
+import { assertNonNullish } from '@/utils/assertion'
+import { useNavigate } from '@tanstack/react-router'
 
 export const SignupForm = () => {
   const [email, setEmail] = useInputState('')
@@ -13,6 +17,14 @@ export const SignupForm = () => {
   const [repliedPassword, setRepliedPassword] = useInputState('')
   const [part, setPart] = useState<PartName | undefined>(undefined)
   const [invalid, setInvalid] = useState(false)
+
+  const { mutateWithToast, isPending } = useToastedMutation({
+    mutationFn: signup,
+    successText: '회원가입에 성공했어요. 가입한 정보로 로그인해주세요.',
+    errorText: '회원가입에 실패했어요. 잠시후에 다시 시도해주세요.',
+  })
+
+  const navigate = useNavigate()
 
   const isFormValid =
     email.length > 0 && password.length > 0 && repliedPassword.length > 0 && part !== undefined
@@ -24,11 +36,13 @@ export const SignupForm = () => {
     }
   }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const fullEmail = `${email}.urssu@gmail.com`
+
     const { error } = SignupFormSchema.safeParse({
-      email,
+      email: fullEmail,
       password,
       repliedPassword,
       nickname,
@@ -38,6 +52,18 @@ export const SignupForm = () => {
     if (error) {
       setInvalid(true)
       return
+    }
+
+    assertNonNullish(part)
+
+    const res = await mutateWithToast({
+      email: fullEmail,
+      password,
+      nickname,
+      part,
+    })
+    if (res) {
+      navigate({ to: '/signin', replace: true })
     }
   }
 
@@ -87,7 +113,7 @@ export const SignupForm = () => {
           잘못 입력된 정보가 있어요. 다시 확인해주세요.
         </div>
       )}
-      <SignForm.Button disabled={!isFormValid} type="submit">
+      <SignForm.Button disabled={!isFormValid || isPending} type="submit">
         회원가입
       </SignForm.Button>
     </SignForm>
@@ -111,7 +137,7 @@ type PartName = (typeof partNames)[number]
 
 const SignupFormSchema = z
   .object({
-    email: z.string(),
+    email: z.string().email(),
     password: z.string().min(1),
     repliedPassword: z.string().min(1),
     nickname: z.string().min(1),
