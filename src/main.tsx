@@ -11,7 +11,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import { routeTree } from './routeTree.gen'
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     auth: undefined!,

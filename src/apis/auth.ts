@@ -1,7 +1,9 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
+import { router } from '@/main'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
+import { removeAuthTokens } from '@/utils/auth'
 import { camelizeSchema } from '@/utils/zod'
 
 interface SignupProps {
@@ -35,4 +37,9 @@ export const signin = async (props: SigninProps) => {
 
   const res = await api.post<SigninResponse>('auth/login', { body: formData }).json()
   return camelizeSchema(SigninResponseSchema).parse(res)
+}
+
+export const signout = () => {
+  removeAuthTokens()
+  router.navigate({ to: '/signin' })
 }
