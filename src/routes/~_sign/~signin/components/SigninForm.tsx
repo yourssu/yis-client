@@ -4,10 +4,11 @@ import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
 import { signin } from '@/apis/auth'
-import { useMutateWithResult } from '@/hooks/useMutateWithResult'
 import { useNicknameToYourssuEmail } from '@/hooks/useNicknameToYourssuEmail'
 import { useToast } from '@/hooks/useToast'
 import { SignForm } from '@/routes/~_sign/components/SignForm'
+import { setAuthTokens } from '@/utils/auth'
+import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
 export const SigninForm = () => {
@@ -16,7 +17,7 @@ export const SigninForm = () => {
   const [invalid, setInvalid] = useState(false)
   const email = useNicknameToYourssuEmail(nickname)
 
-  const { mutateWithResult, isPending } = useMutateWithResult({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: signin,
   })
   const toast = useToast()
@@ -45,15 +46,15 @@ export const SigninForm = () => {
       return
     }
 
-    const success = await mutateWithResult({
-      email,
-      password,
-    })
-
-    if (success) {
+    try {
+      const { accessToken } = await mutateAsync({
+        email,
+        password,
+      })
+      setAuthTokens({ accessToken })
       toast.success('로그인에 성공했어요.')
       navigate({ to: '/' })
-    } else {
+    } catch {
       setInvalid(true)
     }
   }
