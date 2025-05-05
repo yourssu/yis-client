@@ -1,6 +1,6 @@
 import { GNB } from '@/components/GNB'
 import { GrainyBackground } from '@/routes/~_sign/components/GrainyBackground'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 const SignLayout = () => {
   return (
@@ -16,4 +16,9 @@ const SignLayout = () => {
 
 export const Route = createFileRoute('/_sign')({
   component: SignLayout,
+  beforeLoad: ({ context }) => {
+    if (context.auth.isAuthenticated()) {
+      throw redirect({ to: '/' })
+    }
+  },
 })
