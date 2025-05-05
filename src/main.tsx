@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import '@/styles/index.css'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
+import { ToastProvider } from '@/components/Toast/ToastProvider'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
@@ -30,7 +31,9 @@ const App = () => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <TanstackQueryProvider>
-      <App />
+      <ToastProvider duration={3000}>
+        <App />
+      </ToastProvider>
     </TanstackQueryProvider>
   </StrictMode>
 )
