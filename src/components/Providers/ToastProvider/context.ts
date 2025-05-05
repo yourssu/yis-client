@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-export type ToastType = 'error' | 'success'
+export type ToastType = 'default' | 'error' | 'success'
 
 export type ToastItem = {
   id: string
