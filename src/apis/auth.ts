@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
+import { UserResponseSchema, UserResponseType } from '@/types/user'
 import { camelizeSchema } from '@/utils/zod'
 
 interface SignupProps {
@@ -15,20 +16,6 @@ interface SigninProps {
   password: string
 }
 
-const SignupResponseSchema = z.object({
-  email: z.string(),
-  nickname: z.string(),
-  part: z.string(),
-  id: z.number(),
-  role: z.enum(['USER', 'ADMIN']),
-  accesses: z.array(z.string()),
-  created_at: z.string(),
-  updated_at: z.string(),
-  deleted_at: z.string().nullable(),
-})
-
-type SignupResponse = z.infer<typeof SignupResponseSchema>
-
 const SigninResponseSchema = z.object({
   access_token: z.string(),
   token_type: z.string(),
@@ -37,8 +24,8 @@ const SigninResponseSchema = z.object({
 type SigninResponse = z.infer<typeof SigninResponseSchema>
 
 export const signup = async (props: SignupProps) => {
-  const res = await api.post<SignupResponse>('auth', { json: props }).json()
-  return camelizeSchema(SignupResponseSchema).parse(res)
+  const res = await api.post<UserResponseType>('auth', { json: props }).json()
+  return camelizeSchema(UserResponseSchema).parse(res)
 }
 
 export const signin = async (props: SigninProps) => {
