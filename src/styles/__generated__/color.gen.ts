@@ -120,7 +120,8 @@ export const vars = {
   neutralPlaceholder: 'var(--neutralPlaceholder)',
   brandPrimary: 'var(--brandPrimary)',
   brandDisabled: 'var(--brandDisabled)',
-  brandHover: 'var(--brandHover)'
+  brandHover: 'var(--brandHover)',
+  negative: 'var(--negative)'
 };
 
 export type ColorVars = keyof typeof vars;

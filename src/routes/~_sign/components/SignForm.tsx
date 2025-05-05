@@ -9,7 +9,7 @@ const Input = ({
     <input
       className={clsx(
         'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease rounded-lg border px-4 py-2 transition-colors duration-200',
-        invalid && '!border-red500',
+        invalid && '!border-negative',
         className
       )}
       {...props}

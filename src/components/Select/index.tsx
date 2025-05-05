@@ -26,7 +26,7 @@ export const Select = <TValue extends string>({
         <button
           className={clsx(
             'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease data-[placeholder]:text-neutralPlaceholder flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-4 transition-colors duration-200',
-            invalid && '!border-red500',
+            invalid && '!border-negative',
             className
           )}
         >

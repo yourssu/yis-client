@@ -83,7 +83,7 @@ export const SignupForm = () => {
         value={part}
       />
       {invalid && (
-        <div className={clsx('text-red500 w-full text-center text-sm')}>
+        <div className={clsx('text-negative w-full text-center text-sm')}>
           잘못 입력된 정보가 있어요. 다시 확인해주세요.
         </div>
       )}
