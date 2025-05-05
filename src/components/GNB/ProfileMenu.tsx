@@ -1,9 +1,11 @@
 import { TbLogout2 } from 'react-icons/tb'
 import { tv } from 'tailwind-variants'
 
+import { signout } from '@/apis/auth'
 import { Divider } from '@/components/Divider'
 import { Menu } from '@/components/Menu'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { useToast } from '@/hooks/useToast'
 
 const content = tv({
   slots: {
@@ -29,6 +31,7 @@ const content = tv({
 export const ProfileMenu = () => {
   const { avatar, nickname, email, buttonItem, buttonIcon, roleBadge } = content()
 
+  const toast = useToast()
   const role: 'ADMIN' | 'USER' = 'ADMIN'
 
   return (
@@ -54,7 +57,13 @@ export const ProfileMenu = () => {
 
           <Divider className="mt-2" />
 
-          <Menu.ButtonItem className={buttonItem()}>
+          <Menu.ButtonItem
+            className={buttonItem()}
+            onClick={() => {
+              signout()
+              toast.default('YIS에서 로그아웃 됐어요.')
+            }}
+          >
             <TbLogout2 className={buttonIcon()} />
             로그아웃
           </Menu.ButtonItem>
