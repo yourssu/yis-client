@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 
 import { Popover, PopoverProps } from '@/components/Popover'
+import { PopoverContentProps } from '@radix-ui/react-popover'
 
 const ButtonItem = ({
   children,
@@ -14,7 +15,6 @@ const ButtonItem = ({
           'hover:bg-grey200 active:hover:bg-grey300 focus:bg-grey300 ease-ease w-full cursor-pointer transition-colors duration-200',
           className
         )}
-        tabIndex={0}
         {...props}
       >
         {children}
@@ -23,10 +23,23 @@ const ButtonItem = ({
   )
 }
 
+const Content = ({ children, ...props }: PopoverContentProps) => {
+  return (
+    <Popover.Content
+      {...props}
+      onOpenAutoFocus={(e) => {
+        e.preventDefault()
+      }}
+    >
+      {children}
+    </Popover.Content>
+  )
+}
+
 export const Menu = ({ children, ...props }: React.PropsWithChildren<PopoverProps>) => {
   return <Popover {...props}>{children}</Popover>
 }
 
 Menu.Target = Popover.Target
-Menu.Content = Popover.Content
+Menu.Content = Content
 Menu.ButtonItem = ButtonItem
