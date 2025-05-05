@@ -44,7 +44,7 @@ const Content = ({
         onPointerLeave={onPointerLeave}
       >
         {sideOffset && <div style={{ height: sideOffset }} />}
-        <div className={clsx('rounded-3 z-10 border-1', className)}>{children}</div>
+        <div className={clsx('z-10', className)}>{children}</div>
       </PrimivtivePopover.Content>
     </PrimivtivePopover.Portal>
   )
