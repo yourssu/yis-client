@@ -24,6 +24,7 @@
     "camelcase-keys": "^9.1.3",
     "clsx": "^2.1.1",
     "ky": "^1.8.1",
+    "motion": "^12.9.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
