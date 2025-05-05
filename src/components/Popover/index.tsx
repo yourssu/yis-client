@@ -5,6 +5,7 @@ import { PopoverContext } from '@/components/Popover/context'
 import { usePopoverBehavior } from '@/components/Popover/hook'
 import { PopoverBehaviorType } from '@/components/Popover/type'
 import * as PrimivtivePopover from '@radix-ui/react-popover'
+import { Slot } from '@radix-ui/react-slot'
 
 export interface PopoverProps {
   behavior?: PopoverBehaviorType
@@ -69,9 +70,14 @@ const Trigger = ({ children, className }: React.PropsWithChildren<{ className?: 
   )
 }
 
-export const Closeable = ({ children }: React.PropsWithChildren<unknown>) => {
+export const Closeable = ({
+  children,
+  asChild,
+}: React.PropsWithChildren<{ asChild?: boolean }>) => {
+  const Comp = asChild ? Slot : 'div'
+
   const { setOpen } = useContext(PopoverContext)
-  return <div onClick={() => setOpen(false)}>{children}</div>
+  return <Comp onClick={() => setOpen(false)}>{children}</Comp>
 }
 
 export const Popover = ({
