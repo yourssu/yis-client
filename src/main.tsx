@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import '@/styles/index.css'
+import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
@@ -28,7 +29,9 @@ const App = () => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <TanstackQueryProvider>
+      <App />
+    </TanstackQueryProvider>
   </StrictMode>
 )
 
