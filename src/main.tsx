@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import '@/styles/index.css'
+import { AuthProvider } from '@/components/Providers/AuthProvider'
+import { useAuth } from '@/components/Providers/AuthProvider/hook'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
 import { ToastProvider } from '@/components/Toast/ToastProvider'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
@@ -20,9 +22,10 @@ const router = createRouter({
 })
 
 const App = () => {
+  const auth = useAuth()
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider context={{ auth }} router={router} />
       <TanStackRouterDevtools router={router} />
     </>
   )
@@ -31,9 +34,11 @@ const App = () => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <TanstackQueryProvider>
-      <ToastProvider duration={3000}>
-        <App />
-      </ToastProvider>
+      <AuthProvider>
+        <ToastProvider duration={3000}>
+          <App />
+        </ToastProvider>
+      </AuthProvider>
     </TanstackQueryProvider>
   </StrictMode>
 )
