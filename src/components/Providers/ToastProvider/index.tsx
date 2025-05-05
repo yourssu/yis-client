@@ -1,9 +1,7 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 
-import { ToastContext, ToastItem, ToastType } from '@/components/Toast/ToastProvider/context'
-import { ToastAnimationGroup } from '@/components/Toast/ToastProvider/ToastAnimationGroup'
+import { ToastContext, ToastItem, ToastType } from '@/components/Providers/ToastProvider/context'
+import { ToastAnimationGroup } from '@/components/Toast/ToastAnimationGroup'
 
 interface ToastProviderProps {
   duration: number

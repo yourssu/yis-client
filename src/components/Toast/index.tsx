@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants'
 
-import { ToastType } from '@/components/Toast/ToastProvider/context'
+import { ToastType } from '@/components/Providers/ToastProvider/context'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
 const lottie = tv({

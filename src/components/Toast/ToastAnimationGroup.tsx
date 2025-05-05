@@ -1,11 +1,8 @@
-'use client'
-
 import { AnimatePresence, motion } from 'motion/react'
-import { useContext } from 'react'
 import { createPortal } from 'react-dom'
 
+import { useToastContext } from '@/components/Providers/ToastProvider/hook'
 import { Toast } from '@/components/Toast'
-import { ToastContext } from '@/components/Toast/ToastProvider/context'
 
 const variants = {
   hidden: (index: number) => ({ opacity: 0, scale: 0.9, x: '-50%', y: index * 80 + 48 }),
@@ -13,7 +10,7 @@ const variants = {
 }
 
 export const ToastAnimationGroup = () => {
-  const { toasts } = useContext(ToastContext)
+  const { toasts } = useToastContext()
 
   return createPortal(
     <AnimatePresence>

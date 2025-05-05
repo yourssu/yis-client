@@ -5,7 +5,7 @@ import '@/styles/index.css'
 import { AuthProvider } from '@/components/Providers/AuthProvider'
 import { useAuth } from '@/components/Providers/AuthProvider/hook'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
-import { ToastProvider } from '@/components/Toast/ToastProvider'
+import { ToastProvider } from '@/components/Providers/ToastProvider'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
