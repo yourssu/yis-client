@@ -19,7 +19,7 @@ export const SigninForm = () => {
   return (
     <SignForm onSubmit={onSubmit}>
       <div className="flex items-center gap-2">
-        <SignForm.Input onChange={setNickname} placeholder="닉네임" value={nickname} />
+        <SignForm.Input onChange={setNickname} placeholder="이메일" value={nickname} />
         <div className="text-neutralMuted font-medium">.urssu@gmail.com</div>
       </div>
       <SignForm.Input
