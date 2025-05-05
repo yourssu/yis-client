@@ -34,3 +34,8 @@ body {
     'Segoe UI Symbol',
     sans-serif;
 }
+
+a {
+  color: var(--color-blue500);
+  text-decoration: underline;
+}
