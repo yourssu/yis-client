@@ -10,14 +10,7 @@ export const ProfileEditFormDialog = () => {
         <Dialog.Header onClickCloseButton={() => close(false)}>
           <Dialog.Title>프로필 수정</Dialog.Title>
         </Dialog.Header>
-        <Dialog.Content>
-          <ProfileEditForm />
-        </Dialog.Content>
-        <Dialog.ButtonGroup>
-          <Dialog.Button onClick={() => close(true)} variant="primary">
-            수정
-          </Dialog.Button>
-        </Dialog.ButtonGroup>
+        <ProfileEditForm onSuccess={() => close(true)} />
       </Dialog>
     ))
   }

@@ -36,3 +36,10 @@ export const camelizeSchema = <T extends z.ZodTypeAny>(
   zod: T
 ): z.ZodEffects<z.infer<T>, CamelCasedPropertiesDeep<T['_output']>> =>
   zod.transform((val) => camelcaseKeys(val, { deep: true }) as CamelCasedPropertiesDeep<T>)
+
+export const checkError = <TScheme extends object>(
+  error: undefined | z.ZodError<TScheme>,
+  field: keyof TScheme
+) => {
+  return !!error?.formErrors.fieldErrors[field]?.length
+}
