@@ -16,11 +16,13 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 const buttonStyles = tv({
-  base: '!text-15 ease-ease cursor-pointer rounded-lg px-9 py-2 font-medium text-white transition-colors duration-200',
+  base: '!text-15 ease-ease disabled:text-neutralDisabled cursor-pointer rounded-lg px-9 py-2 font-medium text-white transition-colors duration-200 disabled:cursor-not-allowed',
   variants: {
     variant: {
-      primary: 'bg-brandPrimary hover:bg-brandHover focus:bg-brandActive active:bg-brandActive',
-      secondary: 'bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400',
+      primary:
+        'bg-brandPrimary hover:bg-brandHover focus:bg-brandActive active:bg-brandActive disabled:bg-brandDisabled',
+      secondary:
+        'bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400 disabled:bg-greyOpacity500',
     },
   },
 })
