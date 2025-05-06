@@ -18,9 +18,9 @@ export const Toast = ({ children, type }: React.PropsWithChildren<{ type: ToastT
   const src = (() => {
     switch (type) {
       case 'error':
-        return '/error.lottie'
+        return '/lotties/error.lottie'
       case 'success':
-        return '/success.lottie'
+        return '/lotties/success.lottie'
       default:
         return undefined
     }
