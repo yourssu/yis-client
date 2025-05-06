@@ -88,13 +88,13 @@ export const Dialog = ({
           <DialogPrimitive.Portal forceMount>
             <DialogPrimitive.Overlay className="fixed inset-0" />
             <DialogPrimitive.Content
-              className="dialog-content fixed top-1/2 left-1/2 -translate-1/2"
+              className="fixed top-1/2 left-1/2 -translate-1/2"
               onInteractOutside={onCloseWithOutside}
               onPointerDownOutside={onCloseWithOutside}
             >
               <motion.div
                 animate="animate"
-                className="bg-grey100 shadow-dialog rounded-2xl"
+                className="bg-grey100 shadow-dialog rounded-2xl will-change-transform"
                 exit="initial"
                 initial="initial"
                 transition={{
