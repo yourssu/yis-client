@@ -8,6 +8,7 @@ import { Select } from '@/components/Select'
 import { useNicknameToYourssuEmail } from '@/hooks/useNicknameToYourssuEmail'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { SignForm } from '@/routes/~_sign/components/SignForm'
+import { PartName, partNames } from '@/types/part'
 import { assertNonNullish } from '@/utils/assertion'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -119,21 +120,6 @@ export const SignupForm = () => {
     </SignForm>
   )
 }
-
-const partNames = [
-  'HR',
-  'iOS',
-  'Android',
-  'Frontend',
-  'Backend',
-  'Design',
-  'Marketing',
-  'Finance',
-  'PM',
-  'Legal',
-] as const
-
-type PartName = (typeof partNames)[number]
 
 const SignupFormSchema = z
   .object({
