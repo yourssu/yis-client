@@ -133,5 +133,6 @@
   --color-brandPrimary: var(--brandPrimary);
   --color-brandDisabled: var(--brandDisabled);
   --color-brandHover: var(--brandHover);
+  --color-brandActive: var(--brandActive);
   --color-negative: var(--negative);
 }
