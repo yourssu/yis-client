@@ -6,7 +6,7 @@ const SignLayout = () => {
   return (
     <div className="flex h-screen flex-col">
       <GrainyBackground />
-      <GNB />
+      <GNB transparent />
       <div className="flex grow flex-col items-center justify-center gap-8">
         <Outlet />
       </div>
