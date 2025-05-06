@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys'
 import { type CamelCase } from 'type-fest'
-import { type z } from 'zod'
+import { type z, ZodError } from 'zod'
 
 type CamelCaseOptions = {
   preserveConsecutiveUppercase?: boolean
@@ -37,9 +37,16 @@ export const camelizeSchema = <T extends z.ZodTypeAny>(
 ): z.ZodEffects<z.infer<T>, CamelCasedPropertiesDeep<T['_output']>> =>
   zod.transform((val) => camelcaseKeys(val, { deep: true }) as CamelCasedPropertiesDeep<T>)
 
-export const checkError = <TScheme extends object>(
+export const checkParsedError = <TScheme extends object>(
   error: undefined | z.ZodError<TScheme>,
   field: keyof TScheme
 ) => {
   return !!error?.formErrors.fieldErrors[field]?.length
+}
+
+export const isZodError = (e: any): e is z.ZodError =>
+  e instanceof ZodError && e.name === 'ZodError'
+
+export const getZodErrorMessage = (error: z.ZodError) => {
+  return error.issues[0]?.message
 }
