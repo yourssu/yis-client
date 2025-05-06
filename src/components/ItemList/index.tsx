@@ -4,20 +4,23 @@ import { Divider } from '@/components/Divider'
 import { HoverTooltip } from '@/components/HoverTooltip'
 import { InlineButton } from '@/components/InlineButton'
 
-const Header = ({
-  children,
-  sideContent,
-}: React.PropsWithChildren<{ sideContent?: React.ReactNode }>) => {
+const Header = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between pb-3">
-        <div className="text-xl font-bold">{children}</div>
-        {sideContent && (
-          <InlineButton className="text-neutralSubtle !text-15">{sideContent}</InlineButton>
-        )}
-      </div>
+      <div className="flex items-center justify-between pb-3 text-xl font-bold">{children}</div>
       <Divider className="mb-2" />
     </div>
+  )
+}
+
+const HeaderButton = ({
+  children,
+  onClick,
+}: React.PropsWithChildren<{ onClick?: React.MouseEventHandler }>) => {
+  return (
+    <InlineButton className="text-neutralSubtle !text-15 font-normal" onClick={onClick}>
+      {children}
+    </InlineButton>
   )
 }
 
@@ -52,3 +55,4 @@ export const ItemList = ({ children }: React.PropsWithChildren<unknown>) => {
 ItemList.Header = Header
 ItemList.Body = Body
 ItemList.Item = Item
+ItemList.HeaderButton = HeaderButton

@@ -2,10 +2,23 @@ import { UserRoleBadge } from '@/components/Badges/UserRoleBadge'
 import { GNB } from '@/components/GNB'
 import { ItemList } from '@/components/ItemList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
-import { ProfileEditFormDialog } from '@/routes/~_auth/~profile/components/ProfileEditFormDialog'
+import { useAlertDialog } from '@/hooks/useAlertDialog'
+import { ProfileEditDialogForm } from '@/routes/~_auth/~profile/components/ProfileEditDialogForm'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 const Settings = () => {
+  const openEditAlertDialog = useAlertDialog()
+
+  const onClickEdit = () => {
+    openEditAlertDialog({
+      title: '프로필 수정',
+      closeButton: true,
+      content: ({ closeAsTrue }) => {
+        return <ProfileEditDialogForm onSuccess={closeAsTrue} />
+      },
+    })
+  }
+
   return (
     <div>
       <GNB />
@@ -19,7 +32,10 @@ const Settings = () => {
         </div>
 
         <ItemList>
-          <ItemList.Header sideContent={<ProfileEditFormDialog />}>내 정보</ItemList.Header>
+          <ItemList.Header>
+            내 정보
+            <ItemList.HeaderButton onClick={onClickEdit}>수정하기</ItemList.HeaderButton>
+          </ItemList.Header>
           <ItemList.Body>
             <ItemList.Item label="닉네임">Feca</ItemList.Item>
             <ItemList.Item label="소속 파트">Frontend</ItemList.Item>

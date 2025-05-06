@@ -11,11 +11,12 @@ import { TextInput } from '@/components/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { PartName, partNames } from '@/types/part'
 import { checkParsedError } from '@/utils/zod'
-interface ProfileEditFormProps {
+
+interface ProfileEditDialogFormProps {
   onSuccess: () => void
 }
 
-export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
+export const ProfileEditDialogForm = ({ onSuccess }: ProfileEditDialogFormProps) => {
   const defaultData = {
     nickname: 'Feca',
     email: 'feca.urssu@gmail.com',
@@ -38,7 +39,7 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
   })
 
   const isSameAsDefault = isEqual(defaultData, inputData)
-  const { error } = ProfileEditFormSchema.safeParse(inputData)
+  const { error } = ProfileEditDialogFormSchema.safeParse(inputData)
 
   const onSubmit = async () => {
     if (error) {
@@ -90,7 +91,7 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
   )
 }
 
-const ProfileEditFormSchema = z.object({
+const ProfileEditDialogFormSchema = z.object({
   nickname: z.string().min(1),
   email: z.string().email().endsWith('.urssu@gmail.com'),
   part: z.enum(partNames),
