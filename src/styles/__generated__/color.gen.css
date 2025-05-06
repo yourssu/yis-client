@@ -114,6 +114,15 @@
   --color-purple700: var(--purple700);
   --color-purple800: var(--purple800);
   --color-purple900: var(--purple900);
+  --color-violet50: var(--violet50);
+  --color-violet100: var(--violet100);
+  --color-violet200: var(--violet200);
+  --color-violet300: var(--violet300);
+  --color-violet400: var(--violet400);
+  --color-violet500: var(--violet500);
+  --color-violet600: var(--violet600);
+  --color-violet700: var(--violet700);
+  --color-violet800: var(--violet800);
   --color-greyBackground: var(--greyBackground);
   --color-background: var(--background);
   --color-noiseBackgroundInverted: var(--noiseBackgroundInverted);

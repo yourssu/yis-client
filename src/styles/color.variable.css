@@ -120,6 +120,16 @@
   --purple800: #eaacfc;
   --purple900: #f6d9ff;
 
+  --violet50: #211650;
+  --violet100: #342689;
+  --violet200: #3d25ae;
+  --violet300: #4b2ad8;
+  --violet400: #5534fa;
+  --violet500: #5736f5;
+  --violet600: #6b4ef8;
+  --violet700: #7875ff;
+  --violet800: #9ca3ff;
+
   /* Semantic Colors */
   --greyBackground: #101013;
   --background: #17171c;
@@ -130,9 +140,9 @@
   --neutralSubtle: var(--grey600);
   --neutralPlaceholder: var(--grey500);
 
-  --brandPrimary: #5534fa;
+  --brandPrimary: var(--violet400);
   --brandDisabled: rgba(85, 52, 250, 0.45);
-  --brandHover: #6b4ef8;
+  --brandHover: var(--violet600);
 
   --negative: var(--red500);
 }
