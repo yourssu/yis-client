@@ -53,6 +53,9 @@ importers:
       motion:
         specifier: ^12.9.4
         version: 12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      overlay-kit:
+        specifier: ^1.8.0
+        version: 1.8.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
         specifier: ^19.0.0
         version: 19.1.0
@@ -2536,6 +2539,12 @@ packages:
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
+
+  overlay-kit@1.8.0:
+    resolution: {integrity: sha512-+g486uVjC+RM5SwMFAf4b1TkW3LqCllmr4Y617CU+qwf1xvLsJXsKId8pE/BAmt4yZUyn8J1IRYVvjtnQGPDyw==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19
+      react-dom: ^16.8 || ^17 || ^18 || ^19
 
   own-keys@1.0.1:
     resolution: {integrity: sha512-qFOyK5PjiWZd+QQIh+1jhdb9LpxTF0qs7Pm8o5QHYZ0M3vKqSqzsZaEB6oWlxZ+q2sJBMI/Ktgd2N5ZwQoRHfg==}
@@ -5692,6 +5701,11 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.5
+
+  overlay-kit@1.8.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   own-keys@1.0.1:
     dependencies:
