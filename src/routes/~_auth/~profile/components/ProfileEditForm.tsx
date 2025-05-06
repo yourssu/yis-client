@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
+import { editUser } from '@/apis/user'
 import { Dialog } from '@/components/Dialog'
 import { Label } from '@/components/Label'
 import { Select } from '@/components/Select'
 import { TextInput } from '@/components/TextInput'
+import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { PartName, partNames } from '@/types/part'
 import { checkError } from '@/utils/zod'
 interface ProfileEditFormProps {
@@ -23,6 +25,13 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
   const [nickname, setNickname] = useInputState(defaultData.nickname)
   const [email, setEmail] = useInputState(defaultData.email)
   const [part, setPart] = useState<PartName>(defaultData.part)
+
+  const { mutateWithToast } = useToastedMutation({
+    mutationKey: ['profile', 'edit'],
+    mutationFn: editUser,
+    successText: '내 정보를 수정했어요.',
+    errorText: '내 정보 수정에 실패했어요.',
+  })
 
   const isSameAsDefault = isEqual(defaultData, {
     nickname,
@@ -41,6 +50,8 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
       return
     }
 
+    await mutateWithToast({ email, nickname, part, userId: 2 })
+    // Todo: 프로필 인밸리데이션
     onSuccess()
   }
 

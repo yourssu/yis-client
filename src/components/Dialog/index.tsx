@@ -100,7 +100,7 @@ export const Dialog = ({
                 exit="initial"
                 initial="initial"
                 transition={{
-                  duration: 0.3,
+                  duration: 0.25,
                   ease: [0.25, 0.1, 0.25, 1], // timing-function: ease
                 }}
                 variants={{
