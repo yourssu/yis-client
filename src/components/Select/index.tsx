@@ -10,6 +10,7 @@ interface SelectProps<TValue extends string> {
   onValueChange: (value: TValue) => void
   placeholder: string
   value: TValue | undefined
+  viewportClassName?: string
 }
 
 export const Select = <TValue extends string>({
@@ -17,6 +18,7 @@ export const Select = <TValue extends string>({
   onValueChange,
   value,
   className,
+  viewportClassName,
   invalid,
   placeholder,
 }: React.PropsWithChildren<SelectProps<TValue>>) => {
@@ -39,7 +41,9 @@ export const Select = <TValue extends string>({
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content position="popper" sideOffset={8}>
-          <SelectPrimitive.Viewport className="bg-grey100 w-fit rounded-lg py-2">
+          <SelectPrimitive.Viewport
+            className={clsx('bg-grey100 w-fit rounded-lg py-2', viewportClassName)}
+          >
             {items.map((item) => (
               <SelectPrimitive.Item
                 className={clsx(
