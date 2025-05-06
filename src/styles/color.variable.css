@@ -145,6 +145,7 @@
   --brandDisabled: rgba(85, 52, 250, 0.45);
   --brandHover: var(--violet600);
   --brandActive: var(--violet700);
+  --brandAdaptive: rgb(182, 169, 253);
 
   --negative: var(--red500);
 }
