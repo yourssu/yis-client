@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
-import { router } from '@/main'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
 import { removeAuthTokens } from '@/utils/auth'
 import { camelizeSchema } from '@/utils/zod'
@@ -41,5 +40,4 @@ export const signin = async (props: SigninProps) => {
 
 export const signout = () => {
   removeAuthTokens()
-  router.navigate({ to: '/signin' })
 }

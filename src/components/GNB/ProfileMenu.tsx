@@ -6,6 +6,7 @@ import { Divider } from '@/components/Divider'
 import { Menu } from '@/components/Menu'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { useToast } from '@/hooks/useToast'
+import { useNavigate } from '@tanstack/react-router'
 
 const content = tv({
   slots: {
@@ -32,6 +33,7 @@ export const ProfileMenu = () => {
   const { avatar, nickname, email, buttonItem, buttonIcon, roleBadge } = content()
 
   const toast = useToast()
+  const navigate = useNavigate()
   const role: 'ADMIN' | 'USER' = 'ADMIN'
 
   return (
@@ -61,6 +63,7 @@ export const ProfileMenu = () => {
             className={buttonItem()}
             onClick={() => {
               signout()
+              navigate({ to: '/signin' })
               toast.default('YIS에서 로그아웃 됐어요.')
             }}
           >
