@@ -10,7 +10,7 @@ import { Select } from '@/components/Select'
 import { TextInput } from '@/components/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { PartName, partNames } from '@/types/part'
-import { checkError } from '@/utils/zod'
+import { checkParsedError } from '@/utils/zod'
 interface ProfileEditFormProps {
   onSuccess: () => void
 }
@@ -25,32 +25,27 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
   const [nickname, setNickname] = useInputState(defaultData.nickname)
   const [email, setEmail] = useInputState(defaultData.email)
   const [part, setPart] = useState<PartName>(defaultData.part)
+  const inputData = {
+    nickname,
+    email,
+    part,
+  }
 
   const { mutateWithToast } = useToastedMutation({
     mutationKey: ['profile', 'edit'],
     mutationFn: editUser,
     successText: '내 정보를 수정했어요.',
-    errorText: '내 정보 수정에 실패했어요.',
   })
 
-  const isSameAsDefault = isEqual(defaultData, {
-    nickname,
-    email,
-    part,
-  })
-
-  const { error } = ProfileEditFormSchema.safeParse({
-    nickname,
-    email,
-    part,
-  })
+  const isSameAsDefault = isEqual(defaultData, inputData)
+  const { error } = ProfileEditFormSchema.safeParse(inputData)
 
   const onSubmit = async () => {
     if (error) {
       return
     }
 
-    await mutateWithToast({ email, nickname, part, userId: 2 })
+    await mutateWithToast(inputData)
     // Todo: 프로필 인밸리데이션
     onSuccess()
   }
@@ -60,14 +55,14 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
       <Dialog.Content>
         <div className="flex w-[500px] flex-col gap-3 pt-2.5 pb-4">
           <TextInput
-            invalid={checkError(error, 'nickname')}
+            invalid={checkParsedError(error, 'nickname')}
             label="닉네임"
             onChange={setNickname}
             placeholder="닉네임"
             value={nickname}
           />
           <TextInput
-            invalid={checkError(error, 'email')}
+            invalid={checkParsedError(error, 'email')}
             label="이메일"
             onChange={setEmail}
             placeholder="이메일"
@@ -76,7 +71,7 @@ export const ProfileEditForm = ({ onSuccess }: ProfileEditFormProps) => {
           <Label content="소속 파트">
             <Select
               className="w-full"
-              invalid={checkError(error, 'part')}
+              invalid={checkParsedError(error, 'part')}
               items={partNames}
               onValueChange={setPart}
               placeholder="소속 파트"

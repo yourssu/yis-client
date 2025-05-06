@@ -1,4 +1,5 @@
 import { useToast } from '@/hooks/useToast'
+import { handleError } from '@/utils/error'
 import { DefaultError, useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 export const useToastedMutation = <
@@ -9,7 +10,7 @@ export const useToastedMutation = <
 >(
   props: UseMutationOptions<TData, TError, TVariables, TContext> & {
     errorText?: string
-    successText?: string
+    successText: string
   }
 ) => {
   const { successText, errorText, ...mutationProps } = props
@@ -24,11 +25,9 @@ export const useToastedMutation = <
         toast.success(successText)
       }
       return res
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
-    } catch (e) {
-      if (errorText) {
-        toast.error(errorText)
-      }
+    } catch (e: unknown) {
+      const { message } = await handleError(e)
+      toast.error(errorText ?? message)
     }
   }
 

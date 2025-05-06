@@ -7,12 +7,12 @@ interface EditUserProps {
   email: string
   nickname: string
   part: PartName
-  userId: number
 }
 
-export const editUser = async ({ userId, ...body }: EditUserProps) => {
+export const editUser = async (body: EditUserProps) => {
   const res = await api
-    .put<UserResponseType>(`users/${userId}`, {
+    .put<UserResponseType>(`users/0`, {
+      // Todo: 아무 아이디나 던져줘도 상관없음
       json: body,
     })
     .json()
