@@ -39,11 +39,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <TanstackQueryProvider>
       <AuthProvider>
-        <OverlayProvider>
-          <ToastProvider duration={3000}>
+        <ToastProvider duration={3000}>
+          <OverlayProvider>
             <App />
-          </ToastProvider>
-        </OverlayProvider>
+          </OverlayProvider>
+        </ToastProvider>
       </AuthProvider>
     </TanstackQueryProvider>
   </StrictMode>

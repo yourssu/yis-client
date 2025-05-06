@@ -4,6 +4,4 @@ export interface AuthContextProps {
   isAuthenticated: () => boolean
 }
 
-export const AuthContext = createContext<AuthContextProps>({
-  isAuthenticated: () => false,
-})
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined)

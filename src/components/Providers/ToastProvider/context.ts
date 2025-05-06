@@ -13,7 +13,4 @@ interface ToastContextProps {
   toasts: ToastItem[]
 }
 
-export const ToastContext = createContext<ToastContextProps>({
-  toasts: [],
-  addToast: () => {},
-})
+export const ToastContext = createContext<ToastContextProps | undefined>(undefined)
