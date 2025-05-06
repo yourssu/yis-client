@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 
+import { Label } from '@/components/Label'
+
 type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   invalid?: boolean
   label?: string
@@ -18,12 +20,7 @@ export const TextInput = ({ className, invalid, label, ...props }: TextInputProp
   )
 
   if (label) {
-    return (
-      <div>
-        <div className="text-15 !text-neutralMuted py-1.5 font-medium">{label}</div>
-        {input}
-      </div>
-    )
+    return <Label content={label}>{input}</Label>
   }
 
   return input
