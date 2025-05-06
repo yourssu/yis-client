@@ -1,3 +1,4 @@
+import { OverlayProvider } from 'overlay-kit'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -38,9 +39,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <TanstackQueryProvider>
       <AuthProvider>
-        <ToastProvider duration={3000}>
-          <App />
-        </ToastProvider>
+        <OverlayProvider>
+          <ToastProvider duration={3000}>
+            <App />
+          </ToastProvider>
+        </OverlayProvider>
       </AuthProvider>
     </TanstackQueryProvider>
   </StrictMode>

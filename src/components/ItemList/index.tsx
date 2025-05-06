@@ -13,9 +13,7 @@ const Header = ({
       <div className="flex items-center justify-between pb-3">
         <div className="text-xl font-bold">{children}</div>
         {sideContent && (
-          <InlineButton asChild className="text-neutralSubtle !text-15">
-            {sideContent}
-          </InlineButton>
+          <InlineButton className="text-neutralSubtle !text-15">{sideContent}</InlineButton>
         )}
       </div>
       <Divider className="mb-2" />

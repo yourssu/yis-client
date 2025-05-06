@@ -2,6 +2,7 @@ import { UserRoleBadge } from '@/components/Badges/UserRoleBadge'
 import { GNB } from '@/components/GNB'
 import { ItemList } from '@/components/ItemList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { ProfileEditFormDialog } from '@/routes/~_auth/~profile/components/ProfileEditFormDialog'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 const Settings = () => {
@@ -18,7 +19,7 @@ const Settings = () => {
         </div>
 
         <ItemList>
-          <ItemList.Header sideContent={<div>수정하기</div>}>내 정보</ItemList.Header>
+          <ItemList.Header sideContent={<ProfileEditFormDialog />}>내 정보</ItemList.Header>
           <ItemList.Body>
             <ItemList.Item label="닉네임">Feca</ItemList.Item>
             <ItemList.Item label="소속 파트">Frontend</ItemList.Item>
