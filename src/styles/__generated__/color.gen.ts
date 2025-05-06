@@ -127,6 +127,7 @@ export const vars = {
   neutralMuted: 'var(--neutralMuted)',
   neutralSubtle: 'var(--neutralSubtle)',
   neutralPlaceholder: 'var(--neutralPlaceholder)',
+  neutralDisabled: 'var(--neutralDisabled)',
   brandPrimary: 'var(--brandPrimary)',
   brandDisabled: 'var(--brandDisabled)',
   brandHover: 'var(--brandHover)',
