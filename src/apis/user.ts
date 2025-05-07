@@ -1,4 +1,5 @@
 import { api } from '@/apis/api'
+import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartName } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
 import { camelizeSchema } from '@/utils/zod'
@@ -25,6 +26,11 @@ export const editUser = async (props: EditUserProps) => {
 export const getMe = async () => {
   const res = await api.get<UserResponseType>(`auth/me`).json()
   return camelizeSchema(UserResponseSchema).parse(res)
+}
+
+export const getUserApplications = async (userId: number) => {
+  const res = await api.get<ApplicationResponseType>(`users/${userId}/applications`).json()
+  return camelizeSchema(ApplicationResponseSchema).parse(res)
 }
 
 export const useMeInvalidation = () => {
