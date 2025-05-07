@@ -12,7 +12,7 @@ export const ProfileSection = () => {
 
   const onClickEdit = () => {
     openEditAlertDialog({
-      title: '프로필 수정',
+      title: '내 정보 수정',
       closeButton: true,
       content: ({ closeAsTrue }) => {
         return <ProfileEditDialogForm onSuccess={closeAsTrue} user={me} />

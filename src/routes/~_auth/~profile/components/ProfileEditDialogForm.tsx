@@ -28,10 +28,11 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
     part,
   }
 
-  const { mutateWithToast } = useToastedMutation({
+  const { mutateWithToast, isPending } = useToastedMutation({
     mutationKey: ['profile', 'edit'],
     mutationFn: editUser,
     successText: '내 정보를 수정했어요.',
+    errorText: '수정에 실패했어요. 잠시 후 다시 시도해주세요.',
   })
   const invalidateMe = useMeInvalidation()
 
@@ -43,9 +44,10 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
       return
     }
 
-    await mutateWithToast({ id: user.id, ...inputData })
-    invalidateMe()
-    onSuccess()
+    if (await mutateWithToast({ id: user.id, ...inputData })) {
+      invalidateMe()
+      onSuccess()
+    }
   }
 
   return (
@@ -80,7 +82,11 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
         </div>
       </Dialog.Content>
       <Dialog.ButtonGroup>
-        <Dialog.Button disabled={isSameAsDefault || !!error} onClick={onSubmit} variant="primary">
+        <Dialog.Button
+          disabled={isSameAsDefault || !!error || isPending}
+          onClick={onSubmit}
+          variant="primary"
+        >
           수정
         </Dialog.Button>
       </Dialog.ButtonGroup>
