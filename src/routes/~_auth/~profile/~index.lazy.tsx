@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { GNB } from '@/components/GNB'
 import { MyApplicationsSection } from '@/routes/~_auth/~profile/components/MyApplicationsSection'
 import { ProfileSection } from '@/routes/~_auth/~profile/components/ProfileSection'
@@ -9,8 +11,10 @@ const Settings = () => {
       <GNB />
 
       <div className="mx-auto mt-10 flex max-w-[800px] flex-col items-center gap-20">
-        <ProfileSection />
-        <MyApplicationsSection />
+        <Suspense>
+          <ProfileSection />
+          <MyApplicationsSection />
+        </Suspense>
       </div>
     </div>
   )

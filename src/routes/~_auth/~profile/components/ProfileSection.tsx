@@ -2,9 +2,12 @@ import { UserRoleBadge } from '@/components/Badges/UserRoleBadge'
 import { ItemList } from '@/components/ItemList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { useAlertDialog } from '@/hooks/useAlertDialog'
+import { useSuspensedMe } from '@/hooks/useMe'
 import { ProfileEditDialogForm } from '@/routes/~_auth/~profile/components/ProfileEditDialogForm'
 
 export const ProfileSection = () => {
+  const { id, nickname, part, role, email } = useSuspensedMe()
+
   const openEditAlertDialog = useAlertDialog()
 
   const onClickEdit = () => {
@@ -20,9 +23,9 @@ export const ProfileSection = () => {
     <div className="flex w-full flex-col gap-10">
       <div className="flex flex-col items-center gap-4">
         <div className="size-16 overflow-hidden rounded-full">
-          <ProfileAvatar />
+          <ProfileAvatar userId={id} />
         </div>
-        <div className="text-xl font-semibold">Feca</div>
+        <div className="text-xl font-semibold">{nickname}</div>
       </div>
 
       <ItemList>
@@ -31,12 +34,12 @@ export const ProfileSection = () => {
           <ItemList.HeaderButton onClick={onClickEdit}>수정하기</ItemList.HeaderButton>
         </ItemList.Header>
         <ItemList.Body>
-          <ItemList.Item label="닉네임">Feca</ItemList.Item>
-          <ItemList.Item label="소속 파트">Frontend</ItemList.Item>
+          <ItemList.Item label="닉네임">{nickname}</ItemList.Item>
+          <ItemList.Item label="소속 파트">{part}</ItemList.Item>
           <ItemList.Item label="권한">
-            <UserRoleBadge role="ADMIN" size="lg" />
+            <UserRoleBadge role={role} size="lg" />
           </ItemList.Item>
-          <ItemList.Item label="이메일">feca.urssu@gmail.com</ItemList.Item>
+          <ItemList.Item label="이메일">{email}</ItemList.Item>
           <ItemList.Item label="비밀번호" tooltipContent="비밀번호 변경은 관리자에게 문의해주세요.">
             ********
           </ItemList.Item>
