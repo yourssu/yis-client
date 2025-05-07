@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { partNames } from '@/types/part'
 import { camelizeSchema } from '@/utils/zod'
 
 export const userRole = ['USER', 'ADMIN'] as const
@@ -8,7 +9,7 @@ export type UserRoleType = (typeof userRole)[number]
 export const UserResponseSchema = z.object({
   email: z.string(),
   nickname: z.string(),
-  part: z.string(),
+  part: z.enum(partNames),
   id: z.number(),
   role: z.enum(userRole),
   accesses: z.array(z.string()),
