@@ -3,29 +3,25 @@ import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
-import { editUser } from '@/apis/user'
+import { editUser, useMeInvalidation } from '@/apis/user'
 import { Dialog } from '@/components/Dialog'
 import { Label } from '@/components/Label'
 import { Select } from '@/components/Select'
 import { TextInput } from '@/components/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { PartName, partNames } from '@/types/part'
+import { UserType } from '@/types/user'
 import { checkParsedError } from '@/utils/zod'
 
 interface ProfileEditDialogFormProps {
   onSuccess: () => void
+  user: UserType
 }
 
-export const ProfileEditDialogForm = ({ onSuccess }: ProfileEditDialogFormProps) => {
-  const defaultData = {
-    nickname: 'Feca',
-    email: 'feca.urssu@gmail.com',
-    part: 'Frontend' as const,
-  }
-
-  const [nickname, setNickname] = useInputState(defaultData.nickname)
-  const [email, setEmail] = useInputState(defaultData.email)
-  const [part, setPart] = useState<PartName>(defaultData.part)
+export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogFormProps) => {
+  const [nickname, setNickname] = useInputState(user.nickname)
+  const [email, setEmail] = useInputState(user.email)
+  const [part, setPart] = useState<PartName>(user.part)
   const inputData = {
     nickname,
     email,
@@ -37,8 +33,9 @@ export const ProfileEditDialogForm = ({ onSuccess }: ProfileEditDialogFormProps)
     mutationFn: editUser,
     successText: '내 정보를 수정했어요.',
   })
+  const invalidateMe = useMeInvalidation()
 
-  const isSameAsDefault = isEqual(defaultData, inputData)
+  const isSameAsDefault = isEqual(user, inputData)
   const { error } = ProfileEditDialogFormSchema.safeParse(inputData)
 
   const onSubmit = async () => {
@@ -46,8 +43,8 @@ export const ProfileEditDialogForm = ({ onSuccess }: ProfileEditDialogFormProps)
       return
     }
 
-    await mutateWithToast(inputData)
-    // Todo: 프로필 인밸리데이션
+    await mutateWithToast({ id: user.id, ...inputData })
+    invalidateMe()
     onSuccess()
   }
 
