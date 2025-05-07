@@ -19,3 +19,15 @@ export const getKyHTTPErrorMessage = async (e: HTTPError) => {
 
   return undefined
 }
+
+export const makeFormData = <T extends object>(data: T) => {
+  const formData = new FormData()
+
+  for (const key in data) {
+    if (data[key] !== undefined) {
+      formData.append(key, `${data[key]}`)
+    }
+  }
+
+  return formData
+}

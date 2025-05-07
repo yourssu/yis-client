@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
+import { TokenResponseSchema } from '@/types/auth'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
 import { removeAuthTokens } from '@/utils/auth'
 import { camelizeSchema } from '@/utils/zod'
@@ -17,11 +18,7 @@ interface SigninProps {
   password: string
 }
 
-const SigninResponseSchema = z.object({
-  access_token: z.string(),
-  token_type: z.string(),
-})
-
+const SigninResponseSchema = TokenResponseSchema
 type SigninResponse = z.infer<typeof SigninResponseSchema>
 
 export const signup = async (props: SignupProps) => {

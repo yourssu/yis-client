@@ -47,11 +47,11 @@ export const SigninForm = () => {
     }
 
     try {
-      const { accessToken } = await mutateAsync({
+      const tokens = await mutateAsync({
         email,
         password,
       })
-      setAuthTokens({ accessToken })
+      setAuthTokens(tokens)
       toast.success('로그인에 성공했어요.')
       navigate({ to: '/' })
     } catch {
