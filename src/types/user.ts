@@ -15,6 +15,7 @@ export const UserResponseSchema = z.object({
   created_at: z.string(),
   updated_at: z.string(),
   deleted_at: z.string().nullable(),
+  is_active: z.boolean(),
 })
 export type UserResponseType = z.infer<typeof UserResponseSchema>
 

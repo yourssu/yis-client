@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import '@/styles/index.css'
 import { AuthProvider } from '@/components/Providers/AuthProvider'
 import { useAuth } from '@/components/Providers/AuthProvider/hook'
+import { MeProvider } from '@/components/Providers/MeProvider'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
 import { ToastProvider } from '@/components/Providers/ToastProvider'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
@@ -39,11 +40,13 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <TanstackQueryProvider>
       <AuthProvider>
-        <ToastProvider duration={3000}>
-          <OverlayProvider>
-            <App />
-          </OverlayProvider>
-        </ToastProvider>
+        <MeProvider>
+          <ToastProvider duration={3000}>
+            <OverlayProvider>
+              <App />
+            </OverlayProvider>
+          </ToastProvider>
+        </MeProvider>
       </AuthProvider>
     </TanstackQueryProvider>
   </StrictMode>

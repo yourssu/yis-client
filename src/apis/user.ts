@@ -18,3 +18,8 @@ export const editUser = async (body: EditUserProps) => {
     .json()
   return camelizeSchema(UserResponseSchema).parse(res)
 }
+
+export const getMe = async () => {
+  const res = await api.get<UserResponseType>(`auth/me`).json()
+  return camelizeSchema(UserResponseSchema).parse(res)
+}

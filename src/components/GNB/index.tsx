@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Suspense } from 'react'
 
 import { ProfileMenu } from '@/components/GNB/ProfileMenu'
 import { useAuth } from '@/components/Providers/AuthProvider/hook'
@@ -20,7 +21,11 @@ export const GNB = ({ transparent }: GNBProps) => {
       <Link className="flex h-10 items-center" to="/">
         <img alt="logo" className="h-4.5" src="/Logo.png" />
       </Link>
-      {isAuthenticated() && <ProfileMenu />}
+      {isAuthenticated() && (
+        <Suspense>
+          <ProfileMenu />
+        </Suspense>
+      )}
     </div>
   )
 }
