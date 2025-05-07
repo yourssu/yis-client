@@ -27,6 +27,7 @@
     "@tanstack/react-router": "^1.119.0",
     "@tanstack/react-router-devtools": "^1.119.1",
     "@toss/react": "^1.8.1",
+    "@use-funnel/core": "^0.0.11",
     "camelcase-keys": "^9.1.3",
     "clsx": "^2.1.1",
     "es-toolkit": "^1.37.2",
