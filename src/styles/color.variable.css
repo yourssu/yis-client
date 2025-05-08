@@ -125,7 +125,7 @@
   --violet200: #3d25ae;
   --violet300: #4b2ad8;
   --violet400: #5534fa;
-  --violet500: #5736f5;
+  --violet500: #6143fa;
   --violet600: #6b4ef8;
   --violet700: #7875ff;
   --violet800: #9ca3ff;
@@ -141,7 +141,7 @@
   --neutralPlaceholder: var(--grey500);
   --neutralDisabled: hsla(0, 0%, 100%, 0.45);
 
-  --brandPrimary: var(--violet400);
+  --brandPrimary: var(--violet500);
   --brandDisabled: rgba(85, 52, 250, 0.45);
   --brandHover: var(--violet600);
   --brandActive: var(--violet700);
