@@ -61,22 +61,35 @@ export const useFunnelDialog = <TStepContextMap extends AnyStepContextMap>(
         funnel,
       })
       const stepSize = Object.keys(funnelRenderProps).length
-      const title = funnelRenderProps[funnel.step].title
-      const funnelContents = mapValues(
-        funnelRenderProps,
-        ({ content }) => content
-      ) as FunnelRenderComponentProps<TStepContextMap>
 
-      return (
-        <Dialog closeableWithOutside={closeableWithOutside} onClose={closeAsFalse} open={isOpen}>
+      /* 
+        이벤트 핸들러 내에서 외부 인터페이스를 유지하면서
+        퍼널의 변경된 정보를 렌더링할 방법이 없어 랜더링할 컨텐츠에 퍼널 정보를 주입해요.
+      */
+      // eslint-disable-next-line react/display-name
+      const funnelContents = mapValues(funnelRenderProps, ({ content, title }) => (funnelProps) => {
+        const dialogHeader = (
           <Dialog.Header onClickCloseButton={closeButton ? closeAsFalse : undefined}>
             <Dialog.Title>
               <div className="text-brandPrimary py-1.5 text-sm font-medium">
-                {funnel.index + 1}/{stepSize}
+                {funnelProps.index + 1}/{stepSize}
               </div>
               <div>{title}</div>
             </Dialog.Title>
           </Dialog.Header>
+        )
+        const renderedContent = (content as (p: typeof funnelProps) => React.ReactNode)(funnelProps)
+
+        return (
+          <>
+            {dialogHeader}
+            {renderedContent}
+          </>
+        )
+      }) as FunnelRenderComponentProps<TStepContextMap>
+
+      return (
+        <Dialog closeableWithOutside={closeableWithOutside} onClose={closeAsFalse} open={isOpen}>
           <funnel.Render {...funnelContents} />
         </Dialog>
       )
