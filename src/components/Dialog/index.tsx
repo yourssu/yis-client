@@ -32,7 +32,7 @@ const Header = ({
   onClickCloseButton,
 }: React.PropsWithChildren<{ onClickCloseButton?: () => void }>) => {
   return (
-    <div className="flex w-full items-center">
+    <div className="flex w-full">
       <div className="w-full px-6 pt-5">{children}</div>
       {onClickCloseButton && (
         <div className="pt-5 pr-3.5">

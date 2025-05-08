@@ -60,6 +60,7 @@ export const useFunnelDialog = <TStepContextMap extends AnyStepContextMap>(
         },
         funnel,
       })
+      const stepSize = Object.keys(funnelRenderProps).length
       const title = funnelRenderProps[funnel.step].title
       const funnelContents = mapValues(
         funnelRenderProps,
@@ -69,7 +70,12 @@ export const useFunnelDialog = <TStepContextMap extends AnyStepContextMap>(
       return (
         <Dialog closeableWithOutside={closeableWithOutside} onClose={closeAsFalse} open={isOpen}>
           <Dialog.Header onClickCloseButton={closeButton ? closeAsFalse : undefined}>
-            <Dialog.Title>{title}</Dialog.Title>
+            <Dialog.Title>
+              <div className="text-brandPrimary py-1.5 text-sm font-medium">
+                {funnel.index + 1}/{stepSize}
+              </div>
+              <div>{title}</div>
+            </Dialog.Title>
           </Dialog.Header>
           <funnel.Render {...funnelContents} />
         </Dialog>
