@@ -2,6 +2,7 @@ import { mapValues } from 'es-toolkit'
 import { overlay } from 'overlay-kit'
 
 import { Dialog } from '@/components/Dialog'
+import { useAlertDialog } from '@/hooks/useAlertDialog'
 import { usePureFunnel } from '@/hooks/usePureFunnel'
 import { UseFunnelOptions, UseFunnelResults as UseFunnelResultsPrimitive } from '@use-funnel/core'
 import { AnyStepContextMap } from 'node_modules/@use-funnel/core/dist/core'
@@ -38,62 +39,93 @@ interface UseFunnelDialogOpenProps<TStepContextMap extends AnyStepContextMap> {
   }
 }
 
+const FunnelDialog = <TStepContextMap extends AnyStepContextMap>({
+  funnelDialogOpenProps,
+  funnelOptions,
+  overlayOpenProps,
+}: {
+  funnelDialogOpenProps: UseFunnelDialogOpenProps<TStepContextMap>
+  funnelOptions: UseFunnelOptions<TStepContextMap>
+  overlayOpenProps: { close: (value: boolean) => void; isOpen: boolean }
+}) => {
+  const funnel = usePureFunnel(funnelOptions)
+  const openDirtyFormAlertDialog = useAlertDialog()
+
+  const closeAsTrue = () => overlayOpenProps.close(true)
+  const closeAsFalse = () => overlayOpenProps.close(false)
+
+  const askClose = async () => {
+    const respondedClose = await openDirtyFormAlertDialog({
+      title: '서비스 배포를 그만할까요?',
+      content: ({ closeAsTrue, closeAsFalse }) => (
+        <>
+          <Dialog.Content className="text-neutralSubtle text-sm">
+            지금까지 입력한 정보는 저장되지 않아요.
+          </Dialog.Content>
+          <Dialog.ButtonGroup>
+            <Dialog.Button onClick={closeAsFalse} variant="secondary">
+              계속하기
+            </Dialog.Button>
+            <Dialog.Button onClick={closeAsTrue} variant="primary">
+              그만하기
+            </Dialog.Button>
+          </Dialog.ButtonGroup>
+        </>
+      ),
+    })
+    if (respondedClose) {
+      requestAnimationFrame(() => {
+        closeAsFalse()
+      })
+    }
+  }
+
+  const funnelRenderProps = funnelDialogOpenProps.render({
+    dialog: {
+      isOpen: overlayOpenProps.isOpen,
+      closeAsTrue,
+      closeAsFalse,
+    },
+    funnel,
+  })
+
+  const stepSize = Object.keys(funnelRenderProps).length
+  const title = funnelRenderProps[funnel.step].title
+  const funnelContents = mapValues(
+    funnelRenderProps,
+    ({ content }) => content
+  ) as FunnelRenderComponentProps<TStepContextMap>
+
+  return (
+    <Dialog
+      closeableWithOutside={funnelDialogOpenProps.closeableWithOutside}
+      onClose={closeAsFalse}
+      open={overlayOpenProps.isOpen}
+    >
+      <Dialog.Header onClickCloseButton={funnelDialogOpenProps.closeButton ? askClose : undefined}>
+        <Dialog.Title>
+          <div className="text-brandPrimary py-1.5 text-sm font-medium">
+            {funnel.index + 1}/{stepSize}
+          </div>
+          <div>{title}</div>
+        </Dialog.Title>
+      </Dialog.Header>
+      <funnel.Render {...funnelContents} />
+    </Dialog>
+  )
+}
+
 export const useFunnelDialog = <TStepContextMap extends AnyStepContextMap>(
   options: UseFunnelOptions<TStepContextMap>
 ) => {
-  const funnel = usePureFunnel(options)
-
-  const open = async ({
-    closeButton,
-    render,
-    closeableWithOutside,
-  }: UseFunnelDialogOpenProps<TStepContextMap>) =>
-    await overlay.openAsync<boolean>(({ isOpen, close }) => {
-      const closeAsTrue = () => close(true)
-      const closeAsFalse = () => close(false)
-
-      const funnelRenderProps = render({
-        dialog: {
-          isOpen,
-          closeAsTrue,
-          closeAsFalse,
-        },
-        funnel,
-      })
-      const stepSize = Object.keys(funnelRenderProps).length
-
-      /* 
-        이벤트 핸들러 내에서 외부 인터페이스를 유지하면서
-        퍼널의 변경된 정보를 렌더링할 방법이 없어 랜더링할 컨텐츠에 퍼널 정보를 주입해요.
-      */
-      // eslint-disable-next-line react/display-name
-      const funnelContents = mapValues(funnelRenderProps, ({ content, title }) => (funnelProps) => {
-        const dialogHeader = (
-          <Dialog.Header onClickCloseButton={closeButton ? closeAsFalse : undefined}>
-            <Dialog.Title>
-              <div className="text-brandPrimary py-1.5 text-sm font-medium">
-                {funnelProps.index + 1}/{stepSize}
-              </div>
-              <div>{title}</div>
-            </Dialog.Title>
-          </Dialog.Header>
-        )
-        const renderedContent = (content as (p: typeof funnelProps) => React.ReactNode)(funnelProps)
-
-        return (
-          <>
-            {dialogHeader}
-            {renderedContent}
-          </>
-        )
-      }) as FunnelRenderComponentProps<TStepContextMap>
-
+  return async (funnelDialogOpenProps: UseFunnelDialogOpenProps<TStepContextMap>) =>
+    await overlay.openAsync<boolean>((overlayOpenProps) => {
       return (
-        <Dialog closeableWithOutside={closeableWithOutside} onClose={closeAsFalse} open={isOpen}>
-          <funnel.Render {...funnelContents} />
-        </Dialog>
+        <FunnelDialog
+          funnelDialogOpenProps={funnelDialogOpenProps}
+          funnelOptions={options}
+          overlayOpenProps={overlayOpenProps}
+        />
       )
     })
-
-  return open
 }
