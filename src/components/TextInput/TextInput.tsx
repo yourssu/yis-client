@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 import { Label } from '@/components/Label'
 
-type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   description?: string
   invalid?: boolean
   label?: string
