@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 
-import { TextInput } from '@/components/TextInput'
+import { TextInput } from '@/components/TextInput/TextInput'
 
 const Button = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (

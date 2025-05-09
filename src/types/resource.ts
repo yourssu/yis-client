@@ -1,4 +1,11 @@
-export const CpuResourceNames = ['100m', '250m', '500m', '1 CPU', '1.5 CPU', '2 CPU'] as const
+export const CpuResourceNames = [
+  '0.1 CPU',
+  '0.25 CPU',
+  '0.5 CPU',
+  '1 CPU',
+  '1.5 CPU',
+  '2 CPU',
+] as const
 export type CpuResourceNames = (typeof CpuResourceNames)[number]
 
 export const MemoryResourceNames = [

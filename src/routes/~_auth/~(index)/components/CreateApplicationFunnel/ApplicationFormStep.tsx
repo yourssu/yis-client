@@ -2,20 +2,20 @@ import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
 import { Dialog } from '@/components/Dialog'
-import { TextInput } from '@/components/TextInput'
+import { TextInput } from '@/components/TextInput/TextInput'
 import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
 
-type NextStepContext = Required<
-  CreateApplicationFunnelSteps['어플리케이션_정보입력']['application']
->
+type CurrentStepContext = CreateApplicationFunnelSteps['어플리케이션_정보입력']['application']
+type NextStepContext = Required<CurrentStepContext>
 
 interface ApplicationFormProps {
+  initialValue?: CurrentStepContext
   onNext: (c: NextStepContext) => void
 }
 
-export const ApplicationFormStep = ({ onNext }: ApplicationFormProps) => {
-  const [name, setName] = useInputState('')
-  const [description, setDescription] = useInputState('')
+export const ApplicationFormStep = ({ initialValue, onNext }: ApplicationFormProps) => {
+  const [name, setName] = useInputState(initialValue?.name ?? '')
+  const [description, setDescription] = useInputState(initialValue?.description ?? '')
 
   const { error } = ApplicationFormSchema.safeParse({
     name,
@@ -24,7 +24,7 @@ export const ApplicationFormStep = ({ onNext }: ApplicationFormProps) => {
 
   return (
     <>
-      <Dialog.Content className="h-[300px] w-[500px]">
+      <Dialog.Content className="h-[400px] w-[500px]">
         <div className="flex flex-col gap-6 pb-8">
           <TextInput
             description="서비스 이름은 고유해야해요."
