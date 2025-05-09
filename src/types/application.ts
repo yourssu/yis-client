@@ -12,7 +12,7 @@ export const ApplicationResponseSchema = z.object({
     nickname: true,
     part: true,
   }),
-  applied_deployment_id: z.number(),
+  applied_deployment_id: z.number().nullable(),
   created_at: z.string(),
   updated_at: z.string(),
   deleted_at: z.string().nullable(),

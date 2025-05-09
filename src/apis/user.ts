@@ -1,6 +1,6 @@
 import { api } from '@/apis/api'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
-import { PartName } from '@/types/part'
+import { PartNames } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
 import { camelizeSchema } from '@/utils/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,7 +9,7 @@ interface EditUserProps {
   email: string
   id: number
   nickname: string
-  part: PartName
+  part: PartNames
 }
 
 export const editUser = async (props: EditUserProps) => {

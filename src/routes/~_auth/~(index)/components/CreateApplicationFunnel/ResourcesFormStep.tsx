@@ -155,7 +155,7 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
           }}
           variant="primary"
         >
-          다음
+          배포하기
         </Dialog.Button>
       </Dialog.ButtonGroup>
     </>

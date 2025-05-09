@@ -1,6 +1,7 @@
 import { GNB } from '@/components/GNB'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
+import { DeploymentCompleteStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentCompleteStep'
 import { DeploymentInfoFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentInfoFormStep'
 import { ResourcesFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ResourcesFormStep'
 import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
@@ -17,9 +18,9 @@ const Index = () => {
 
   const onClick = () => {
     openCreateApplicationFunnelDialog({
-      closeableWithOutside: true,
+      closeableWithOutside: false,
       closeButton: true,
-      render: () => ({
+      render: ({ dialog: { closeAsTrue } }) => ({
         어플리케이션_정보입력: {
           title: '서비스 이름을 알려주세요',
           content: ({ history, context }) => {
@@ -65,9 +66,9 @@ const Index = () => {
           },
         },
         배포요청_완료: {
-          title: '배포 요청 완료',
-          content: () => {
-            return <div>배포 요청 완료!</div>
+          title: '',
+          content: ({ context }) => {
+            return <DeploymentCompleteStep close={closeAsTrue} context={context} />
           },
         },
       }),
