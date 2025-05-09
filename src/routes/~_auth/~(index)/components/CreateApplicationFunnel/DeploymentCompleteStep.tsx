@@ -1,27 +1,54 @@
-import { useState } from 'react'
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
 import { Dialog } from '@/components/Dialog'
 import { useEffectOnce } from '@/hooks/useEffectOnce'
 import { useCreateFirstDeploymentMutation } from '@/routes/~_auth/~(index)/hooks/useCreateFirstDeploymentMutation'
 import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
-import { DotLottieReact } from '@lottiefiles/dotlottie-react'
-
+import { DotLottie, DotLottieReact, DotLottieReactProps } from '@lottiefiles/dotlottie-react'
 interface DeploymentCompleteStepProps {
   close: () => void
   context: CreateApplicationFunnelSteps['배포요청_완료']
 }
 
 interface ResultProps {
-  content: React.ReactNode
   description: string
+  lottieProps: DotLottieReactProps
   title: string
 }
 
-const Result = ({ content, description, title }: ResultProps) => {
+type ResultType = 'error' | 'loading' | 'success'
+
+const Result = ({ lottieProps, description, title }: ResultProps) => {
+  const [dotLottie, setDotLottie] = useState<DotLottie | undefined>(undefined)
+
+  /* 
+    src가 변경되더라도 이전 로띠의 프레임을 유지하는 문제가 있어요.
+    로띠가 로드되면 프레임을 다시 1로 설정해줌으로 해결해줘요. (0 안됨)
+  */
+  useEffect(() => {
+    if (!dotLottie) {
+      return
+    }
+    const onLoad = () => {
+      dotLottie.setFrame(1)
+    }
+    dotLottie.addEventListener('load', onLoad)
+    return () => {
+      dotLottie.removeEventListener('load', onLoad)
+    }
+  }, [lottieProps.src])
+
   return (
     <div className="flex size-full flex-col items-center">
-      <div className="flex h-[260px] w-full items-end justify-center">{content}</div>
+      <div className="flex h-[260px] w-full items-end justify-center">
+        <DotLottieReact
+          autoplay
+          dotLottieRefCallback={(v) => setDotLottie(v ?? undefined)}
+          {...lottieProps}
+        />
+      </div>
       <div className="text-xl font-semibold">{title}</div>
       <div className="text-neutralMuted mt-2 text-sm">{description}</div>
     </div>
@@ -29,7 +56,7 @@ const Result = ({ content, description, title }: ResultProps) => {
 }
 
 export const DeploymentCompleteStep = ({ context, close }: DeploymentCompleteStepProps) => {
-  const [result, setResult] = useState<'error' | 'loading' | 'success'>('loading')
+  const [result, setResult] = useState<ResultType>('loading')
   const mutateResult = useCreateFirstDeploymentMutation()
 
   useEffectOnce(() => {
@@ -49,41 +76,54 @@ export const DeploymentCompleteStep = ({ context, close }: DeploymentCompleteSte
       <Dialog.Content className="h-[440px] w-[500px] !pt-0">
         <SwitchCase
           caseBy={{
-            error: () => <div className="text-red-500">배포 요청에 실패했어요.</div>,
-            loading: () => <Result {...ResultMap.loading} />,
             success: () => <Result {...ResultMap.success} />,
+            loading: () => <Result {...ResultMap.loading} />,
+            error: () => <Result {...ResultMap.error} />,
           }}
           value={result}
         />
       </Dialog.Content>
-      {result === 'success' && (
-        <Dialog.ButtonGroup>
-          <Dialog.Button onClick={close} variant="primary">
-            확인
-          </Dialog.Button>
-        </Dialog.ButtonGroup>
-      )}
+      <Dialog.ButtonGroup>
+        <Dialog.Button
+          className={clsx(result === 'loading' && 'invisible')}
+          onClick={close}
+          variant="primary"
+        >
+          확인
+        </Dialog.Button>
+      </Dialog.ButtonGroup>
     </>
   )
 }
 
-const ResultMap = {
+const ResultMap: Record<
+  ResultType,
+  { description: string; lottieProps: DotLottieReactProps; title: string }
+> = {
   success: {
     title: '배포 요청을 보냈어요',
     description: '승인까지 최대 하루 정도 걸릴 수 있어요.',
-    content: <DotLottieReact autoplay className="w-[80%]" src="/lotties/success.lottie" />,
+    lottieProps: {
+      src: '/lotties/success.lottie',
+      className: 'w-[80%]',
+    },
   },
   loading: {
     title: '배포 요청을 보내고 있어요',
     description: '몇 초 정도 기다리면 배포가 완료돼요.',
-    content: (
-      <DotLottieReact
-        autoplay
-        className="w-full"
-        loop
-        speed={1.1}
-        src="/lotties/bouncy-loading.lottie"
-      />
-    ),
+    lottieProps: {
+      src: '/lotties/bouncy-loading.lottie',
+      loop: true,
+      speed: 1.1,
+      className: 'w-full',
+    },
+  },
+  error: {
+    title: '배포 요청에 실패했어요',
+    description: '잠시 후 다시 시도해주세요.',
+    lottieProps: {
+      src: '/lotties/error.lottie',
+      className: 'w-[60%] pb-4',
+    },
   },
 }
