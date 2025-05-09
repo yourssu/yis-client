@@ -70,13 +70,12 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
           />
           <Label content="소속 파트">
             <Select
-              className="w-full"
               invalid={checkParsedError(error, 'part')}
               items={PartNames}
               onValueChange={setPart}
               placeholder="소속 파트"
               value={part}
-              viewportClassName="!bg-grey200"
+              viewPortBackground="grey200"
             />
           </Label>
         </div>

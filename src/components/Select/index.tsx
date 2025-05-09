@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
+import { vars } from '@/styles/__generated__/color.gen'
 import * as SelectPrimitive from '@radix-ui/react-select'
 
 interface SelectProps<TValue extends string> {
@@ -10,7 +11,7 @@ interface SelectProps<TValue extends string> {
   onValueChange: (value: TValue) => void
   placeholder: string
   value: TValue | undefined
-  viewportClassName?: string
+  viewPortBackground?: keyof typeof vars
 }
 
 export const Select = <TValue extends string>({
@@ -18,7 +19,7 @@ export const Select = <TValue extends string>({
   onValueChange,
   value,
   className,
-  viewportClassName,
+  viewPortBackground,
   invalid,
   placeholder,
 }: React.PropsWithChildren<SelectProps<TValue>>) => {
@@ -27,7 +28,7 @@ export const Select = <TValue extends string>({
       <SelectPrimitive.Trigger asChild>
         <button
           className={clsx(
-            'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease data-[placeholder]:text-neutralPlaceholder flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-4 transition-colors duration-200',
+            'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease data-[placeholder]:text-neutralPlaceholder flex w-full cursor-pointer items-center justify-between rounded-lg border py-2 pl-4 transition-colors duration-200',
             invalid && '!border-negative',
             className
           )}
@@ -42,7 +43,10 @@ export const Select = <TValue extends string>({
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content position="popper" sideOffset={8}>
           <SelectPrimitive.Viewport
-            className={clsx('bg-grey100 w-fit rounded-lg py-2', viewportClassName)}
+            className="bg-grey100 w-fit rounded-lg py-2"
+            style={{
+              backgroundColor: viewPortBackground && vars[viewPortBackground],
+            }}
           >
             {items.map((item) => (
               <SelectPrimitive.Item
