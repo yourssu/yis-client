@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
-import { Merge } from 'type-fest'
 import { z } from 'zod'
 
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
-import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
-
-type CurrentStepContext = CreateApplicationFunnelSteps['배포_정보입력']['deploy']
-type NextStepContext = Merge<Required<CurrentStepContext>, Pick<CurrentStepContext, 'message'>>
+import {
+  DeployConfirmedContext,
+  DeployContext,
+} from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
 
 interface DeploymentInfoFormProps {
-  initialValue?: CurrentStepContext
-  onNext: (c: NextStepContext) => void
+  initialValue?: DeployContext
+  onNext: (c: DeployConfirmedContext) => void
   onPrevious: () => void
 }
 

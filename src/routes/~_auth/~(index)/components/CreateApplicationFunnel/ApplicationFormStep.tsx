@@ -3,14 +3,14 @@ import { z } from 'zod'
 
 import { Dialog } from '@/components/Dialog'
 import { TextInput } from '@/components/TextInput/TextInput'
-import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
-
-type CurrentStepContext = CreateApplicationFunnelSteps['어플리케이션_정보입력']['application']
-type NextStepContext = Required<CurrentStepContext>
+import {
+  ApplicationConfirmedContext,
+  ApplicationContext,
+} from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
 
 interface ApplicationFormProps {
-  initialValue?: CurrentStepContext
-  onNext: (c: NextStepContext) => void
+  initialValue?: ApplicationContext
+  onNext: (c: ApplicationConfirmedContext) => void
 }
 
 export const ApplicationFormStep = ({ initialValue, onNext }: ApplicationFormProps) => {

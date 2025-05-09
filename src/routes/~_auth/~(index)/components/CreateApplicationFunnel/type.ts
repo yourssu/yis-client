@@ -1,40 +1,45 @@
+import { Merge } from 'type-fest'
+
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
+
+export type ApplicationContext = {
+  description?: string
+  name?: string
+}
+export type ApplicationConfirmedContext = Required<ApplicationContext>
+
+export type DeployContext = {
+  domain?: string
+  imageUrl?: string
+  message?: string
+  port?: number
+}
+export type DeployConfirmedContext = Merge<Required<DeployContext>, Pick<DeployContext, 'message'>>
+
+export type ResourceContext = {
+  cpuLimit?: CpuResourceNames
+  cpuRequest?: CpuResourceNames
+  memoryLimit?: MemoryResourceNames
+  memoryRequest?: MemoryResourceNames
+}
+export type ResourceConfirmedContext = Required<ResourceContext>
 
 export type CreateApplicationFunnelSteps = {
   리소스_정보입력: {
-    application: {
-      description: string
-      name: string
-    }
-    deploy: {
-      domain: string
-      imageUrl: string
-      message?: string
-      port: number
-    }
-    resource: {
-      cpuLimit?: CpuResourceNames
-      cpuRequest?: CpuResourceNames
-      memoryLimit?: MemoryResourceNames
-      memoryRequest?: MemoryResourceNames
-    }
+    application: ApplicationConfirmedContext
+    deploy: DeployConfirmedContext
+    resource: ResourceContext
   }
   배포_정보입력: {
-    application: {
-      description: string
-      name: string
-    }
-    deploy: {
-      domain?: string
-      imageUrl?: string
-      message?: string
-      port?: number
-    }
+    application: ApplicationConfirmedContext
+    deploy: DeployContext
+  }
+  배포요청_완료: {
+    application: ApplicationConfirmedContext
+    deploy: DeployConfirmedContext
+    resource: ResourceConfirmedContext
   }
   어플리케이션_정보입력: {
-    application: {
-      description?: string
-      name?: string
-    }
+    application: ApplicationContext
   }
 }
