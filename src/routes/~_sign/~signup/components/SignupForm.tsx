@@ -8,7 +8,7 @@ import { Select } from '@/components/Select'
 import { useNicknameToYourssuEmail } from '@/hooks/useNicknameToYourssuEmail'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { SignForm } from '@/routes/~_sign/components/SignForm'
-import { PartName, partNames } from '@/types/part'
+import { PartNames } from '@/types/part'
 import { assertNonNullish } from '@/utils/assertion'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -17,7 +17,7 @@ export const SignupForm = () => {
   const [nickname, setNickname] = useInputState('')
   const [password, setPassword] = useInputState('')
   const [repliedPassword, setRepliedPassword] = useInputState('')
-  const [part, setPart] = useState<PartName | undefined>(undefined)
+  const [part, setPart] = useState<PartNames | undefined>(undefined)
   const [invalid, setInvalid] = useState(false)
   const fullEmail = useNicknameToYourssuEmail(email)
 
@@ -101,7 +101,7 @@ export const SignupForm = () => {
       />
       <Select
         invalid={invalid}
-        items={partNames}
+        items={PartNames}
         onValueChange={(v) => {
           setPart(v)
           setInvalid(false)
@@ -127,7 +127,7 @@ const SignupFormSchema = z
     password: z.string().min(1),
     repliedPassword: z.string().min(1),
     nickname: z.string().min(1),
-    part: z.enum(partNames),
+    part: z.enum(PartNames),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.repliedPassword) {

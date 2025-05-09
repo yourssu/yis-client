@@ -1,4 +1,4 @@
-export const partNames = [
+export const PartNames = [
   'HR',
   'iOS',
   'Android',
@@ -11,4 +11,4 @@ export const partNames = [
   'Legal',
 ] as const
 
-export type PartName = (typeof partNames)[number]
+export type PartNames = (typeof PartNames)[number]

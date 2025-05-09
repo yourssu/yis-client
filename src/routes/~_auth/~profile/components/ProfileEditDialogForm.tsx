@@ -9,7 +9,7 @@ import { Label } from '@/components/Label'
 import { Select } from '@/components/Select'
 import { TextInput } from '@/components/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
-import { PartName, partNames } from '@/types/part'
+import { PartNames } from '@/types/part'
 import { UserType } from '@/types/user'
 import { checkParsedError } from '@/utils/zod'
 
@@ -21,7 +21,7 @@ interface ProfileEditDialogFormProps {
 export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogFormProps) => {
   const [nickname, setNickname] = useInputState(user.nickname)
   const [email, setEmail] = useInputState(user.email)
-  const [part, setPart] = useState<PartName>(user.part)
+  const [part, setPart] = useState<PartNames>(user.part)
   const inputData = {
     nickname,
     email,
@@ -72,7 +72,7 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
             <Select
               className="w-full"
               invalid={checkParsedError(error, 'part')}
-              items={partNames}
+              items={PartNames}
               onValueChange={setPart}
               placeholder="소속 파트"
               value={part}
@@ -97,5 +97,5 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
 const ProfileEditDialogFormSchema = z.object({
   nickname: z.string().min(1),
   email: z.string().email().endsWith('.urssu@gmail.com'),
-  part: z.enum(partNames),
+  part: z.enum(PartNames),
 })
