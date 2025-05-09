@@ -3,10 +3,7 @@ import { z } from 'zod'
 
 import { Dialog } from '@/components/Dialog'
 import { TextInput } from '@/components/TextInput/TextInput'
-import {
-  ApplicationConfirmedContext,
-  ApplicationContext,
-} from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
+import { ApplicationConfirmedContext, ApplicationContext } from '@/routes/~_auth/~(index)/type'
 
 interface ApplicationFormProps {
   initialValue?: ApplicationContext

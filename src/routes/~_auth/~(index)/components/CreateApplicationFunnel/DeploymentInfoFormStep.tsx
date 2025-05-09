@@ -5,10 +5,7 @@ import { z } from 'zod'
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
-import {
-  DeployConfirmedContext,
-  DeployContext,
-} from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
+import { DeployConfirmedContext, DeployContext } from '@/routes/~_auth/~(index)/type'
 
 interface DeploymentInfoFormProps {
   initialValue?: DeployContext
@@ -35,7 +32,7 @@ export const DeploymentInfoFormStep = ({
 
   return (
     <>
-      <Dialog.Content className="h-[400px] w-[500px]">
+      <Dialog.Content className="h-[440px] w-[500px]">
         <div className="flex flex-col gap-4 pb-8">
           <TextInput
             description="ex) https://www.google.com"

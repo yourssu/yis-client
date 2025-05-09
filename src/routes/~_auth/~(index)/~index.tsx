@@ -3,7 +3,7 @@ import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
 import { DeploymentInfoFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentInfoFormStep'
 import { ResourcesFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ResourcesFormStep'
-import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
+import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
 import { createFileRoute } from '@tanstack/react-router'
 
 const Index = () => {
