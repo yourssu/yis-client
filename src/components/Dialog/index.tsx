@@ -12,7 +12,7 @@ interface DialogProps {
 }
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant: 'primary' | 'secondary'
+  variant: 'primary' | 'secondary' | 'subPrimary'
 }
 
 const buttonStyles = tv({
@@ -23,6 +23,8 @@ const buttonStyles = tv({
         'bg-brandPrimary hover:bg-brandHover focus:bg-brandActive active:bg-brandActive disabled:bg-brandDisabled',
       secondary:
         'bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400 disabled:bg-greyOpacity500',
+      subPrimary:
+        'bg-brandAdaptiveBg text-brandAdaptive hover:bg-brandAdaptiveBgHover focus:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
     },
   },
 })
