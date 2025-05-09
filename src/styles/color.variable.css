@@ -142,10 +142,14 @@
   --neutralDisabled: hsla(0, 0%, 100%, 0.45);
 
   --brandPrimary: var(--violet500);
-  --brandDisabled: rgba(85, 52, 250, 0.45);
+  --brandDisabled: rgba(97, 67, 250, 0.45);
   --brandHover: var(--violet600);
   --brandActive: var(--violet700);
   --brandAdaptive: rgb(182, 169, 253);
+  --brandAdaptiveBg: rgb(97, 67, 250, 0.2);
+  --brandAdaptiveBgHover: rgb(97, 67, 250, 0.33);
+  --brandAdaptiveBgActive: rgb(97, 67, 250, 0.45);
+  --brandAdaptiveBgDisabled: rgb(97, 67, 250, 0.11);
 
   --negative: var(--red500);
 }

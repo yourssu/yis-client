@@ -133,6 +133,10 @@ export const vars = {
   brandHover: 'var(--brandHover)',
   brandActive: 'var(--brandActive)',
   brandAdaptive: 'var(--brandAdaptive)',
+  brandAdaptiveBg: 'var(--brandAdaptiveBg)',
+  brandAdaptiveBgHover: 'var(--brandAdaptiveBgHover)',
+  brandAdaptiveBgActive: 'var(--brandAdaptiveBgActive)',
+  brandAdaptiveBgDisabled: 'var(--brandAdaptiveBgDisabled)',
   negative: 'var(--negative)'
 };
 
