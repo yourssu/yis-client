@@ -8,3 +8,5 @@ export type Mutable<T> =
     : T extends Record<number | string | symbol, unknown>
       ? { -readonly [K in keyof T]: Mutable<T[K]> }
       : T
+
+export type Merge<T, U> = Omit<T, keyof U> & U
