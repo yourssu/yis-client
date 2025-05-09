@@ -99,6 +99,12 @@ const FunnelDialog = <TStepContextMap extends AnyStepContextMap>({
   return (
     <Dialog
       closeableWithOutside={funnelDialogOpenProps.closeableWithOutside}
+      contentProps={{
+        onEscapeKeyDown: (e) => {
+          e.preventDefault()
+          askClose()
+        },
+      }}
       onClose={closeAsFalse}
       open={overlayOpenProps.isOpen}
     >

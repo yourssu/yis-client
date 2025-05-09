@@ -7,6 +7,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 interface DialogProps {
   closeableWithOutside?: boolean
+  contentProps?: DialogPrimitive.DialogContentProps
   onClose: () => void
   open: boolean
 }
@@ -77,6 +78,7 @@ export const Dialog = ({
   open,
   closeableWithOutside,
   children,
+  contentProps = {},
 }: React.PropsWithChildren<DialogProps>) => {
   const onCloseWithOutside = (e: Event) => {
     if (!closeableWithOutside) {
@@ -92,6 +94,7 @@ export const Dialog = ({
           <DialogPrimitive.Portal forceMount>
             <DialogPrimitive.Overlay className="fixed inset-0" />
             <DialogPrimitive.Content
+              {...contentProps}
               className="fixed top-1/2 left-1/2 -translate-1/2"
               onInteractOutside={onCloseWithOutside}
               onPointerDownOutside={onCloseWithOutside}
