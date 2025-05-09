@@ -17,7 +17,7 @@ export const NumberInput = ({
   onChange,
   ...props
 }: NumberInputProps) => {
-  const stringifiedValue = value !== undefined ? clamp(value, min, max) : undefined
+  const stringifiedValue = value !== undefined ? String(clamp(value, min, max)) : ''
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const parsedValue = integerParser(e.target.value)
