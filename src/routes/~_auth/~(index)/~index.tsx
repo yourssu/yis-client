@@ -2,6 +2,7 @@ import { GNB } from '@/components/GNB'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
 import { DeploymentInfoFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentInfoFormStep'
+import { ResourcesFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ResourcesFormStep'
 import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/type'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -34,25 +35,39 @@ const Index = () => {
           },
         },
         배포_정보입력: {
-          title: '배포 정보 입력',
+          title: '배포에 필요한 정보를 입력해주세요',
           content: ({ history, context }) => {
-            const { application, deploy } = context
             return (
               <DeploymentInfoFormStep
-                initialValue={deploy}
+                initialValue={context.deploy}
                 onNext={(c) => {
                   history.replace('배포_정보입력', { deploy: c })
-                  history.push('리소스_정보입력', { application, deploy: c, resource: {} })
+                  history.push('리소스_정보입력', { ...context, deploy: c, resource: {} })
                 }}
-                onPrevious={() => history.back()}
+                onPrevious={history.back}
               />
             )
           },
         },
         리소스_정보입력: {
-          title: '배포 정보 입력',
+          title: '서비스에 필요한 리소스를 선택해주세요',
+          content: ({ history, context }) => {
+            return (
+              <ResourcesFormStep
+                initialValue={context.resource}
+                onNext={(c) => {
+                  history.replace('리소스_정보입력', { resource: c })
+                  history.push('배포요청_완료', { ...context, resource: c })
+                }}
+                onPrevious={history.back}
+              />
+            )
+          },
+        },
+        배포요청_완료: {
+          title: '배포 요청 완료',
           content: () => {
-            return <div>배포 정보 입력</div>
+            return <div>배포 요청 완료!</div>
           },
         },
       }),
