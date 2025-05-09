@@ -24,7 +24,7 @@ export const ApplicationFormStep = ({ initialValue, onNext }: ApplicationFormPro
 
   return (
     <>
-      <Dialog.Content className="h-[400px] w-[500px]">
+      <Dialog.Content className="h-[440px] w-[500px]">
         <div className="flex flex-col gap-6 pb-8">
           <TextInput
             description="서비스 이름은 고유해야해요."
