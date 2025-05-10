@@ -1,34 +1,18 @@
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'motion/react'
 import { MdClose } from 'react-icons/md'
-import { tv } from 'tailwind-variants'
+import { Merge } from 'type-fest'
 
+import { ButtonProps, Button as StyledButton } from '@/components/Button'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+
 interface DialogProps {
   closeableWithOutside?: boolean
   contentProps?: DialogPrimitive.DialogContentProps
   onClose: () => void
   open: boolean
 }
-
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant: 'primary' | 'secondary' | 'subPrimary'
-}
-
-const buttonStyles = tv({
-  base: '!text-15 ease-ease disabled:text-neutralDisabled cursor-pointer rounded-lg px-9 py-2 font-medium text-white transition-colors duration-200 disabled:cursor-not-allowed',
-  variants: {
-    variant: {
-      primary:
-        'bg-brandPrimary hover:bg-brandHover focus:bg-brandActive active:bg-brandActive disabled:bg-brandDisabled',
-      secondary:
-        'bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400 disabled:bg-greyOpacity500',
-      subPrimary:
-        'bg-brandAdaptiveBg text-brandAdaptive hover:bg-brandAdaptiveBgHover focus:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
-    },
-  },
-})
 
 const Header = ({
   children,
@@ -65,11 +49,16 @@ const ButtonGroup = ({ children }: React.PropsWithChildren<unknown>) => {
   return <div className="flex w-full justify-end gap-3 px-6 pb-5">{children}</div>
 }
 
-const Button = ({ variant, className, children, ...props }: ButtonProps) => {
+const Button = ({
+  className,
+  size = 'md',
+  children,
+  ...props
+}: Merge<ButtonProps, { size?: ButtonProps['size'] }>) => {
   return (
-    <button className={clsx(buttonStyles({ variant }), className)} {...props} type="button">
+    <StyledButton className={clsx('rounded-lg px-9 py-2', className)} size={size} {...props}>
       {children}
-    </button>
+    </StyledButton>
   )
 }
 

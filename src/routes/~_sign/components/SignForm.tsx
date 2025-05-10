@@ -1,16 +1,22 @@
-import { clsx } from 'clsx'
+import clsx from 'clsx'
 
+import { Button as StyledButton } from '@/components/Button'
 import { TextInput } from '@/components/TextInput/TextInput'
 
-const Button = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const Button = ({
+  children,
+  className,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button
-      className={clsx(
-        'text-15 bg-brandPrimary hover:bg-brandHover focus:bg-brandHover disabled:bg-brandDisabled ease-ease mt-4 cursor-pointer rounded-lg px-4 py-2 font-medium transition-colors duration-200 disabled:cursor-not-allowed disabled:text-[hsla(0,0%,100%,0.45)]',
-        className
-      )}
+    <StyledButton
+      className={clsx('mt-4 rounded-lg', className)}
+      size="md"
+      variant="primary"
       {...props}
-    />
+    >
+      {children}
+    </StyledButton>
   )
 }
 

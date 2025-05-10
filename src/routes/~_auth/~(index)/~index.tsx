@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { GNB } from '@/components/GNB'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
@@ -84,12 +85,9 @@ const Index = () => {
         <div className="text-neutralMuted mb-6 text-xl font-semibold">
           아직 배포된 서비스가 없어요.
         </div>
-        <button
-          className="bg-violet100 text-15 text-brandAdaptive hover:bg-violet200 ease-ease cursor-pointer rounded-xl px-5.5 py-2.5 font-medium transition-colors duration-200"
-          onClick={onClick}
-        >
+        <Button onClick={onClick} size="lg" variant="primary">
           서비스 배포하기
-        </button>
+        </Button>
       </div>
     </div>
   )
