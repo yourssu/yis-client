@@ -1,3 +1,4 @@
+import { MdLockOutline } from 'react-icons/md'
 import { RiUserSmileLine } from 'react-icons/ri'
 import { TbLogout2 } from 'react-icons/tb'
 import { tv } from 'tailwind-variants'
@@ -60,6 +61,17 @@ export const ProfileMenu = () => {
             >
               <RiUserSmileLine className={buttonIcon()} />내 정보
             </Menu.ButtonItem>
+            {role === 'ADMIN' && (
+              <Menu.ButtonItem
+                className={buttonItem()}
+                onClick={() => {
+                  navigate({ to: '/admin' })
+                }}
+              >
+                <MdLockOutline className={buttonIcon()} />
+                관리자 페이지
+              </Menu.ButtonItem>
+            )}
             <Menu.ButtonItem
               className={buttonItem()}
               onClick={() => {

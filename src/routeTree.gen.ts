@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/~__root'
 import { Route as SignImport } from './routes/~_sign'
 import { Route as AuthImport } from './routes/~_auth'
+import { Route as R404Import } from './routes/~404'
 import { Route as AuthindexIndexImport } from './routes/~_auth/~(index)/~index'
 
 // Create Virtual Routes
@@ -22,6 +23,7 @@ import { Route as AuthindexIndexImport } from './routes/~_auth/~(index)/~index'
 const SignSignupIndexLazyImport = createFileRoute('/_sign/signup/')()
 const SignSigninIndexLazyImport = createFileRoute('/_sign/signin/')()
 const AuthProfileIndexLazyImport = createFileRoute('/_auth/profile/')()
+const AuthAdminIndexLazyImport = createFileRoute('/_auth/admin/')()
 
 // Create/Update Routes
 
@@ -32,6 +34,12 @@ const SignRoute = SignImport.update({
 
 const AuthRoute = AuthImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const R404Route = R404Import.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -59,6 +67,14 @@ const AuthProfileIndexLazyRoute = AuthProfileIndexLazyImport.update({
   import('./routes/~_auth/~profile/~index.lazy').then((d) => d.Route),
 )
 
+const AuthAdminIndexLazyRoute = AuthAdminIndexLazyImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import('./routes/~_auth/~admin/~index.lazy').then((d) => d.Route),
+)
+
 const AuthindexIndexRoute = AuthindexIndexImport.update({
   id: '/(index)/',
   path: '/',
@@ -69,6 +85,13 @@ const AuthindexIndexRoute = AuthindexIndexImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404Import
+      parentRoute: typeof rootRoute
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -88,6 +111,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthindexIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/admin/': {
+      id: '/_auth/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthAdminIndexLazyImport
       parentRoute: typeof AuthImport
     }
     '/_auth/profile/': {
@@ -118,11 +148,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthindexIndexRoute: typeof AuthindexIndexRoute
+  AuthAdminIndexLazyRoute: typeof AuthAdminIndexLazyRoute
   AuthProfileIndexLazyRoute: typeof AuthProfileIndexLazyRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthindexIndexRoute: AuthindexIndexRoute,
+  AuthAdminIndexLazyRoute: AuthAdminIndexLazyRoute,
   AuthProfileIndexLazyRoute: AuthProfileIndexLazyRoute,
 }
 
@@ -141,16 +173,20 @@ const SignRouteChildren: SignRouteChildren = {
 const SignRouteWithChildren = SignRoute._addFileChildren(SignRouteChildren)
 
 export interface FileRoutesByFullPath {
+  '/404': typeof R404Route
   '': typeof SignRouteWithChildren
   '/': typeof AuthindexIndexRoute
+  '/admin': typeof AuthAdminIndexLazyRoute
   '/profile': typeof AuthProfileIndexLazyRoute
   '/signin': typeof SignSigninIndexLazyRoute
   '/signup': typeof SignSignupIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
+  '/404': typeof R404Route
   '': typeof SignRouteWithChildren
   '/': typeof AuthindexIndexRoute
+  '/admin': typeof AuthAdminIndexLazyRoute
   '/profile': typeof AuthProfileIndexLazyRoute
   '/signin': typeof SignSigninIndexLazyRoute
   '/signup': typeof SignSignupIndexLazyRoute
@@ -158,9 +194,11 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/404': typeof R404Route
   '/_auth': typeof AuthRouteWithChildren
   '/_sign': typeof SignRouteWithChildren
   '/_auth/(index)/': typeof AuthindexIndexRoute
+  '/_auth/admin/': typeof AuthAdminIndexLazyRoute
   '/_auth/profile/': typeof AuthProfileIndexLazyRoute
   '/_sign/signin/': typeof SignSigninIndexLazyRoute
   '/_sign/signup/': typeof SignSignupIndexLazyRoute
@@ -168,14 +206,16 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/' | '/profile' | '/signin' | '/signup'
+  fullPaths: '/404' | '' | '/' | '/admin' | '/profile' | '/signin' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/' | '/profile' | '/signin' | '/signup'
+  to: '/404' | '' | '/' | '/admin' | '/profile' | '/signin' | '/signup'
   id:
     | '__root__'
+    | '/404'
     | '/_auth'
     | '/_sign'
     | '/_auth/(index)/'
+    | '/_auth/admin/'
     | '/_auth/profile/'
     | '/_sign/signin/'
     | '/_sign/signup/'
@@ -183,11 +223,13 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  R404Route: typeof R404Route
   AuthRoute: typeof AuthRouteWithChildren
   SignRoute: typeof SignRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  R404Route: R404Route,
   AuthRoute: AuthRouteWithChildren,
   SignRoute: SignRouteWithChildren,
 }
@@ -202,14 +244,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "~__root.tsx",
       "children": [
+        "/404",
         "/_auth",
         "/_sign"
       ]
+    },
+    "/404": {
+      "filePath": "~404.tsx"
     },
     "/_auth": {
       "filePath": "~_auth.tsx",
       "children": [
         "/_auth/(index)/",
+        "/_auth/admin/",
         "/_auth/profile/"
       ]
     },
@@ -222,6 +269,10 @@ export const routeTree = rootRoute
     },
     "/_auth/(index)/": {
       "filePath": "~_auth/~(index)/~index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/admin/": {
+      "filePath": "~_auth/~admin/~index.lazy.tsx",
       "parent": "/_auth"
     },
     "/_auth/profile/": {
