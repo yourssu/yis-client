@@ -1,7 +1,10 @@
+import { z } from 'zod'
+
 import { api } from '@/apis/api'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartNames } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
+import { PaginationParams } from '@/utils/ky'
 import { camelizeSchema } from '@/utils/zod'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -28,9 +31,20 @@ export const getMe = async () => {
   return camelizeSchema(UserResponseSchema).parse(res)
 }
 
-export const getUserApplications = async (userId: number) => {
-  const res = await api.get<ApplicationResponseType>(`users/${userId}/applications`).json()
-  return camelizeSchema(ApplicationResponseSchema).parse(res)
+export const getUserApplications = async ({
+  limit = 5,
+  userId,
+  skip = 0,
+}: PaginationParams & { userId: number }) => {
+  const res = await api
+    .get<ApplicationResponseType>(`users/${userId}/applications`, {
+      searchParams: {
+        limit,
+        skip,
+      },
+    })
+    .json()
+  return camelizeSchema(z.array(ApplicationResponseSchema)).parse(res)
 }
 
 export const useMeInvalidation = () => {
