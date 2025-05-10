@@ -3,7 +3,7 @@ import { tv } from 'tailwind-variants'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size: 'lg' | 'md' | 'sm'
-  variant: 'primary' | 'secondary' | 'subPrimary'
+  variant: 'primary' | 'secondary' | 'subPrimary' | 'transparent'
 }
 
 const button = tv({
@@ -16,6 +16,8 @@ const button = tv({
         '!text-neutral disabled:!text-neutralDisabled bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400 disabled:bg-greyOpacity500',
       subPrimary:
         'bg-brandAdaptiveBg disabled:!text-brandDisabled !text-brandAdaptive hover:bg-brandAdaptiveBgHover focus:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
+      transparent:
+        '!text-neutralSubtle hover:bg-grey100 active:bg-grey200 focus:bg-grey200 disabled:!text-neutralDisabled bg-transparent disabled:bg-transparent',
     },
     size: {
       sm: 'rounded-lg px-4 py-1.5 text-sm font-medium',
