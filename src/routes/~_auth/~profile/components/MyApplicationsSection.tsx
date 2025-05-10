@@ -1,10 +1,12 @@
+import { compareDesc } from 'date-fns'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
-import { getUserApplications } from '@/apis/user'
+import { getUserApplicationsWithRecentDeployment } from '@/apis/user'
 import { Button } from '@/components/Button'
 import { Divider } from '@/components/Divider'
 import { ItemList } from '@/components/ItemList'
 import { useSuspensedMe } from '@/hooks/useMe'
+import { ApplicationCard } from '@/routes/~_auth/~profile/components/ApplicationCard'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
@@ -12,12 +14,15 @@ export const MyApplicationsSection = () => {
   const { id: userId } = useSuspensedMe()
   const { data: applications, fetchNextPage } = useSuspenseInfiniteQuery({
     queryKey: ['user-applications', userId],
-    queryFn: ({ pageParam }) => getUserApplications({ userId, skip: pageParam }),
+    queryFn: ({ pageParam }) =>
+      getUserApplicationsWithRecentDeployment({ userId, skip: pageParam }),
     initialPageParam: 0,
     getNextPageParam: (_, pages) => pages.flat().length,
   })
 
-  const allApplications = applications.pages.flat()
+  const allApplications = applications.pages
+    .flat()
+    .sort((a, b) => compareDesc(a.createdAt, b.createdAt))
 
   return (
     <div className="flex w-full flex-col gap-10">
@@ -37,9 +42,12 @@ export const MyApplicationsSection = () => {
           </div>
         ) : (
           <ItemList.Body>
-            {allApplications.map((application) => (
-              <div key={application.id}>{application.name}</div>
-            ))}
+            <div className="flex flex-col gap-2">
+              {allApplications.map((application) => (
+                <ApplicationCard application={application} key={application.id} />
+              ))}
+            </div>
+
             <Divider className="mt-4 mb-2" />
             <Button onClick={() => fetchNextPage()} size="md" variant="transparent">
               <div className="flex items-center justify-center">

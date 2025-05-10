@@ -1,6 +1,8 @@
+import { compareDesc } from 'date-fns'
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
+import { getApplicationDeployments } from '@/apis/application'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartNames } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
@@ -13,6 +15,10 @@ interface EditUserProps {
   id: number
   nickname: string
   part: PartNames
+}
+
+type GetUserApplicationsProps = PaginationParams & {
+  userId: number
 }
 
 export const editUser = async (props: EditUserProps) => {
@@ -35,9 +41,9 @@ export const getUserApplications = async ({
   limit = 5,
   userId,
   skip = 0,
-}: PaginationParams & { userId: number }) => {
+}: GetUserApplicationsProps) => {
   const res = await api
-    .get<ApplicationResponseType>(`users/${userId}/applications`, {
+    .get<ApplicationResponseType[]>(`users/${userId}/applications`, {
       searchParams: {
         limit,
         skip,
@@ -45,6 +51,24 @@ export const getUserApplications = async ({
     })
     .json()
   return camelizeSchema(z.array(ApplicationResponseSchema)).parse(res)
+}
+
+export const getUserApplicationsWithRecentDeployment = async ({
+  userId,
+  limit = 5,
+  skip = 0,
+}: GetUserApplicationsProps) => {
+  const applications = await getUserApplications({ userId, limit, skip })
+  const recentDeployments = await Promise.all(
+    applications.map(async ({ id }) => {
+      const deployments = await getApplicationDeployments({ applicationId: id })
+      return [...deployments].sort((a, b) => compareDesc(a.updatedAt, b.updatedAt))[0]
+    })
+  )
+  return applications.map((application, index) => ({
+    ...application,
+    recentDeployment: recentDeployments[index],
+  }))
 }
 
 export const useMeInvalidation = () => {
