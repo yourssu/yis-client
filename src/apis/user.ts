@@ -11,6 +11,7 @@ import { camelizeSchema } from '@/utils/zod'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface EditUserProps {
+  avatarId: number
   email: string
   id: number
   nickname: string
@@ -22,11 +23,14 @@ type GetUserApplicationsProps = PaginationParams & {
 }
 
 export const editUser = async (props: EditUserProps) => {
-  const { id, ...body } = props
+  const { id, avatarId, ...body } = props
 
   const res = await api
     .put<UserResponseType>(`users/${id}`, {
-      json: body,
+      json: {
+        ...body,
+        avatar_id: avatarId,
+      },
     })
     .json()
   return camelizeSchema(UserResponseSchema).parse(res)

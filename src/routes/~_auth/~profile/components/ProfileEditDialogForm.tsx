@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { editUser, useMeInvalidation } from '@/apis/user'
 import { Dialog } from '@/components/Dialog'
 import { Label } from '@/components/Label'
+import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { Select } from '@/components/Select'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
@@ -22,10 +23,12 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
   const [nickname, setNickname] = useInputState(user.nickname)
   const [email, setEmail] = useInputState(user.email)
   const [part, setPart] = useState<PartNames>(user.part)
+  const [avatarId, setAvatarId] = useState(user.avatarId)
   const inputData = {
     nickname,
     email,
     part,
+    avatarId,
   }
 
   const { mutateWithToast, isPending } = useToastedMutation({
@@ -54,6 +57,28 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
     <>
       <Dialog.Content>
         <div className="flex w-[500px] flex-col gap-3 pt-2.5 pb-4">
+          <Label content="프로필 사진">
+            <div className="flex items-center justify-center gap-10">
+              <div className="size-20 overflow-hidden rounded-full">
+                <ProfileAvatar avatarId={avatarId} draggable={false} />
+              </div>
+              <div className="grid grid-cols-[repeat(4,44px)] gap-2">
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((id) => (
+                  <div
+                    className={`size-11 cursor-pointer overflow-hidden rounded-full border-2 p-1 ${
+                      avatarId === id ? 'border-brandPrimary' : 'border-transparent'
+                    }`}
+                    key={id}
+                    onClick={() => setAvatarId(id)}
+                  >
+                    <div className="size-full overflow-hidden rounded-full">
+                      <ProfileAvatar avatarId={id} draggable={false} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Label>
           <TextInput
             invalid={checkParsedError(error, 'nickname')}
             label="닉네임"
@@ -97,4 +122,5 @@ const ProfileEditDialogFormSchema = z.object({
   nickname: z.string().min(1),
   email: z.string().email().endsWith('.urssu@gmail.com'),
   part: z.enum(PartNames),
+  avatarId: z.number(),
 })
