@@ -1,9 +1,11 @@
-import { z } from 'zod'
-
 import { api } from '@/apis/api'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { DeploymentResponseSchema, DeploymentResponseType } from '@/types/deployment'
-import { PaginationParams } from '@/utils/ky'
+import {
+  PaginatedResponseSchema,
+  PaginatedResponseType,
+  PaginationParams,
+} from '@/types/pagination'
 import { camelizeSchema } from '@/utils/zod'
 
 export type CreateApplicationProps = {
@@ -26,12 +28,16 @@ export const getApplicationDeployments = async ({
   skip = 0,
 }: GetApplicationDeploymentsProps) => {
   const res = await api
-    .get<DeploymentResponseType[]>(`applications/${applicationId}/deployments`, {
-      searchParams: {
-        limit,
-        skip,
-      },
-    })
+    .get<PaginatedResponseType<DeploymentResponseType[]>>(
+      `applications/${applicationId}/deployments`,
+      {
+        searchParams: {
+          limit,
+          skip,
+        },
+      }
+    )
     .json()
-  return camelizeSchema(z.array(DeploymentResponseSchema)).parse(res)
+
+  return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
 }

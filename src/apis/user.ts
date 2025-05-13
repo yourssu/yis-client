@@ -6,7 +6,6 @@ import { getApplicationDeployments } from '@/apis/application'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartNames } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
-import { PaginationParams } from '@/utils/ky'
 import { camelizeSchema } from '@/utils/zod'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -18,7 +17,7 @@ interface EditUserProps {
   part: PartNames
 }
 
-type GetUserApplicationsProps = PaginationParams & {
+type GetUserApplicationsProps = {
   userId: number
 }
 
@@ -41,32 +40,19 @@ export const getMe = async () => {
   return camelizeSchema(UserResponseSchema).parse(res)
 }
 
-export const getUserApplications = async ({
-  limit = 5,
-  userId,
-  skip = 0,
-}: GetUserApplicationsProps) => {
-  const res = await api
-    .get<ApplicationResponseType[]>(`users/${userId}/applications`, {
-      searchParams: {
-        limit,
-        skip,
-      },
-    })
-    .json()
+export const getUserApplications = async ({ userId }: GetUserApplicationsProps) => {
+  const res = await api.get<ApplicationResponseType[]>(`users/${userId}/applications`).json()
   return camelizeSchema(z.array(ApplicationResponseSchema)).parse(res)
 }
 
 export const getUserApplicationsWithRecentDeployment = async ({
   userId,
-  limit = 5,
-  skip = 0,
 }: GetUserApplicationsProps) => {
-  const applications = await getUserApplications({ userId, limit, skip })
+  const applications = await getUserApplications({ userId })
   const recentDeployments = await Promise.all(
     applications.map(async ({ id }) => {
-      const deployments = await getApplicationDeployments({ applicationId: id })
-      return [...deployments].sort((a, b) => compareDesc(a.updatedAt, b.updatedAt))[0]
+      const { data } = await getApplicationDeployments({ applicationId: id })
+      return [...data].sort((a, b) => compareDesc(a.updatedAt, b.updatedAt))[0]
     })
   )
   return applications.map((application, index) => ({

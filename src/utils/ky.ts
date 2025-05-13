@@ -1,10 +1,5 @@
 import { HTTPError } from 'ky'
 
-export type PaginationParams = {
-  limit?: number
-  skip?: number
-}
-
 export const isKyHTTPError = (e: any): e is HTTPError => e instanceof HTTPError
 
 export const getKyHTTPErrorMessage = async (e: HTTPError) => {
