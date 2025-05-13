@@ -27,20 +27,20 @@ export const ProfileMenu = () => {
 
   const toast = useToast()
   const navigate = useNavigate()
-  const { id, nickname, email, role } = useSuspensedMe()
+  const { nickname, email, role, avatarId } = useSuspensedMe()
 
   return (
     <Menu>
       <Menu.Target>
         <div className="size-9 cursor-pointer overflow-hidden rounded-full">
-          <ProfileAvatar userId={id} />
+          <ProfileAvatar avatarId={avatarId} />
         </div>
       </Menu.Target>
 
       <Menu.Content align="end" sideOffset={8}>
         <div className="bg-grey100 flex min-w-[280px] flex-col items-center gap-3 rounded-lg p-4">
           <div className={avatar()}>
-            <ProfileAvatar userId={id} />
+            <ProfileAvatar avatarId={avatarId} />
           </div>
           <div className="flex flex-col items-center gap-0.5">
             <div className="flex items-center gap-2">

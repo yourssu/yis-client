@@ -23,7 +23,7 @@ export const ProfileSection = () => {
     <div className="flex w-full flex-col gap-10">
       <div className="flex flex-col items-center gap-4">
         <div className="size-16 overflow-hidden rounded-full">
-          <ProfileAvatar userId={me.id} />
+          <ProfileAvatar avatarId={me.avatarId} />
         </div>
         <div className="text-xl font-semibold">{me.nickname}</div>
       </div>

@@ -7,6 +7,7 @@ import { removeAuthTokens } from '@/utils/auth'
 import { camelizeSchema } from '@/utils/zod'
 
 interface SignupProps {
+  avatarId: number
   email: string
   nickname: string
   part: string
@@ -22,7 +23,16 @@ const SigninResponseSchema = TokenResponseSchema
 type SigninResponse = z.infer<typeof SigninResponseSchema>
 
 export const signup = async (props: SignupProps) => {
-  const res = await api.post<UserResponseType>('auth', { json: props }).json()
+  const { avatarId, ...others } = props
+
+  const res = await api
+    .post<UserResponseType>('auth', {
+      json: {
+        ...others,
+        avatar_id: avatarId,
+      },
+    })
+    .json()
   return camelizeSchema(UserResponseSchema).parse(res)
 }
 

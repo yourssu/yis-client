@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { random } from 'es-toolkit'
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
@@ -62,6 +63,7 @@ export const SignupForm = () => {
       password,
       nickname,
       part,
+      avatarId: Math.floor(random(12)) + 1,
     })
     if (res) {
       navigate({ to: '/signin', replace: true })
