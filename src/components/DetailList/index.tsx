@@ -46,7 +46,9 @@ const Detail = ({ children }: DeatilProps) => {
       }}
     >
       {renderTarget && (
-        <div className="border-grey200 size-full min-w-[400px] border-l-1 p-5">{renderTarget}</div>
+        <div className="border-grey200 size-full min-w-[400px] border-l-1 p-5 pb-20">
+          {renderTarget}
+        </div>
       )}
     </motion.div>
   )
