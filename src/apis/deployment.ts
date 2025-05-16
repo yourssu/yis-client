@@ -1,5 +1,15 @@
 import { api } from '@/apis/api'
-import { DeploymentResponseSchema, DeploymentResponseType } from '@/types/deployment'
+import { getApplication } from '@/apis/application'
+import {
+  DeploymentResponseSchema,
+  DeploymentResponseType,
+  DeploymentStateNames,
+} from '@/types/deployment'
+import {
+  PaginatedResponseSchema,
+  PaginatedResponseType,
+  PaginationParams,
+} from '@/types/pagination'
 import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/types/resource'
 import { camelizeSchema } from '@/utils/zod'
 
@@ -19,6 +29,10 @@ export type CreateDeploymentProps = {
     memoryLimit: MemoryResourceNames
     memoryRequest: MemoryResourceNames
   }
+}
+
+type GetDeploymentsByStateProps = PaginationParams & {
+  state: DeploymentStateNames
 }
 
 export const createDeployment = async (props: CreateDeploymentProps) => {
@@ -43,4 +57,47 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
     })
     .json()
   return camelizeSchema(DeploymentResponseSchema).parse(res)
+}
+
+export const getDeploymentsByState = async ({
+  state,
+  limit = 50,
+  skip = 0,
+}: GetDeploymentsByStateProps) => {
+  const res = await api
+    .get<PaginatedResponseType<DeploymentResponseType[]>>(`deployments/state`, {
+      searchParams: {
+        limit,
+        skip,
+        state,
+      },
+    })
+    .json()
+  return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
+}
+
+export const getDeploymentsByStateWithApplication = async ({
+  state,
+  limit = 50,
+  skip = 0,
+}: GetDeploymentsByStateProps) => {
+  const res = await getDeploymentsByState({
+    state,
+    limit,
+    skip,
+  })
+  const applications = await Promise.all(
+    res.data.map(async ({ applicationId }) => {
+      const application = await getApplication(applicationId)
+      return application
+    })
+  )
+
+  return {
+    ...res,
+    data: res.data.map((deployment, index) => ({
+      ...deployment,
+      application: applications[index],
+    })),
+  }
 }

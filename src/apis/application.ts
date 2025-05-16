@@ -22,6 +22,11 @@ export const createApplication = async (props: CreateApplicationProps) => {
   return camelizeSchema(ApplicationResponseSchema).parse(res)
 }
 
+export const getApplication = async (applicationId: number) => {
+  const res = await api.get<ApplicationResponseType>(`applications/${applicationId}`).json()
+  return camelizeSchema(ApplicationResponseSchema).parse(res)
+}
+
 export const getApplicationDeployments = async ({
   applicationId,
   limit = 100,
@@ -38,6 +43,5 @@ export const getApplicationDeployments = async ({
       }
     )
     .json()
-
   return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
 }

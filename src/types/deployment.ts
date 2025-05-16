@@ -2,6 +2,9 @@ import { z } from 'zod'
 
 import { camelizeSchema } from '@/utils/zod'
 
+export const DeploymentStateNames = ['REQUEST', 'RETURN', 'APPROVAL'] as const
+export type DeploymentStateNames = (typeof DeploymentStateNames)[number]
+
 export const DeploymentResponseSchema = z.object({
   domain_name: z.string(),
   cpu_requests: z.string(),
@@ -9,13 +12,14 @@ export const DeploymentResponseSchema = z.object({
   cpu_limits: z.string(),
   memory_limits: z.string(),
   port: z.number(),
-  image_url: z.string().url(),
+  image_url: z.string(),
   replicas: z.number(),
   message: z.string().nullable(),
   id: z.number(),
   application_id: z.number(),
   comment: z.string().nullable(),
   is_applied: z.boolean(),
+  state: z.enum(DeploymentStateNames),
   user_id: z.number(),
   admin_id: z.number().nullable(),
   // manifests: z.array() // Todo: 메니페스트 타입 구현하기

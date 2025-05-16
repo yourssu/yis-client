@@ -11,6 +11,7 @@ export const ApplicationResponseSchema = z.object({
     email: true,
     nickname: true,
     part: true,
+    avatar_id: true,
   }),
   applied_deployment_id: z.number().nullable(),
   created_at: z.string(),
