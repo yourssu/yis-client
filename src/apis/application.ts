@@ -6,6 +6,7 @@ import {
   PaginatedResponseType,
   PaginationParams,
 } from '@/types/pagination'
+import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema } from '@/utils/zod'
 
 export type CreateApplicationProps = {
@@ -31,15 +32,17 @@ export const getApplicationDeployments = async ({
   applicationId,
   limit = 100,
   skip = 0,
+  orderBy,
 }: GetApplicationDeploymentsProps) => {
   const res = await api
     .get<PaginatedResponseType<DeploymentResponseType[]>>(
       `applications/${applicationId}/deployments`,
       {
-        searchParams: {
+        searchParams: omitByNullish({
           limit,
           skip,
-        },
+          orderBy,
+        }),
       }
     )
     .json()

@@ -1,4 +1,3 @@
-import { compareDesc } from 'date-fns'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 
 import { getDeploymentsByStateWithApplication } from '@/apis/deployment'
@@ -20,6 +19,7 @@ export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
       getDeploymentsByStateWithApplication({
         state,
         skip: pageParam,
+        orderBy: 'UPDATED_AT_DESC',
       }),
     getNextPageParam: (lastPage) => {
       const next = lastPage.currentLimit + lastPage.currentSkip
@@ -28,9 +28,7 @@ export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
     initialPageParam: 0,
   })
 
-  const sortedDeployments = [...deployments.pages.map((deployment) => deployment.data)]
-    .flat()
-    .sort((a, b) => compareDesc(a.updatedAt, b.updatedAt))
+  const sortedDeployments = [...deployments.pages.flatMap(({ data }) => data)]
 
   return (
     <>

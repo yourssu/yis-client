@@ -1,4 +1,3 @@
-import { compareDesc } from 'date-fns'
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
@@ -51,8 +50,11 @@ export const getUserApplicationsWithRecentDeployment = async ({
   const applications = await getUserApplications({ userId })
   const recentDeployments = await Promise.all(
     applications.map(async ({ id }) => {
-      const { data } = await getApplicationDeployments({ applicationId: id })
-      return [...data].sort((a, b) => compareDesc(a.updatedAt, b.updatedAt))[0]
+      const { data } = await getApplicationDeployments({
+        applicationId: id,
+        orderBy: 'UPDATED_AT_DESC',
+      })
+      return data[0]
     })
   )
   return applications.map((application, index) => ({

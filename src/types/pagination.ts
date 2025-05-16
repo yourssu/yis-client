@@ -1,7 +1,14 @@
 import { z } from 'zod'
 
+export type PaginationOrder =
+  | 'CREATED_AT_ASC'
+  | 'CREATED_AT_DESC'
+  | 'UPDATED_AT_ASC'
+  | 'UPDATED_AT_DESC'
+
 export type PaginationParams = {
   limit?: number
+  orderBy?: PaginationOrder
   skip?: number
 }
 

@@ -11,6 +11,7 @@ import {
   PaginationParams,
 } from '@/types/pagination'
 import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/types/resource'
+import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema } from '@/utils/zod'
 
 export type CreateDeploymentProps = {
@@ -63,14 +64,16 @@ export const getDeploymentsByState = async ({
   state,
   limit = 50,
   skip = 0,
+  orderBy,
 }: GetDeploymentsByStateProps) => {
   const res = await api
     .get<PaginatedResponseType<DeploymentResponseType[]>>(`deployments/state`, {
-      searchParams: {
+      searchParams: omitByNullish({
         limit,
         skip,
         state,
-      },
+        order_by: orderBy,
+      }),
     })
     .json()
   return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
@@ -80,11 +83,13 @@ export const getDeploymentsByStateWithApplication = async ({
   state,
   limit = 50,
   skip = 0,
+  orderBy,
 }: GetDeploymentsByStateProps) => {
   const res = await getDeploymentsByState({
     state,
     limit,
     skip,
+    orderBy,
   })
   const applications = await Promise.all(
     res.data.map(async ({ applicationId }) => {
