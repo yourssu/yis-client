@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 
 import { GNB } from '@/components/GNB'
 import { useSuspensedMe } from '@/hooks/useMe'
+import { DeploymentStateTable } from '@/routes/~_auth/~admin/components/DeploymentStateTable'
 import { createLazyFileRoute, Navigate } from '@tanstack/react-router'
 
 const Admin = () => {
@@ -14,7 +15,9 @@ const Admin = () => {
   return (
     <div>
       <GNB />
-      어드민
+      <div className="mx-auto mt-10 flex max-w-[1200px] flex-col items-center gap-20">
+        <DeploymentStateTable />
+      </div>
     </div>
   )
 }
