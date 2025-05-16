@@ -34,18 +34,19 @@ const Detail = ({ children }: DeatilProps) => {
   return (
     <motion.div
       animate={renderTarget ? 'animate' : 'initial'}
+      className="overflow-hidden"
       transition={{
         type: 'spring',
         damping: 50,
         stiffness: 500,
       }}
       variants={{
-        initial: { flex: '0 1', marginLeft: 0 },
-        animate: { flex: '300 1', marginLeft: 10 },
+        initial: { flex: '0 1', marginLeft: 0, minWidth: '0px' },
+        animate: { flex: '300 1', marginLeft: 10, minWidth: '300px' },
       }}
     >
       {renderTarget && (
-        <div className="border-grey200 size-full border-l-1 p-5">{renderTarget}</div>
+        <div className="border-grey200 size-full min-w-[400px] border-l-1 p-5">{renderTarget}</div>
       )}
     </motion.div>
   )
