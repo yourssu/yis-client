@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 
 import { getDeploymentsByStateWithApplication } from '@/apis/deployment'
@@ -5,14 +6,20 @@ import { Button } from '@/components/Button'
 import { DetailList } from '@/components/DetailList'
 import { Divider } from '@/components/Divider'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { AdminPageSearchParams } from '@/routes/~_auth/~admin/type'
 import { DeploymentStateNames } from '@/types/deployment'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 interface DeploymentStateListProps {
+  setActiveDeploymentId: Dispatch<SetStateAction<AdminPageSearchParams['id']>>
   state: DeploymentStateNames
 }
 
-export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
+export const DeploymentStateList = ({
+  state,
+
+  setActiveDeploymentId,
+}: DeploymentStateListProps) => {
   const { data: deployments } = useSuspenseInfiniteQuery({
     queryKey: ['deployments', state],
     queryFn: ({ pageParam }) =>
@@ -33,7 +40,7 @@ export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
   return (
     <>
       <DetailList.List>
-        {sortedDeployments.map((deployment, index) => (
+        {sortedDeployments.map((deployment) => (
           <DetailList.ListItem
             description={deployment.application.description}
             footer={<MdKeyboardArrowRight className="size-5" />}
@@ -47,15 +54,21 @@ export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
                 </div>
               </div>
             }
-            index={index}
+            id={deployment.id}
             key={deployment.id}
+            onClick={({ close }) => {
+              setActiveDeploymentId(close ? deployment.id.toString() : undefined)
+            }}
             text={deployment.application.name}
           />
         ))}
       </DetailList.List>
       <DetailList.Detail>
-        {({ index }) => {
-          const deployment = sortedDeployments[index]
+        {({ id }) => {
+          const deployment = sortedDeployments.find((v) => v.id === id)
+          if (!deployment) {
+            return undefined
+          }
 
           const listPairs = [
             {
@@ -108,7 +121,7 @@ export const DeploymentStateList = ({ state }: DeploymentStateListProps) => {
               </div>
               <div className="flex flex-col gap-4">
                 {listPairs.map(({ label, value }) => (
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-sm" key={label}>
                     <div className="text-neutralMuted">{label}</div>
                     <div>{value}</div>
                   </div>
