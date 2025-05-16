@@ -3,8 +3,8 @@ import { createContext, useContext } from 'react'
 
 interface DetailListContextProps<TTab extends string> {
   onTabChange: (value: TTab) => void
-  selectedIndex: number | undefined
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>
+  selectedId: number | undefined
+  setSelectedId: React.Dispatch<React.SetStateAction<number | undefined>>
   setTab: React.Dispatch<React.SetStateAction<TTab>>
   tab: TTab
 }
@@ -12,8 +12,8 @@ interface DetailListContextProps<TTab extends string> {
 export const createDetailListContext = once(<TTab extends string>() =>
   createContext<DetailListContextProps<TTab>>({
     onTabChange: () => {},
-    selectedIndex: undefined,
-    setSelectedIndex: () => {},
+    selectedId: undefined,
+    setSelectedId: () => {},
     setTab: () => {},
     tab: '' as TTab,
   })

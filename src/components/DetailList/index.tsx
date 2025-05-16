@@ -5,8 +5,9 @@ import React, { useState } from 'react'
 import { createDetailListContext, useDetailListContext } from '@/components/DetailList/context'
 
 interface DetailListProps<TTab extends string> {
+  componentId: string
+  defaultSelectedId?: number
   defaultTab: TTab
-  id: string
   onTabChange: (value: TTab) => void
   tabs: TTab[]
 }
@@ -15,22 +16,24 @@ interface ListItemProps {
   description: string
   footer: React.ReactNode
   header: React.ReactNode
-  index: number
+  id: number
+  onClick?: (p: { close: boolean }) => void
   text: string
 }
 
 interface DeatilProps {
-  children: (p: { index: number }) => React.ReactNode
+  children: (p: { id: number }) => React.ReactNode
 }
 
 const Detail = ({ children }: DeatilProps) => {
-  const { selectedIndex } = useDetailListContext()
+  const { selectedId } = useDetailListContext()
 
-  const active = selectedIndex !== undefined
+  const active = selectedId !== undefined
+  const renderTarget = active && children({ id: selectedId })
 
   return (
     <motion.div
-      animate={active ? 'animate' : 'initial'}
+      animate={renderTarget ? 'animate' : 'initial'}
       transition={{
         type: 'spring',
         damping: 50,
@@ -41,10 +44,8 @@ const Detail = ({ children }: DeatilProps) => {
         animate: { flex: '300 1', marginLeft: 10 },
       }}
     >
-      {active && (
-        <div className="border-grey200 size-full border-l-1 p-5">
-          {children({ index: selectedIndex })}
-        </div>
+      {renderTarget && (
+        <div className="border-grey200 size-full border-l-1 p-5">{renderTarget}</div>
       )}
     </motion.div>
   )
@@ -54,17 +55,18 @@ const List = ({ children }: React.PropsWithChildren<unknown>) => {
   return <div className="flex flex-[400_1] flex-col pt-2.5">{children}</div>
 }
 
-const ListItem = ({ index, text, description, footer, header }: ListItemProps) => {
-  const { selectedIndex, setSelectedIndex } = useDetailListContext()
+const ListItem = ({ id, text, description, footer, header, onClick }: ListItemProps) => {
+  const { selectedId, setSelectedId } = useDetailListContext()
 
   return (
     <div
       className={clsx(
         'hover:bg-grey100 ease-ease flex cursor-pointer items-center justify-between rounded-lg p-2 transition-colors duration-300',
-        selectedIndex === index && 'bg-grey50'
+        selectedId === id && 'bg-grey50'
       )}
       onClick={() => {
-        setSelectedIndex((prev) => (prev === index ? undefined : index))
+        onClick?.({ close: selectedId !== id })
+        setSelectedId((prev) => (prev === id ? undefined : id))
       }}
     >
       <div className="flex items-center gap-5">
@@ -83,25 +85,26 @@ export const DetailList = <TTab extends string>({
   children,
   tabs,
   defaultTab,
-  id,
+  componentId,
+  defaultSelectedId,
   onTabChange,
 }: React.PropsWithChildren<DetailListProps<TTab>>) => {
   const [tab, setTab] = useState<TTab>(defaultTab)
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined)
+  const [selectedId, setSelectedId] = useState<number | undefined>(defaultSelectedId)
 
   const Context = createDetailListContext<TTab>()
   return (
     <Context.Provider
       value={{
         onTabChange,
-        selectedIndex,
-        setSelectedIndex,
+        selectedId,
+        setSelectedId,
         setTab,
         tab,
       }}
     >
       <div className="w-full">
-        <LayoutGroup id={id}>
+        <LayoutGroup id={componentId}>
           <div className="border-grey200 flex w-full gap-5 border-b-[1px]">
             {tabs.map((item) => (
               <div
@@ -109,7 +112,7 @@ export const DetailList = <TTab extends string>({
                 key={item}
                 onClick={() => {
                   setTab(item)
-                  setSelectedIndex(undefined)
+                  setSelectedId(undefined)
                   onTabChange(item)
                 }}
               >
