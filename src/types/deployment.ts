@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { CPUResourceValueNames, MemoryResourceNames } from '@/types/resource'
 import { camelizeSchema } from '@/utils/zod'
 
 export const DeploymentStateNames = ['REQUEST', 'RETURN', 'APPROVAL'] as const
@@ -7,10 +8,10 @@ export type DeploymentStateNames = (typeof DeploymentStateNames)[number]
 
 export const DeploymentResponseSchema = z.object({
   domain_name: z.string(),
-  cpu_requests: z.string(),
-  memory_requests: z.string(),
-  cpu_limits: z.string(),
-  memory_limits: z.string(),
+  cpu_requests: z.enum(CPUResourceValueNames),
+  memory_requests: z.enum(MemoryResourceNames),
+  cpu_limits: z.enum(CPUResourceValueNames),
+  memory_limits: z.enum(MemoryResourceNames),
   port: z.number(),
   image_url: z.string(),
   replicas: z.number(),
