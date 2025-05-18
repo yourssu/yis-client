@@ -36,11 +36,6 @@ body {
     sans-serif;
 }
 
-a {
-  color: var(--color-blue500);
-  text-decoration: underline;
-}
-
 input::placeholder {
   color: var(--color-neutralPlaceholder);
 }

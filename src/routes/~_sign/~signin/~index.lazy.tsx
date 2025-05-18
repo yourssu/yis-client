@@ -1,8 +1,8 @@
-import { InlineButton } from '@/components/InlineButton'
+import { InlineLink } from '@/components/InlineLink'
 import { SigninForm } from '@/routes/~_sign/~signin/components/SigninForm'
 import { SignFooter } from '@/routes/~_sign/components/SignFooter'
 import { SignTitle } from '@/routes/~_sign/components/SignTitle'
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
 const Signin = () => {
   return (
@@ -11,9 +11,7 @@ const Signin = () => {
       <SigninForm />
       <SignFooter>
         아직 YIS 계정이 없으신가요?
-        <InlineButton asChild>
-          <Link to="/signup">가입하기</Link>
-        </InlineButton>
+        <InlineLink to="/signup">로그인하기</InlineLink>
       </SignFooter>
     </>
   )
