@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 
+import { userKey } from '@/apis/keys'
 import { getUserApplicationsWithRecentDeployment } from '@/apis/user'
 import { GNB } from '@/components/GNB'
 import { useSuspensedMe } from '@/hooks/useMe'
@@ -11,7 +12,7 @@ import { createFileRoute } from '@tanstack/react-router'
 const Index = () => {
   const { id: userId } = useSuspensedMe()
   const { data: applications } = useSuspenseQuery({
-    queryKey: ['user-applications', userId],
+    queryKey: userKey.applications(userId),
     queryFn: () => getUserApplicationsWithRecentDeployment({ userId }),
   })
 

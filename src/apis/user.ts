@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { api } from '@/apis/api'
 import { getApplicationDeployments } from '@/apis/application'
+import { userKey } from '@/apis/keys'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartNames } from '@/types/part'
 import { UserResponseSchema, UserResponseType } from '@/types/user'
@@ -67,7 +68,7 @@ export const useMeInvalidation = () => {
   const queryClient = useQueryClient()
   return () => {
     queryClient.invalidateQueries({
-      queryKey: ['me'],
+      queryKey: userKey.me(),
     })
   }
 }

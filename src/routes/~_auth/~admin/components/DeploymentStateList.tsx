@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 
 import { getDeploymentsByStateWithApplication } from '@/apis/deployment'
+import { deploymentKey } from '@/apis/keys'
 import { DetailList } from '@/components/DetailList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { DeploymentStateListDetail } from '@/routes/~_auth/~admin/components/DeploymentStateListDetail'
@@ -20,7 +21,7 @@ export const DeploymentStateList = ({
   setActiveDeploymentId,
 }: DeploymentStateListProps) => {
   const { data: deployments } = useSuspenseInfiniteQuery({
-    queryKey: ['deployments', state],
+    queryKey: deploymentKey.state(state),
     queryFn: ({ pageParam }) =>
       getDeploymentsByStateWithApplication({
         state,

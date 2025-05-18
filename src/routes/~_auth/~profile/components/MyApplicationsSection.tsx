@@ -1,5 +1,6 @@
 import { compareDesc } from 'date-fns'
 
+import { userKey } from '@/apis/keys'
 import { getUserApplicationsWithRecentDeployment } from '@/apis/user'
 import { ItemList } from '@/components/ItemList'
 import { useSuspensedMe } from '@/hooks/useMe'
@@ -10,7 +11,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 export const MyApplicationsSection = () => {
   const { id: userId } = useSuspensedMe()
   const { data: applications } = useSuspenseQuery({
-    queryKey: ['user-applications', userId],
+    queryKey: userKey.applications(userId),
     queryFn: () => getUserApplicationsWithRecentDeployment({ userId }),
   })
 
