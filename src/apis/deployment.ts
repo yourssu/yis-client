@@ -36,6 +36,13 @@ type GetDeploymentsByStateProps = PaginationParams & {
   state: DeploymentStateNames
 }
 
+interface UpdateDeploymentStateProps {
+  comment?: string
+  id: number
+  link: string
+  state: DeploymentStateNames
+}
+
 export const createDeployment = async (props: CreateDeploymentProps) => {
   const res = await api
     .post<DeploymentResponseType>('deployments/', {
@@ -105,4 +112,22 @@ export const getDeploymentsByStateWithApplication = async ({
       application: applications[index],
     })),
   }
+}
+
+export const updateDeploymentState = async ({
+  comment,
+  link,
+  state,
+  id,
+}: UpdateDeploymentStateProps) => {
+  const res = await api
+    .patch<DeploymentResponseType>(`deployments/${id}`, {
+      json: {
+        state,
+        comment,
+        link,
+      },
+    })
+    .json()
+  return camelizeSchema(DeploymentResponseSchema).parse(res)
 }
