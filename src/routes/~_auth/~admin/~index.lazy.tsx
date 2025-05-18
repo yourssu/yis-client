@@ -1,17 +1,11 @@
 import { Suspense } from 'react'
 
 import { GNB } from '@/components/GNB'
-import { useSuspensedMe } from '@/hooks/useMe'
+import { PageValidator } from '@/components/PageValidator'
 import { DeploymentStateTable } from '@/routes/~_auth/~admin/components/DeploymentStateTable'
-import { createLazyFileRoute, Navigate } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
 const Admin = () => {
-  const { role } = useSuspensedMe()
-
-  if (role !== 'ADMIN') {
-    return <Navigate replace to="/404" />
-  }
-
   return (
     <div>
       <GNB />
@@ -25,7 +19,9 @@ const Admin = () => {
 export const Route = createLazyFileRoute('/_auth/admin/')({
   component: () => (
     <Suspense>
-      <Admin />
+      <PageValidator validate={(me) => me.role === 'ADMIN'}>
+        <Admin />
+      </PageValidator>
     </Suspense>
   ),
 })
