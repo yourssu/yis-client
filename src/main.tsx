@@ -1,8 +1,12 @@
+import { setDefaultOptions as setDefaultDateFnsOptions } from 'date-fns'
+import { ko } from 'date-fns/locale'
 import { OverlayProvider } from 'overlay-kit'
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 
 import '@/styles/index.css'
+
+import { createRoot } from 'react-dom/client'
+
 import { AuthProvider } from '@/components/Providers/AuthProvider'
 import { useAuth } from '@/components/Providers/AuthProvider/hook'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
@@ -11,6 +15,8 @@ import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import { routeTree } from './routeTree.gen'
+
+setDefaultDateFnsOptions({ locale: ko })
 
 export const router = createRouter({
   routeTree,
