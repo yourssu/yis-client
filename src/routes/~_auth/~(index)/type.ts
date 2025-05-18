@@ -1,5 +1,6 @@
 import { Merge } from 'type-fest'
 
+import { getUserApplicationsWithRecentDeployment } from '@/apis/user'
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 
 export type ApplicationContext = {
@@ -43,3 +44,7 @@ export type CreateApplicationFunnelSteps = {
     application: ApplicationContext
   }
 }
+
+export type ApplicationsWithRecentDeploymentItem = Awaited<
+  ReturnType<typeof getUserApplicationsWithRecentDeployment>
+>[number]
