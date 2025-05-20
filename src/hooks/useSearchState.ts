@@ -14,7 +14,7 @@ interface UseSearchStateProps<
 
 const useRoutePathById = (pathId: RouteId) => {
   const matches = useMatches()
-  const path = matches.find((match) => match.id === pathId)?.fullPath as RoutePath | undefined
+  const path = matches.find((match) => match.routeId === pathId)?.fullPath as RoutePath | undefined
 
   if (!path) {
     throw new Error(`해당 id가 라우트 트리에 없어요. '${pathId}'`)
