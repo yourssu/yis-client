@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { PartNames } from '@/types/part'
-import { camelizeSchema } from '@/utils/zod'
+import { camelizeSchema, zodISODateString } from '@/utils/zod'
 
 export const userRole = ['USER', 'ADMIN'] as const
 export type UserRoleType = (typeof userRole)[number]
@@ -13,12 +13,13 @@ export const UserResponseSchema = z.object({
   id: z.number(),
   role: z.enum(userRole),
   accesses: z.array(z.string()),
-  created_at: z.string(),
-  updated_at: z.string(),
-  deleted_at: z.string().nullable(),
+  created_at: zodISODateString(),
+  updated_at: zodISODateString(),
+  deleted_at: zodISODateString().nullable(),
   is_active: z.boolean(),
   avatar_id: z.number(),
 })
+
 export type UserResponseType = z.infer<typeof UserResponseSchema>
 
 export const UserSchema = camelizeSchema(UserResponseSchema)

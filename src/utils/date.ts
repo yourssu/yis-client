@@ -1,6 +1,7 @@
 import { DateArg, differenceInMinutes, formatDistanceToNowStrict, isThisYear } from 'date-fns'
 import { formatWithOptions } from 'date-fns/fp'
 import { ko } from 'date-fns/locale'
+
 export const formatToKoreanRelativeDate = (date: DateArg<Date>) => {
   if (differenceInMinutes(new Date(), date) === 0) {
     return '방금 전'

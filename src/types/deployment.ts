@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { CPUResourceValueNames, MemoryResourceNames } from '@/types/resource'
-import { camelizeSchema } from '@/utils/zod'
+import { camelizeSchema, zodISODateString } from '@/utils/zod'
 
 export const DeploymentStateNames = ['REQUEST', 'RETURN', 'APPROVAL'] as const
 export type DeploymentStateNames = (typeof DeploymentStateNames)[number]
@@ -24,9 +24,9 @@ export const DeploymentResponseSchema = z.object({
   user_id: z.number(),
   admin_id: z.number().nullable(),
   // manifests: z.array() // Todo: 메니페스트 타입 구현하기
-  created_at: z.string(),
-  updated_at: z.string(),
-  deleted_at: z.string().nullable(),
+  created_at: zodISODateString(),
+  updated_at: zodISODateString(),
+  deleted_at: zodISODateString().nullable(),
 })
 export type DeploymentResponseType = z.infer<typeof DeploymentResponseSchema>
 

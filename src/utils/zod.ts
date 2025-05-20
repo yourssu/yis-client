@@ -64,3 +64,12 @@ export const ambiguousZodEnum = <
     .transform((val) => (val.includes(val as any) ? val : fallback))
     .pipe(z.union([z.enum(val), z.literal(fallback)]))
 }
+
+export const zodISODateString = () =>
+  z.string().transform((v) => {
+    const checkResultIsValidDate = (date: string) => {
+      return !isNaN(new Date(date).getTime())
+    }
+    const isofiedDate = v.endsWith('Z') ? v : `${v}Z`
+    return checkResultIsValidDate(isofiedDate) ? isofiedDate : v
+  })
