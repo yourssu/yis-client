@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 import { api } from '@/apis/api'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { DeploymentResponseSchema, DeploymentResponseType } from '@/types/deployment'
@@ -17,6 +19,14 @@ export type CreateApplicationProps = {
 type GetApplicationDeploymentsProps = PaginationParams & {
   applicationId: number
 }
+
+const CheckApplicationNameUniqueResponseSchema = z.object({
+  is_unique: z.boolean(),
+})
+
+type CheckApplicationNameUniqueResponseType = z.infer<
+  typeof CheckApplicationNameUniqueResponseSchema
+>
 
 export const createApplication = async (props: CreateApplicationProps) => {
   const res = await api.post<ApplicationResponseType>('applications/', { json: props }).json()
@@ -47,4 +57,13 @@ export const getApplicationDeployments = async ({
     )
     .json()
   return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
+}
+
+export const checkApplicationNameUnique = async ({ name }: { name: string }) => {
+  const res = await api
+    .post<CheckApplicationNameUniqueResponseType>('applications/unique', {
+      json: { name },
+    })
+    .json()
+  return camelizeSchema(CheckApplicationNameUniqueResponseSchema).parse(res).isUnique
 }
