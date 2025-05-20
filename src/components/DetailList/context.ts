@@ -1,24 +1,11 @@
-import { once } from 'es-toolkit'
-import { createContext, useContext } from 'react'
+import { createContext } from 'react'
 
-interface DetailListContextProps<TTab extends string> {
-  onTabChange: (value: TTab) => void
+interface DetailListContextProps {
   selectedId: number | undefined
   setSelectedId: React.Dispatch<React.SetStateAction<number | undefined>>
-  setTab: React.Dispatch<React.SetStateAction<TTab>>
-  tab: TTab
 }
 
-export const createDetailListContext = once(<TTab extends string>() =>
-  createContext<DetailListContextProps<TTab>>({
-    onTabChange: () => {},
-    selectedId: undefined,
-    setSelectedId: () => {},
-    setTab: () => {},
-    tab: '' as TTab,
-  })
-)
-
-export const useDetailListContext = <TTab extends string>() => {
-  return useContext(createDetailListContext<TTab>())
-}
+export const DetailListContext = createContext<DetailListContextProps>({
+  selectedId: undefined,
+  setSelectedId: () => {},
+})

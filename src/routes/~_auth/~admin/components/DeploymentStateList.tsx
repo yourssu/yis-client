@@ -15,11 +15,7 @@ interface DeploymentStateListProps {
   state: DeploymentStateNames
 }
 
-export const DeploymentStateList = ({
-  state,
-
-  setActiveDeploymentId,
-}: DeploymentStateListProps) => {
+export const DeploymentStateList = ({ state, setActiveDeploymentId }: DeploymentStateListProps) => {
   const { data: deployments } = useSuspenseInfiniteQuery({
     queryKey: deploymentKey.state(state),
     queryFn: ({ pageParam }) =>
@@ -38,7 +34,7 @@ export const DeploymentStateList = ({
   const sortedDeployments = [...deployments.pages.flatMap(({ data }) => data)]
 
   return (
-    <>
+    <DetailList>
       <DetailList.List>
         {sortedDeployments.map((deployment) => (
           <DetailList.ListItem
@@ -75,6 +71,6 @@ export const DeploymentStateList = ({
           )
         }}
       </DetailList.Detail>
-    </>
+    </DetailList>
   )
 }

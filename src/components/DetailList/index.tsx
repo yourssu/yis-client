@@ -1,15 +1,11 @@
 import clsx from 'clsx'
-import { LayoutGroup, motion } from 'motion/react'
-import React, { useState } from 'react'
+import { motion } from 'motion/react'
+import React, { useContext, useState } from 'react'
 
-import { createDetailListContext, useDetailListContext } from '@/components/DetailList/context'
+import { DetailListContext } from '@/components/DetailList/context'
 
-interface DetailListProps<TTab extends string> {
-  componentId: string
+interface DetailListProps {
   defaultSelectedId?: number
-  defaultTab: TTab
-  onTabChange: (value: TTab) => void
-  tabs: TTab[]
 }
 
 interface ListItemProps {
@@ -26,7 +22,7 @@ interface DeatilProps {
 }
 
 const Detail = ({ children }: DeatilProps) => {
-  const { selectedId } = useDetailListContext()
+  const { selectedId } = useContext(DetailListContext)
 
   const active = selectedId !== undefined
   const renderTarget = active && children({ id: selectedId })
@@ -59,7 +55,7 @@ const List = ({ children }: React.PropsWithChildren<unknown>) => {
 }
 
 const ListItem = ({ id, text, description, footer, header, onClick }: ListItemProps) => {
-  const { selectedId, setSelectedId } = useDetailListContext()
+  const { selectedId, setSelectedId } = useContext(DetailListContext)
 
   return (
     <div
@@ -84,58 +80,21 @@ const ListItem = ({ id, text, description, footer, header, onClick }: ListItemPr
   )
 }
 
-export const DetailList = <TTab extends string>({
+export const DetailList = ({
   children,
-  tabs,
-  defaultTab,
-  componentId,
   defaultSelectedId,
-  onTabChange,
-}: React.PropsWithChildren<DetailListProps<TTab>>) => {
-  const [tab, setTab] = useState<TTab>(defaultTab)
+}: React.PropsWithChildren<DetailListProps>) => {
   const [selectedId, setSelectedId] = useState<number | undefined>(defaultSelectedId)
 
-  const Context = createDetailListContext<TTab>()
   return (
-    <Context.Provider
+    <DetailListContext.Provider
       value={{
-        onTabChange,
         selectedId,
         setSelectedId,
-        setTab,
-        tab,
       }}
     >
-      <div className="w-full">
-        <LayoutGroup id={componentId}>
-          <div className="border-grey200 flex w-full gap-5 border-b-[1px]">
-            {tabs.map((item) => (
-              <div
-                className="relative w-fit py-2.5"
-                key={item}
-                onClick={() => {
-                  setTab(item)
-                  setSelectedId(undefined)
-                  onTabChange(item)
-                }}
-              >
-                <span className="text-15 cursor-pointer font-medium">{item}</span>
-                {item === tab && (
-                  <motion.div
-                    className="absolute bottom-0 h-0.5 w-full bg-white"
-                    layoutId="tab-indicator"
-                    transition={{
-                      duration: 0.25,
-                    }}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </LayoutGroup>
-        <div className="flex">{children}</div>
-      </div>
-    </Context.Provider>
+      <div className="flex w-full">{children}</div>
+    </DetailListContext.Provider>
   )
 }
 

@@ -1,7 +1,7 @@
 import { invert } from 'es-toolkit'
 import { Suspense } from 'react'
 
-import { DetailList } from '@/components/DetailList'
+import { Tab } from '@/components/Tab'
 import { useSearchState } from '@/hooks/useSearchState'
 import { useSetStateSelector } from '@/hooks/useSetStateSelector'
 import { DeploymentStateList } from '@/routes/~_auth/~admin/components/DeploymentStateList'
@@ -24,17 +24,20 @@ export const DeploymentStateTable = () => {
 
   return (
     <div className="w-full">
-      <DetailList
-        componentId="어드민 배포 목록"
-        defaultSelectedId={search.id ? Number(search.id) : undefined}
+      <Tab
         defaultTab={TabStateNameMap[search.tab]}
         onTabChange={onTabChange}
         tabs={DeploymentStateNames.map((v) => TabStateNameMap[v])}
       >
-        <Suspense>
-          <DeploymentStateList setActiveDeploymentId={setters.id} state={search.tab} />
-        </Suspense>
-      </DetailList>
+        {({ tab }) => (
+          <Suspense>
+            <DeploymentStateList
+              setActiveDeploymentId={setters.id}
+              state={invert(TabStateNameMap)[tab]}
+            />
+          </Suspense>
+        )}
+      </Tab>
     </div>
   )
 }
