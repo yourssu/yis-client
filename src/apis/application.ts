@@ -1,7 +1,12 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
-import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
+import {
+  ApplicationClusterStatusResponseSchema,
+  ApplicationClusterStatusResponseType,
+  ApplicationResponseSchema,
+  ApplicationResponseType,
+} from '@/types/application'
 import { DeploymentResponseSchema, DeploymentResponseType } from '@/types/deployment'
 import {
   PaginatedResponseSchema,
@@ -66,4 +71,11 @@ export const checkApplicationNameUnique = async (name: string) => {
     })
     .json()
   return camelizeSchema(CheckApplicationNameUniqueResponseSchema).parse(res).isUnique
+}
+
+export const getApplicationClusterStatus = async (applicationId: number) => {
+  const res = await api
+    .get<ApplicationClusterStatusResponseType>(`applications/${applicationId}/cluster/status`)
+    .json()
+  return camelizeSchema(ApplicationClusterStatusResponseSchema).parse(res)
 }

@@ -3,6 +3,8 @@ import { DeploymentStateNames } from '@/types/deployment'
 export const applicationKey = {
   all: ['application'] as const,
   detail: (applicationId: number) => [...applicationKey.all, { applicationId }] as const,
+  cluster: (applicationId: number) =>
+    [...applicationKey.all, 'cluster', { applicationId }] as const,
 }
 
 export const userKey = {
