@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys'
 import { type CamelCase } from 'type-fest'
-import { type z, ZodError } from 'zod'
+import { z } from 'zod'
 
 type CamelCaseOptions = {
   preserveConsecutiveUppercase?: boolean
@@ -45,8 +45,22 @@ export const checkParsedError = <TScheme extends object>(
 }
 
 export const isZodError = (e: any): e is z.ZodError =>
-  e instanceof ZodError && e.name === 'ZodError'
+  e instanceof z.ZodError && e.name === 'ZodError'
 
 export const getZodErrorMessage = (error: z.ZodError) => {
   return error.issues[0]?.message
+}
+
+export const ambiguousZodEnum = <
+  U extends string,
+  T extends Readonly<[U, ...U[]]>,
+  TFallback extends string,
+>(
+  val: T,
+  fallback: TFallback
+) => {
+  return z
+    .string()
+    .transform((val) => (val.includes(val as any) ? val : fallback))
+    .pipe(z.union([z.enum(val), z.literal(fallback)]))
 }
