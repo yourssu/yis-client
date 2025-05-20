@@ -18,15 +18,13 @@ import { Route as AuthImport } from './routes/~_auth'
 import { Route as R404Import } from './routes/~404'
 import { Route as AuthAdminIndexImport } from './routes/~_auth/~admin/~index'
 import { Route as AuthindexIndexImport } from './routes/~_auth/~(index)/~index'
+import { Route as AuthApplicationApplicationIdIndexImport } from './routes/~_auth/~application/~$applicationId/~index'
 
 // Create Virtual Routes
 
 const SignSignupIndexLazyImport = createFileRoute('/_sign/signup/')()
 const SignSigninIndexLazyImport = createFileRoute('/_sign/signin/')()
 const AuthProfileIndexLazyImport = createFileRoute('/_auth/profile/')()
-const AuthApplicationApplicationIdIndexLazyImport = createFileRoute(
-  '/_auth/application/$applicationId/',
-)()
 
 // Create/Update Routes
 
@@ -84,8 +82,8 @@ const AuthindexIndexRoute = AuthindexIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthApplicationApplicationIdIndexLazyRoute =
-  AuthApplicationApplicationIdIndexLazyImport.update({
+const AuthApplicationApplicationIdIndexRoute =
+  AuthApplicationApplicationIdIndexImport.update({
     id: '/application/$applicationId/',
     path: '/application/$applicationId/',
     getParentRoute: () => AuthRoute,
@@ -159,7 +157,7 @@ declare module '@tanstack/react-router' {
       id: '/_auth/application/$applicationId/'
       path: '/application/$applicationId'
       fullPath: '/application/$applicationId'
-      preLoaderRoute: typeof AuthApplicationApplicationIdIndexLazyImport
+      preLoaderRoute: typeof AuthApplicationApplicationIdIndexImport
       parentRoute: typeof AuthImport
     }
   }
@@ -171,15 +169,15 @@ interface AuthRouteChildren {
   AuthindexIndexRoute: typeof AuthindexIndexRoute
   AuthAdminIndexRoute: typeof AuthAdminIndexRoute
   AuthProfileIndexLazyRoute: typeof AuthProfileIndexLazyRoute
-  AuthApplicationApplicationIdIndexLazyRoute: typeof AuthApplicationApplicationIdIndexLazyRoute
+  AuthApplicationApplicationIdIndexRoute: typeof AuthApplicationApplicationIdIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthindexIndexRoute: AuthindexIndexRoute,
   AuthAdminIndexRoute: AuthAdminIndexRoute,
   AuthProfileIndexLazyRoute: AuthProfileIndexLazyRoute,
-  AuthApplicationApplicationIdIndexLazyRoute:
-    AuthApplicationApplicationIdIndexLazyRoute,
+  AuthApplicationApplicationIdIndexRoute:
+    AuthApplicationApplicationIdIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -204,7 +202,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthProfileIndexLazyRoute
   '/signin': typeof SignSigninIndexLazyRoute
   '/signup': typeof SignSignupIndexLazyRoute
-  '/application/$applicationId': typeof AuthApplicationApplicationIdIndexLazyRoute
+  '/application/$applicationId': typeof AuthApplicationApplicationIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -215,7 +213,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthProfileIndexLazyRoute
   '/signin': typeof SignSigninIndexLazyRoute
   '/signup': typeof SignSignupIndexLazyRoute
-  '/application/$applicationId': typeof AuthApplicationApplicationIdIndexLazyRoute
+  '/application/$applicationId': typeof AuthApplicationApplicationIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -228,7 +226,7 @@ export interface FileRoutesById {
   '/_auth/profile/': typeof AuthProfileIndexLazyRoute
   '/_sign/signin/': typeof SignSigninIndexLazyRoute
   '/_sign/signup/': typeof SignSignupIndexLazyRoute
-  '/_auth/application/$applicationId/': typeof AuthApplicationApplicationIdIndexLazyRoute
+  '/_auth/application/$applicationId/': typeof AuthApplicationApplicationIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -333,7 +331,7 @@ export const routeTree = rootRoute
       "parent": "/_sign"
     },
     "/_auth/application/$applicationId/": {
-      "filePath": "~_auth/~application/~$applicationId/~index.lazy.tsx",
+      "filePath": "~_auth/~application/~$applicationId/~index.tsx",
       "parent": "/_auth"
     }
   }
