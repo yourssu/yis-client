@@ -1,9 +1,10 @@
 import { tv } from 'tailwind-variants'
 
 import { ClusterStatus, useApplicationClusterStatus } from '@/hooks/useApplicationClusterStatus'
+import { ApplicationClusterPodType } from '@/types/application'
 
 interface ApplicationClusterStatusProps {
-  applicationId: number
+  pods: ApplicationClusterPodType[]
 }
 
 const indicator = tv({
@@ -18,8 +19,8 @@ const indicator = tv({
   },
 })
 
-export const ApplicationClusterStatus = ({ applicationId }: ApplicationClusterStatusProps) => {
-  const { summary, pods, statusCounts } = useApplicationClusterStatus(applicationId)
+export const ApplicationClusterStatus = ({ pods }: ApplicationClusterStatusProps) => {
+  const { summary, statusCounts } = useApplicationClusterStatus(pods)
 
   return (
     <div className="flex items-center gap-1.5">

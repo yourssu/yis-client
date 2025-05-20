@@ -79,3 +79,18 @@ export const getApplicationClusterStatus = async (applicationId: number) => {
     .json()
   return camelizeSchema(ApplicationClusterStatusResponseSchema).parse(res)
 }
+
+export const getFullApplication = async (applicationId: number) => {
+  const application = await getApplication(applicationId)
+
+  const [deployments, clusterStatus] = await Promise.all([
+    getApplicationDeployments({ applicationId, orderBy: 'UPDATED_AT_DESC' }),
+    getApplicationClusterStatus(applicationId),
+  ])
+
+  return {
+    ...application,
+    recentDeployment: deployments.data[0],
+    pods: clusterStatus.pods,
+  }
+}

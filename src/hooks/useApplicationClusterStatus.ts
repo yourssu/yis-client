@@ -1,12 +1,8 @@
-import { getApplicationClusterStatus } from '@/apis/application'
-import { applicationKey } from '@/apis/keys'
-import { ApplicationClusterStatusType } from '@/types/application'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { ApplicationClusterPodType } from '@/types/application'
 
-type PodType = ApplicationClusterStatusType['pods'][number]
 export type ClusterStatus = 'failed' | 'inDeployment' | 'noPods' | 'running'
 
-const getPodStatusSummary = (pod: PodType): ClusterStatus => {
+const getPodStatusSummary = (pod: ApplicationClusterPodType): ClusterStatus => {
   if (pod.status === 'Running' && pod.ready) {
     return 'running'
   }
@@ -16,13 +12,7 @@ const getPodStatusSummary = (pod: PodType): ClusterStatus => {
   return 'failed'
 }
 
-export const useApplicationClusterStatus = (applicationId: number) => {
-  const { data } = useSuspenseQuery({
-    queryKey: applicationKey.cluster(applicationId),
-    queryFn: () => getApplicationClusterStatus(applicationId),
-  })
-
-  const { pods } = data
+export const useApplicationClusterStatus = (pods: ApplicationClusterPodType[]) => {
   const allPodStatus = pods.map((pod) => getPodStatusSummary(pod))
   const statusCounts = {
     running: allPodStatus.filter((status) => status === 'running').length,
@@ -31,7 +21,6 @@ export const useApplicationClusterStatus = (applicationId: number) => {
   }
 
   return {
-    pods,
     summary: ((): ClusterStatus => {
       if (pods.length === 0) {
         return 'noPods'

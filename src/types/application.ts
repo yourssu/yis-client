@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { DeploymentResponseSchema } from '@/types/deployment'
 import { UserResponseSchema } from '@/types/user'
 import { ambiguousZodEnum, camelizeSchema } from '@/utils/zod'
 
@@ -22,6 +23,15 @@ export type ApplicationResponseType = z.infer<typeof ApplicationResponseSchema>
 export const ApplicationSchema = camelizeSchema(ApplicationResponseSchema)
 export type ApplicationType = z.infer<typeof ApplicationSchema>
 
+export const ApplicationClusterPodSchema = z.object({
+  name: z.string(),
+  ready: z.boolean(),
+  status: ambiguousZodEnum(['Running', 'Pending', 'ContainerCreating'], 'Unknown-Status'),
+  restarts: z.number(),
+  age: z.string(),
+})
+export type ApplicationClusterPodType = z.infer<typeof ApplicationClusterPodSchema>
+
 export const ApplicationClusterStatusResponseSchema = z.object({
   application_id: z.number(),
   name: z.string(),
@@ -30,15 +40,7 @@ export const ApplicationClusterStatusResponseSchema = z.object({
   available_replicas: z.number(),
   updated_replicas: z.number(),
   // conditions: 필요없음
-  pods: z.array(
-    z.object({
-      name: z.string(),
-      ready: z.boolean(),
-      status: ambiguousZodEnum(['Running', 'Pending', 'ContainerCreating'], 'Unknown-Status'),
-      restarts: z.number(),
-      age: z.string(),
-    })
-  ),
+  pods: z.array(ApplicationClusterPodSchema),
   age: z.string(),
 })
 export type ApplicationClusterStatusResponseType = z.infer<
@@ -46,3 +48,11 @@ export type ApplicationClusterStatusResponseType = z.infer<
 >
 export const ApplicationClusterStatusSchema = camelizeSchema(ApplicationClusterStatusResponseSchema)
 export type ApplicationClusterStatusType = z.infer<typeof ApplicationClusterStatusSchema>
+
+export const FullApplicationResponseSchema = ApplicationResponseSchema.extend({
+  recentDeployment: DeploymentResponseSchema,
+  pods: z.array(ApplicationClusterPodSchema),
+})
+export type FullApplicationResponseType = z.infer<typeof FullApplicationResponseSchema>
+export const FullApplicationSchema = camelizeSchema(FullApplicationResponseSchema)
+export type FullApplicationType = z.infer<typeof FullApplicationSchema>
