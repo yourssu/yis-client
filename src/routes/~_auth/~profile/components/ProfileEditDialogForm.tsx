@@ -60,7 +60,7 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
           <Label content="프로필 사진">
             <div className="flex items-center justify-center gap-10">
               <div className="size-20 overflow-hidden rounded-full">
-                <ProfileAvatar avatarId={avatarId} draggable={false} />
+                <ProfileAvatar avatarId={avatarId} draggable={false} rounded size={80} />
               </div>
               <div className="grid grid-cols-[repeat(4,44px)] gap-2">
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((id) => (
@@ -71,9 +71,7 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
                     key={id}
                     onClick={() => setAvatarId(id)}
                   >
-                    <div className="size-full overflow-hidden rounded-full">
-                      <ProfileAvatar avatarId={id} draggable={false} />
-                    </div>
+                    <ProfileAvatar avatarId={id} draggable={false} rounded size="full" />
                   </div>
                 ))}
               </div>

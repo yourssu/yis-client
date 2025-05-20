@@ -14,7 +14,6 @@ import { useNavigate } from '@tanstack/react-router'
 
 const content = tv({
   slots: {
-    avatar: 'size-12 overflow-hidden rounded-full',
     nicknameStyle: 'text-lg font-semibold',
     emailStyle: 'text-13 !text-neutralSubtle font-medium',
     buttonItem: 'text-neutralMuted flex w-full items-center gap-2.5 rounded-md px-4 py-2.5 text-sm',
@@ -23,7 +22,7 @@ const content = tv({
 })
 
 export const ProfileMenu = () => {
-  const { avatar, nicknameStyle, emailStyle, buttonItem, buttonIcon } = content()
+  const { nicknameStyle, emailStyle, buttonItem, buttonIcon } = content()
 
   const toast = useToast()
   const navigate = useNavigate()
@@ -32,16 +31,12 @@ export const ProfileMenu = () => {
   return (
     <Menu>
       <Menu.Target>
-        <div className="size-9 cursor-pointer overflow-hidden rounded-full">
-          <ProfileAvatar avatarId={avatarId} />
-        </div>
+        <ProfileAvatar avatarId={avatarId} containerClassName="cursor-pointer" rounded size={36} />
       </Menu.Target>
 
       <Menu.Content align="end" sideOffset={8}>
         <div className="bg-grey100 flex min-w-[280px] flex-col items-center gap-3 rounded-lg p-4">
-          <div className={avatar()}>
-            <ProfileAvatar avatarId={avatarId} />
-          </div>
+          <ProfileAvatar avatarId={avatarId} rounded size={48} />
           <div className="flex flex-col items-center gap-0.5">
             <div className="flex items-center gap-2">
               <div className={nicknameStyle()}>{nickname}</div>

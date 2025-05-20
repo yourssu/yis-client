@@ -76,9 +76,7 @@ export const DeploymentStateListDetail = ({
           <div className="text-neutralSubtle text-sm">{application.description}</div>
         </div>
         <div className="flex flex-col items-center gap-1.5">
-          <div className="size-10 overflow-hidden rounded-full">
-            <ProfileAvatar avatarId={application.user.avatarId} />
-          </div>
+          <ProfileAvatar avatarId={application.user.avatarId} rounded size={40} />
           <div className="text-neutralMuted text-15 font-semibold">{application.user.nickname}</div>
         </div>
       </div>

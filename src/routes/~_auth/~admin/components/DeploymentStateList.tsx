@@ -46,9 +46,7 @@ export const DeploymentStateList = ({
             footer={<MdKeyboardArrowRight className="size-5" />}
             header={
               <div className="flex flex-col items-center gap-1">
-                <div className="size-7 overflow-hidden rounded-full">
-                  <ProfileAvatar avatarId={deployment.application.user.avatarId} />
-                </div>
+                <ProfileAvatar avatarId={deployment.application.user.avatarId} rounded size={28} />
                 <div className="text-neutralMuted text-xs font-semibold">
                   {deployment.application.user.nickname}
                 </div>

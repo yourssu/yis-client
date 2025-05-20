@@ -4,8 +4,9 @@ import { useUserAvatarSrc } from '@/hooks/useUserAvatarSrc'
 
 type ProfileAvatarProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'src'> & {
   avatarId: number
+  containerClassName?: string
   rounded?: boolean
-  size?: number
+  size?: 'full' | number
 }
 
 export const ProfileAvatar = ({
@@ -13,16 +14,17 @@ export const ProfileAvatar = ({
   rounded,
   size,
   avatarId,
+  containerClassName,
   ...props
 }: ProfileAvatarProps) => {
   const src = useUserAvatarSrc(avatarId)
 
   return (
     <div
-      className={clsx(rounded && 'overflow-hidden rounded-full')}
+      className={clsx(containerClassName, rounded && 'overflow-hidden rounded-full')}
       style={{
-        width: size,
-        height: size,
+        width: size === 'full' ? '100%' : size,
+        height: size === 'full' ? '100%' : size,
       }}
     >
       <img
