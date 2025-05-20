@@ -24,6 +24,7 @@ export const useCreateApplicationFunnelDialog = () => {
           content: ({ history, context }) => {
             return (
               <ApplicationFormStep
+                close={closeAsTrue}
                 initialValue={context.application}
                 onNext={(c) => {
                   history.replace('어플리케이션_정보입력', { application: c })
