@@ -27,9 +27,7 @@ export const ApplicationFormStep = ({ initialValue, onNext }: ApplicationFormPro
   })
 
   const onClick = async () => {
-    const isUnique = await mutateAsync({
-      name,
-    })
+    const isUnique = await mutateAsync(name)
 
     if (!isUnique) {
       setInvalid(true)

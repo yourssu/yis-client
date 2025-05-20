@@ -59,7 +59,7 @@ export const getApplicationDeployments = async ({
   return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
 }
 
-export const checkApplicationNameUnique = async ({ name }: { name: string }) => {
+export const checkApplicationNameUnique = async (name: string) => {
   const res = await api
     .post<CheckApplicationNameUniqueResponseType>('applications/unique', {
       json: { name },
