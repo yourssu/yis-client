@@ -1,0 +1,75 @@
+import { useFunnelDialog } from '@/hooks/useFunnelDialog'
+import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
+import { DeploymentCompleteStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentCompleteStep'
+import { DeploymentInfoFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentInfoFormStep'
+import { ResourcesFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ResourcesFormStep'
+import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
+
+export const useCreateApplicationFunnelDialog = () => {
+  const openCreateApplicationFunnelDialog = useFunnelDialog<CreateApplicationFunnelSteps>({
+    id: 'create-application',
+    initial: {
+      step: '어플리케이션_정보입력',
+      context: { application: {} },
+    },
+  })
+
+  return () => {
+    openCreateApplicationFunnelDialog({
+      closeableWithOutside: false,
+      closeButton: true,
+      render: ({ dialog: { closeAsTrue } }) => ({
+        어플리케이션_정보입력: {
+          title: '서비스 이름을 알려주세요',
+          content: ({ history, context }) => {
+            return (
+              <ApplicationFormStep
+                initialValue={context.application}
+                onNext={(c) => {
+                  history.replace('어플리케이션_정보입력', { application: c })
+                  history.push('배포_정보입력', { application: c, deploy: {} })
+                }}
+              />
+            )
+          },
+        },
+        배포_정보입력: {
+          title: '배포에 필요한 정보를 입력해주세요',
+          content: ({ history, context }) => {
+            return (
+              <DeploymentInfoFormStep
+                initialValue={context.deploy}
+                onNext={(c) => {
+                  history.replace('배포_정보입력', { deploy: c })
+                  history.push('리소스_정보입력', { ...context, deploy: c, resource: {} })
+                }}
+                onPrevious={history.back}
+              />
+            )
+          },
+        },
+        리소스_정보입력: {
+          title: '서비스에 필요한 리소스를 선택해주세요',
+          content: ({ history, context }) => {
+            return (
+              <ResourcesFormStep
+                initialValue={context.resource}
+                onNext={(c) => {
+                  history.replace('리소스_정보입력', { resource: c })
+                  history.push('배포요청_완료', { ...context, resource: c })
+                }}
+                onPrevious={history.back}
+              />
+            )
+          },
+        },
+        배포요청_완료: {
+          title: '',
+          content: ({ context }) => {
+            return <DeploymentCompleteStep close={closeAsTrue} context={context} />
+          },
+        },
+      }),
+    })
+  }
+}
