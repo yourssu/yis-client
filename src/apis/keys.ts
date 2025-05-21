@@ -6,6 +6,8 @@ export const applicationKey = {
   cluster: (applicationId: number) =>
     [...applicationKey.all, 'cluster', { applicationId }] as const,
   full: (applicationId: number) => [...applicationKey.all, 'full', { applicationId }] as const,
+  deployments: (applicationId: number) =>
+    [...applicationKey.all, 'deployments', { applicationId }] as const,
 }
 
 export const userKey = {

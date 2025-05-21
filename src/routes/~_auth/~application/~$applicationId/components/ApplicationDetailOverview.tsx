@@ -58,7 +58,7 @@ export const ApplicationDetailOverview = ({
   }
 
   return (
-    <div>
+    <div className="bg-grey50 rounded-2xl p-4">
       <div className="mb-3 pt-1 text-sm font-semibold">서비스 상세</div>
       <div className="flex h-fit w-full gap-8">
         <ItemList>

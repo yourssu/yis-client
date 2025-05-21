@@ -1,8 +1,10 @@
 import { invert } from 'es-toolkit'
+import { Suspense } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
 import { ChipTab } from '@/components/ChipTab'
 import { useSearchState } from '@/hooks/useSearchState'
+import { ApplicationDetailDeployments } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailDeployments'
 import { ApplicationDetailOverview } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailOverview'
 import { ApplicationDetailPageSearchParams } from '@/routes/~_auth/~application/~$applicationId/type'
 import { FullApplicationType } from '@/types/application'
@@ -25,11 +27,15 @@ export const ApplicationDetailTab = ({ application }: ApplicationDetailTabProps)
       tabs={Object.values(tabStateNameMap)}
     >
       {({ tab }) => (
-        <div className="bg-grey50 mt-3.5 rounded-2xl p-4">
+        <div className="pt-3.5">
           <SwitchCase
             caseBy={{
               개요: () => <ApplicationDetailOverview application={application} />,
-              '배포 목록': () => <div />,
+              '배포 목록': () => (
+                <Suspense>
+                  <ApplicationDetailDeployments application={application} />
+                </Suspense>
+              ),
               클러스터: () => <div />,
             }}
             value={tab}

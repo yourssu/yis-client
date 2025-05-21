@@ -9,12 +9,12 @@ interface DetailListProps {
 }
 
 interface ListItemProps {
-  description: string
+  description: React.ReactNode
   footer: React.ReactNode
   header: React.ReactNode
   id: number
   onClick?: (p: { close: boolean }) => void
-  text: string
+  text: React.ReactNode
 }
 
 interface DeatilProps {
@@ -75,7 +75,7 @@ const ListItem = ({ id, text, description, footer, header, onClick }: ListItemPr
           <div className="text-neutralSubtle text-sm">{description}</div>
         </div>
       </div>
-      <div>{footer}</div>
+      {footer}
     </div>
   )
 }
