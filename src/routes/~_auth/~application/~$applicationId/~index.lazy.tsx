@@ -5,6 +5,7 @@ import { applicationKey } from '@/apis/keys'
 import { GNB } from '@/components/GNB'
 import { PageValidator } from '@/components/PageValidator'
 import { ApplicationDetailHeader } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailHeader'
+import { ApplicationDetailTab } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailTab'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
@@ -19,6 +20,8 @@ const Application = () => {
     <PageValidator validate={({ email }) => email !== application.user.email}>
       <div className="mx-auto w-full max-w-[1200px]">
         <ApplicationDetailHeader application={application} />
+        <div className="h-4" />
+        <ApplicationDetailTab application={application} />
       </div>
     </PageValidator>
   )
