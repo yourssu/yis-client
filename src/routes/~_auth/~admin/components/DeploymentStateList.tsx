@@ -31,7 +31,7 @@ export const DeploymentStateList = ({ state, setActiveDeploymentId }: Deployment
     initialPageParam: 0,
   })
 
-  const sortedDeployments = [...deployments.pages.flatMap(({ data }) => data)]
+  const sortedDeployments = deployments.pages.flatMap(({ data }) => data)
 
   return (
     <DetailList>

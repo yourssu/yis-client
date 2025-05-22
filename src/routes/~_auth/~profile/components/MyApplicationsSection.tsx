@@ -15,7 +15,7 @@ export const MyApplicationsSection = () => {
     queryFn: () => getUserApplicationsWithRecentDeployment({ userId }),
   })
 
-  const allApplications = applications.flat().sort((a, b) => compareDesc(a.createdAt, b.createdAt))
+  const allApplications = applications.toSorted((a, b) => compareDesc(a.createdAt, b.createdAt))
 
   return (
     <div className="flex w-full flex-col gap-10">
