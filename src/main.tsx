@@ -16,6 +16,8 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import { routeTree } from './routeTree.gen'
 
+import 'core-js/stable'
+
 setDefaultDateFnsOptions({ locale: ko })
 
 export const router = createRouter({
