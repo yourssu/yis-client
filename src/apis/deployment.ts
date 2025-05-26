@@ -1,5 +1,6 @@
 import { api } from '@/apis/api'
 import { getApplication } from '@/apis/application'
+import { deploymentKey } from '@/apis/keys'
 import {
   DeploymentResponseSchema,
   DeploymentResponseType,
@@ -14,6 +15,7 @@ import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/ty
 import { makeManifests } from '@/utils/manifest'
 import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema } from '@/utils/zod'
+import { useQueryClient } from '@tanstack/react-query'
 
 export type CreateDeploymentProps = {
   application: {
@@ -141,4 +143,13 @@ export const updateDeploymentState = async ({
     })
     .json()
   return camelizeSchema(DeploymentResponseSchema).parse(res)
+}
+
+export const useDeploymentsByStateInvalidation = ({ state }: { state: DeploymentStateNames }) => {
+  const queryClient = useQueryClient()
+  return () => {
+    queryClient.invalidateQueries({
+      queryKey: deploymentKey.state(state),
+    })
+  }
 }

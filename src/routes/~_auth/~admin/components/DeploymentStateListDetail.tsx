@@ -1,7 +1,10 @@
-import { updateDeploymentState } from '@/apis/deployment'
+import { useInputState } from 'react-simplikit'
+
+import { updateDeploymentState, useDeploymentsByStateInvalidation } from '@/apis/deployment'
 import { Button } from '@/components/Button'
 import { Divider } from '@/components/Divider'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { TextInput } from '@/components/TextInput/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { ApplicationType } from '@/types/application'
 import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
@@ -17,11 +20,14 @@ export const DeploymentStateListDetail = ({
   application,
   state,
 }: DeploymentStateListDetailProps) => {
+  const [comment, setComment] = useInputState('')
+
   const { mutateWithToast } = useToastedMutation({
     mutationFn: updateDeploymentState,
     successText: '보냈어요',
     errorText: '실패했어요',
   })
+  const invalidateDeployments = useDeploymentsByStateInvalidation({ state })
 
   const listPairs = [
     {
@@ -59,7 +65,9 @@ export const DeploymentStateListDetail = ({
       id: deployment.id,
       state: 'APPROVAL',
       link: 'https://wow.com', // Todo: 링크 변경해야 함.
+      comment: comment ? comment : undefined,
     })
+    invalidateDeployments()
   }
 
   const onClickReject = async () => {
@@ -67,7 +75,9 @@ export const DeploymentStateListDetail = ({
       id: deployment.id,
       state: 'RETURN',
       link: 'https://wow.com', // Todo: 링크 변경해야 함.
+      comment: comment ? comment : undefined,
     })
+    invalidateDeployments()
   }
 
   return (
@@ -106,13 +116,21 @@ export const DeploymentStateListDetail = ({
         </div>
       )}
       {state === 'REQUEST' && (
-        <div className="grid grid-cols-2 gap-2">
-          <Button onClick={onClickReject} size="lg" variant="secondary">
-            거부
-          </Button>
-          <Button onClick={onClickApprove} size="lg" variant="primary">
-            승인
-          </Button>
+        <div className="flex flex-col gap-3">
+          {/* Todo: TextField로 변경해야 함 */}
+          <TextInput
+            onChange={setComment}
+            placeholder="작성할 코멘트가 있다면 작성해주세요..."
+            value={comment}
+          />
+          <div className="grid grid-cols-2 gap-2">
+            <Button onClick={onClickReject} size="lg" variant="secondary">
+              거부
+            </Button>
+            <Button onClick={onClickApprove} size="lg" variant="primary">
+              승인
+            </Button>
+          </div>
         </div>
       )}
     </div>
