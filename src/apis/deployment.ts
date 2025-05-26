@@ -11,12 +11,14 @@ import {
   PaginationParams,
 } from '@/types/pagination'
 import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/types/resource'
+import { makeManifests } from '@/utils/manifest'
 import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema } from '@/utils/zod'
 
 export type CreateDeploymentProps = {
   application: {
     id: number
+    name: string
   }
   deployment: {
     domain: string
@@ -60,7 +62,16 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
           message: props.deployment.message,
           application_id: props.application.id,
         },
-        manifests: [],
+        manifests: makeManifests({
+          applicationName: props.application.name,
+          domainName: props.deployment.domain,
+          port: props.deployment.port,
+          imageUrl: props.deployment.imageUrl,
+          cpuLimits: CpuResourceValueMap[props.resource.cpuLimit],
+          cpuRequests: CpuResourceValueMap[props.resource.cpuRequest],
+          memoryLimits: props.resource.memoryLimit,
+          memoryRequests: props.resource.memoryRequest,
+        }),
       },
     })
     .json()

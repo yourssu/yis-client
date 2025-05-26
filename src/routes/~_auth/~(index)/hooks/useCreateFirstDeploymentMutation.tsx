@@ -25,6 +25,7 @@ export const useCreateFirstDeploymentMutation = () => {
         resource,
         application: {
           id: createApplicationResult.id,
+          name: createApplicationResult.name,
         },
       })
       return createDeploymentResult
