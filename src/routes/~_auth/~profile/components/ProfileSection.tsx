@@ -4,6 +4,7 @@ import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { useAlertDialog } from '@/hooks/useAlertDialog'
 import { useSuspensedMe } from '@/hooks/useMe'
 import { ProfileEditDialogForm } from '@/routes/~_auth/~profile/components/ProfileEditDialogForm'
+import { formatTemplates } from '@/utils/date'
 
 export const ProfileSection = () => {
   const me = useSuspensedMe()
@@ -40,6 +41,9 @@ export const ProfileSection = () => {
           <ItemList.Item label="이메일">{me.email}</ItemList.Item>
           <ItemList.Item label="비밀번호" tooltipContent="비밀번호 변경은 관리자에게 문의해주세요.">
             ********
+          </ItemList.Item>
+          <ItemList.Item label="가입일">
+            {formatTemplates['(2024년)? 2월 3일, 오후 10:23'](me.createdAt)}
           </ItemList.Item>
         </ItemList.Body>
       </ItemList>
