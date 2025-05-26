@@ -5,10 +5,10 @@ import { z } from 'zod'
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
+import { useZodFormValidation } from '@/hooks/useZodFormValidation'
 import { DeployConfirmedContext, DeployContext } from '@/routes/~_auth/~(index)/type'
 import { assertNonNullish } from '@/utils/assertion'
 import { regexes } from '@/utils/regex'
-import { getZodErrorMessage } from '@/utils/zod'
 
 interface DeploymentInfoFormProps {
   initialValue?: DeployContext
@@ -25,7 +25,6 @@ export const DeploymentInfoFormStep = ({
   const [imageUrl, setImageUrl] = useInputState(initialValue?.imageUrl ?? '')
   const [port, setPort] = useState<number | undefined>(initialValue?.port)
   const [message, setMessage] = useInputState(initialValue?.message ?? '')
-  const [invalidText, setInvalidText] = useState<string | undefined>(undefined)
 
   const formData = {
     domain,
@@ -34,18 +33,19 @@ export const DeploymentInfoFormStep = ({
     message,
   }
 
+  const { invalid, invalidText, onChangeWithReset, validate } = useZodFormValidation(
+    formData,
+    DeploymentInfoFormSchema.form
+  )
+
   const { error: buttonError } = DeploymentInfoFormSchema.button.safeParse(formData)
 
   const onClickNext = () => {
-    const { error: formError } = DeploymentInfoFormSchema.form.safeParse(formData)
-
-    if (formError) {
-      setInvalidText(getZodErrorMessage(formError))
+    if (!validate()) {
       return
     }
 
     assertNonNullish(port)
-
     onNext({ domain, imageUrl, port, message })
   }
 
@@ -55,20 +55,28 @@ export const DeploymentInfoFormStep = ({
         <div className="flex flex-col gap-4 pb-8">
           <TextInput
             description="http, https 없이 입력해주세요."
-            onChange={setDomain}
+            invalid={invalid.domain}
+            onChange={onChangeWithReset(setDomain)}
             placeholder="도메인 (예: www.example.com)"
             value={domain}
           />
-          <NumberInput onChange={setPort} placeholder="포트 번호" value={port} />
+          <NumberInput
+            invalid={invalid.port}
+            onChange={onChangeWithReset(setPort)}
+            placeholder="포트 번호"
+            value={port}
+          />
           <TextInput
             description="ex) alexwhen/docker-2048:latest2"
-            onChange={setImageUrl}
+            invalid={invalid.imageUrl}
+            onChange={onChangeWithReset(setImageUrl)}
             placeholder="도커 이미지 링크"
             value={imageUrl}
           />
           <TextInput
             description="관리자가 추가로 알아야 할 사항이 있다면 적어주세요."
-            onChange={setMessage}
+            invalid={invalid.message}
+            onChange={onChangeWithReset(setMessage)}
             placeholder="남길 메시지 (선택)"
             value={message}
           />

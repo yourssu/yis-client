@@ -4,12 +4,9 @@ import { z } from 'zod'
 
 import { getZodErrorMessage } from '@/utils/zod'
 
-export const useZodFormValidation = <
-  TValue extends Record<string, any>,
-  TSchema extends z.AnyZodObject,
->(
+export const useZodFormValidation = <TValue extends Record<string, any>>(
   value: TValue,
-  schema: TSchema
+  schema: z.ZodTypeAny
 ) => {
   const [invalid, setInvalid] = useState<Record<keyof TValue, boolean>>(
     mapValues(value, () => false)

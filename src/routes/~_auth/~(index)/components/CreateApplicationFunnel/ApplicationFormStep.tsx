@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod'
 
@@ -6,9 +5,9 @@ import { checkApplicationNameUnique } from '@/apis/application'
 import { Dialog } from '@/components/Dialog'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { STAGE } from '@/config'
+import { useZodFormValidation } from '@/hooks/useZodFormValidation'
 import { useFillMockApplicationData } from '@/routes/~_auth/~(index)/hooks/useFillMockApplicationData'
 import { ApplicationConfirmedContext, ApplicationContext } from '@/routes/~_auth/~(index)/type'
-import { getZodErrorMessage } from '@/utils/zod'
 import { useMutation } from '@tanstack/react-query'
 
 interface ApplicationFormProps {
@@ -20,20 +19,19 @@ interface ApplicationFormProps {
 export const ApplicationFormStep = ({ initialValue, onNext, close }: ApplicationFormProps) => {
   const [name, setName] = useInputState(initialValue?.name ?? '')
   const [description, setDescription] = useInputState(initialValue?.description ?? '')
-  const [invalidText, setInvalidText] = useState<string | undefined>(undefined)
+
+  const { invalid, invalidText, setInvalidText, validate } = useZodFormValidation(
+    { name, description },
+    ApplicationFormSchema
+  )
+
   const fillMockApplicationData = useFillMockApplicationData()
   const { mutateAsync } = useMutation({
     mutationFn: checkApplicationNameUnique,
   })
 
-  const { error } = ApplicationFormSchema.safeParse({
-    name,
-    description,
-  })
-
   const onClick = async () => {
-    if (error) {
-      setInvalidText(getZodErrorMessage(error))
+    if (!validate()) {
       return
     }
 
@@ -55,7 +53,7 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
         <div className="flex flex-col gap-6 pb-8">
           <TextInput
             description="서비스 이름은 고유해야해요."
-            invalid={!!invalidText}
+            invalid={invalid.name}
             onChange={(e) => {
               setInvalidText(undefined)
               setName(e)
@@ -64,6 +62,7 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
             value={name}
           />
           <TextInput
+            invalid={invalid.description}
             onChange={setDescription}
             placeholder="서비스 설명 (선택)"
             value={description}
