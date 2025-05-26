@@ -12,7 +12,11 @@ interface ApplicationListItemProps {
 
 export const ApplicationListItem = ({ application }: ApplicationListItemProps) => {
   return (
-    <Link params={{ applicationId: application.id.toString() }} to="/application/$applicationId">
+    <Link
+      params={{ applicationId: application.id.toString() }}
+      search={{ tab: 'overview' }}
+      to="/application/$applicationId"
+    >
       <div className="bg-grey50 hover:bg-grey100 ease-ease flex flex-col gap-4 rounded-md px-4 py-3 transition-colors duration-200">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
