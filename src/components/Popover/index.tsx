@@ -51,11 +51,16 @@ const Content = ({
   )
 }
 
-const Trigger = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
+const Trigger = ({
+  children,
+  className,
+  ...props
+}: React.PropsWithChildren<PrimivtivePopover.PopoverTriggerProps>) => {
   const { onClick, onPointerEnter, onPointerLeave } = usePopoverBehavior()
 
   return (
     <PrimivtivePopover.Trigger
+      {...props}
       className={clsx('outline-none', className)}
       onClick={(e) => {
         e.stopPropagation()

@@ -31,7 +31,7 @@ export const ApplicationDetailHeader = ({ application }: ApplicationDetailHeader
           </div>
         </div>
         <Menu>
-          <Menu.Target>
+          <Menu.Target asChild>
             <IconButton
               className="text-neutralMuted bg-greyOpacity100 hover:bg-greyOpacity200"
               size="md"
