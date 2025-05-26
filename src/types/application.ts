@@ -26,7 +26,10 @@ export type ApplicationType = z.infer<typeof ApplicationSchema>
 export const ApplicationClusterPodSchema = z.object({
   name: z.string(),
   ready: z.boolean(),
-  status: ambiguousZodEnum(['Running', 'Pending', 'ContainerCreating'], 'Unknown-Status'),
+  status: ambiguousZodEnum(
+    ['Running', 'Pending', 'ContainerCreating', 'CrashLoopBackOff', 'ImagePullBackOff', 'Failed'],
+    'Unknown-Status'
+  ),
   restarts: z.number(),
   age: z.string(),
 })
@@ -51,7 +54,6 @@ export const ApplicationClusterConditionSchema = z.union([
     ),
   }),
 ])
-export type ApplicationClusterConditionType = z.infer<typeof ApplicationClusterConditionSchema>
 
 export const ApplicationClusterStatusResponseSchema = z.object({
   application_id: z.number(),
@@ -72,7 +74,7 @@ export type ApplicationClusterStatusType = z.infer<typeof ApplicationClusterStat
 
 export const FullApplicationResponseSchema = ApplicationResponseSchema.extend({
   recentDeployment: DeploymentResponseSchema,
-  pods: z.array(ApplicationClusterPodSchema),
+  clusterStatus: ApplicationClusterStatusResponseSchema,
 })
 export type FullApplicationResponseType = z.infer<typeof FullApplicationResponseSchema>
 export const FullApplicationSchema = camelizeSchema(FullApplicationResponseSchema)

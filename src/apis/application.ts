@@ -91,6 +91,6 @@ export const getFullApplication = async (applicationId: number) => {
   return {
     ...application,
     recentDeployment: deployments.data[0],
-    pods: clusterStatus.pods,
+    clusterStatus,
   }
 }

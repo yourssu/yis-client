@@ -1,39 +1,77 @@
-import { ApplicationClusterPodType } from '@/types/application'
+import { ApplicationClusterPodType, ApplicationClusterStatusType } from '@/types/application'
 
-export type ClusterStatus = 'failed' | 'inDeployment' | 'noPods' | 'running'
+export type ClusterStatusSummary = '배포 성공' | '배포 실패' | '배포 중' | '초기화 중'
 
-const getPodStatusSummary = (pod: ApplicationClusterPodType): ClusterStatus => {
-  if (pod.status === 'Running' && pod.ready) {
-    return 'running'
-  }
-  if (pod.status === 'ContainerCreating' && !pod.ready) {
-    return 'inDeployment'
-  }
-  return 'failed'
-}
+const PodFailureNames: Array<ApplicationClusterPodType['status']> = [
+  'CrashLoopBackOff',
+  'Failed',
+  'ImagePullBackOff',
+]
 
-export const useApplicationClusterStatus = (pods: ApplicationClusterPodType[]) => {
-  const allPodStatus = pods.map((pod) => getPodStatusSummary(pod))
-  const statusCounts = {
-    running: allPodStatus.filter((status) => status === 'running').length,
-    inDeployment: allPodStatus.filter((status) => status === 'inDeployment').length,
-    failed: allPodStatus.filter((status) => status === 'failed').length,
-  }
+const PodPendingOrCreatingNames: Array<ApplicationClusterPodType['status']> = [
+  'ContainerCreating',
+  'Pending',
+  'Unknown-Status',
+]
+
+const getPodStatusCases = (pods: ApplicationClusterPodType[]) => {
+  const allPodsReady = pods.every((pod) => pod.status === 'Running' && pod.ready)
+  const somePodsUnready = pods.some((pod) => pod.status === 'Running' && !pod.ready)
+  const hasPodFailure = pods.some((pod) => PodFailureNames.includes(pod.status))
+  const allPodsPendingOrCreating = pods.every((pod) =>
+    PodPendingOrCreatingNames.includes(pod.status)
+  )
 
   return {
-    summary: ((): ClusterStatus => {
-      if (pods.length === 0) {
-        return 'noPods'
-      }
-      if (statusCounts.running === pods.length) {
-        return 'running'
-      }
-      if (statusCounts.failed > 0) {
-        return 'failed'
-      }
-      return 'inDeployment'
-    })(),
-    statusMap: Object.fromEntries(pods.map((pod) => [pod.name, getPodStatusSummary(pod)])),
-    statusCounts,
+    hasPodFailure,
+    allPodsPendingOrCreating,
+    allPodsReady,
+    somePodsUnready,
+  }
+}
+
+const getClusterStatusSummary = (
+  clusterStatus: ApplicationClusterStatusType
+): ClusterStatusSummary => {
+  const { conditions, pods } = clusterStatus
+
+  const progressing = conditions.find((c) => c.type === 'Progressing')
+  const available = conditions.find((c) => c.type === 'Available')
+
+  if (!progressing || !available) {
+    return '배포 실패'
+  }
+
+  const { allPodsPendingOrCreating, allPodsReady, hasPodFailure, somePodsUnready } =
+    getPodStatusCases(pods)
+
+  if (progressing.status === 'False' && progressing.reason === 'ProgressDeadlineExceeded') {
+    return '배포 실패'
+  }
+
+  if (hasPodFailure) {
+    return '배포 실패'
+  }
+
+  if (allPodsPendingOrCreating) {
+    return '초기화 중'
+  }
+
+  if (progressing.status === 'True' && available.status === 'True' && allPodsReady) {
+    return '배포 성공'
+  }
+
+  if (somePodsUnready || progressing.status === 'True') {
+    return '배포 중'
+  }
+
+  return '배포 중'
+}
+
+export const useApplicationClusterStatus = (clusterStatus: ApplicationClusterStatusType) => {
+  return {
+    summary: getClusterStatusSummary(clusterStatus),
+    runningPodCount: clusterStatus.pods.filter((pod) => pod.status === 'Running' && pod.ready)
+      .length,
   }
 }

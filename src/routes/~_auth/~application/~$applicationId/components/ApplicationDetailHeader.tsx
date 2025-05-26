@@ -12,7 +12,7 @@ interface ApplicationDetailHeaderProps {
 }
 
 export const ApplicationDetailHeader = ({ application }: ApplicationDetailHeaderProps) => {
-  const { user, pods } = application
+  const { user, clusterStatus } = application
 
   return (
     <div>
@@ -27,7 +27,7 @@ export const ApplicationDetailHeader = ({ application }: ApplicationDetailHeader
             <div className="text-neutralMuted text-15">{application.description}</div>
           </div>
           <div className="flex items-center gap-1.5">
-            <ApplicationClusterStatus pods={pods} />
+            <ApplicationClusterStatus clusterStatus={clusterStatus} />
           </div>
         </div>
         <Menu>
