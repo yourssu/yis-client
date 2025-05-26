@@ -32,6 +32,12 @@ type CamelCasedPropertiesDeep<
           }
         : Value
 
+type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never
+
+type LiteralOrFallback<TUnion extends readonly string[], TFallback extends string> =
+  | TFallback
+  | TUnion[number]
+
 export const camelizeSchema = <T extends z.ZodTypeAny>(
   zod: T
 ): z.ZodEffects<z.infer<T>, CamelCasedPropertiesDeep<T['_output']>> =>
@@ -52,17 +58,34 @@ export const getZodErrorMessage = (error: z.ZodError) => {
 }
 
 export const ambiguousZodEnum = <
-  U extends string,
-  T extends Readonly<[U, ...U[]]>,
-  TFallback extends string,
+  T extends string,
+  TFallback extends string & {},
+  TUnion extends Readonly<[T, ...T[]]>,
 >(
-  val: T,
-  fallback: TFallback
+  union: TUnion,
+  fallback: ((v: string) => TFallback) | TFallback
 ) => {
-  return z
+  const enumSchema = z.enum(union)
+  const fallbackFn = typeof fallback === 'function' ? fallback : () => fallback
+
+  const schema = z
     .string()
-    .transform((val) => (val.includes(val as any) ? val : fallback))
-    .pipe(z.union([z.enum(val), z.literal(fallback)]))
+    .transform((v) => (union.includes(v as any) ? v : fallbackFn(v)))
+    .pipe(
+      z.union([
+        enumSchema,
+        z
+          .string()
+          .refine((v) => !union.includes(v as any), {
+            message: 'fallback이 union과 값이 겹쳐요.',
+          })
+          .transform((v) => fallbackFn(v)),
+      ])
+    )
+
+  return schema as unknown as z.ZodType<
+    StringLiteral<LiteralOrFallback<TUnion, ReturnType<typeof fallbackFn>>>
+  >
 }
 
 export const zodISODateString = () =>
@@ -70,6 +93,6 @@ export const zodISODateString = () =>
     const checkResultIsValidDate = (date: string) => {
       return !isNaN(new Date(date).getTime())
     }
-    const isofiedDate = v.endsWith('Z') ? v : `${v}Z`
+    const isofiedDate = v.endsWith('Z') ? v : `${v.replace('+00:00', '')}Z`
     return checkResultIsValidDate(isofiedDate) ? isofiedDate : v
   })
