@@ -21,7 +21,9 @@ export function assertNonNullish<T>(
 /* 
   타입상으로만 검증하고 싶을 때 사용해요.
 */
-export function assertSoftly(condition: unknown): asserts condition {}
+export function assertSoftly(condition: unknown): asserts condition {
+  condition // eslint-disable-line @typescript-eslint/no-unused-expressions
+}
 
 /* 
   타입상으로만 검증하고 싶을 때 사용해요.
