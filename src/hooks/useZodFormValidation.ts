@@ -42,6 +42,7 @@ export const useZodFormValidation = <TValue extends Record<string, any>>(
   return {
     invalid,
     invalidText,
+    setInvalid,
     setInvalidText,
     reset,
     validate,
