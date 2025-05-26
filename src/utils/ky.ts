@@ -3,14 +3,14 @@ import { HTTPError } from 'ky'
 export const isKyHTTPError = (e: any): e is HTTPError => e instanceof HTTPError
 
 export const getKyHTTPErrorMessage = async (e: HTTPError) => {
-  const { type, json, body } = e.response
+  const type = e.response.headers.get('content-type') || ''
 
-  if (!body) {
+  if (!e.response.body) {
     return e.message
   }
 
   if (type.includes('json')) {
-    return (await json<{ message: string }>()).message
+    return (await e.response.json<{ detail: string }>()).detail
   }
 
   if (type.includes('text')) {
