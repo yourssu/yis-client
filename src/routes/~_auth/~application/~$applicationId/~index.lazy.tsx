@@ -17,7 +17,8 @@ const Application = () => {
   })
 
   return (
-    <PageValidator validate={({ email }) => email !== application.user.email}>
+    // <PageValidator validate={({ email }) => email !== application.user.email}>
+    <PageValidator validate={() => true}>
       <div className="mx-auto w-full max-w-[1200px]">
         <ApplicationDetailHeader application={application} />
         <div className="h-4" />
