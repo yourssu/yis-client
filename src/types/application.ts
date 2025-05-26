@@ -32,6 +32,27 @@ export const ApplicationClusterPodSchema = z.object({
 })
 export type ApplicationClusterPodType = z.infer<typeof ApplicationClusterPodSchema>
 
+const BaseApplicationClusterConditionSchema = z.object({
+  status: ambiguousZodEnum(['True', 'False'], 'Unknown-Status'),
+  last_update: zodISODateString(),
+  message: z.string(),
+})
+
+export const ApplicationClusterConditionSchema = z.union([
+  BaseApplicationClusterConditionSchema.extend({
+    type: z.literal('Available'),
+    reason: ambiguousZodEnum(['MinimumReplicasAvailable', 'MinimumReplicasUnavailable'], (v) => v),
+  }),
+  BaseApplicationClusterConditionSchema.extend({
+    type: z.literal('Progressing'),
+    reason: ambiguousZodEnum(
+      ['ReplicaSetUpdated', 'NewReplicaSetAvailable', 'ProgressDeadlineExceeded'],
+      (v) => v
+    ),
+  }),
+])
+export type ApplicationClusterConditionType = z.infer<typeof ApplicationClusterConditionSchema>
+
 export const ApplicationClusterStatusResponseSchema = z.object({
   application_id: z.number(),
   name: z.string(),
@@ -39,7 +60,7 @@ export const ApplicationClusterStatusResponseSchema = z.object({
   total_replicas: z.number(),
   available_replicas: z.number(),
   updated_replicas: z.number(),
-  // conditions: 필요없음
+  conditions: z.array(ApplicationClusterConditionSchema),
   pods: z.array(ApplicationClusterPodSchema),
   age: z.string(),
 })
