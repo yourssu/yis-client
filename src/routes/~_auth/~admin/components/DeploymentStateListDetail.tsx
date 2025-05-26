@@ -24,8 +24,8 @@ export const DeploymentStateListDetail = ({
 
   const { mutateWithToast } = useToastedMutation({
     mutationFn: updateDeploymentState,
-    successText: '보냈어요',
-    errorText: '실패했어요',
+    successText: '검토 결과를 보냈어요',
+    errorText: '검토 결과 전송에 실패했어요',
   })
   const invalidateDeployments = useDeploymentsByStateInvalidation({ state })
 
