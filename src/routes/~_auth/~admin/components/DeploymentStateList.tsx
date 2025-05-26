@@ -67,6 +67,7 @@ export const DeploymentStateList = ({ state, setActiveDeploymentId }: Deployment
             <DeploymentStateListDetail
               application={deployment.application}
               deployment={deployment}
+              state={state}
             />
           )
         }}

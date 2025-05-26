@@ -4,16 +4,18 @@ import { Divider } from '@/components/Divider'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { ApplicationType } from '@/types/application'
-import { DeploymentType } from '@/types/deployment'
+import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
 
 interface DeploymentStateListDetailProps {
   application: ApplicationType
   deployment: DeploymentType
+  state: DeploymentStateNames
 }
 
 export const DeploymentStateListDetail = ({
   deployment,
   application,
+  state,
 }: DeploymentStateListDetailProps) => {
   const { mutateWithToast } = useToastedMutation({
     mutationFn: updateDeploymentState,
@@ -94,14 +96,25 @@ export const DeploymentStateListDetail = ({
         <div>{deployment.message ? deployment.message : '-'}</div>
       </div>
       <Divider />
-      <div className="grid grid-cols-2 gap-2">
-        <Button onClick={onClickReject} size="lg" variant="secondary">
-          거부
-        </Button>
-        <Button onClick={onClickApprove} size="lg" variant="primary">
-          승인
-        </Button>
-      </div>
+      {deployment.adminId && (
+        <div className="text-sm">
+          {/* Todo: 어드민 닉네임으로 수정 */}
+          <div className="text-neutralMuted mb-2">
+            어드민 ID '{deployment.adminId}' 님이 보낸 메시지
+          </div>
+          <div>{deployment.comment ? deployment.comment : '-'}</div>
+        </div>
+      )}
+      {state === 'REQUEST' && (
+        <div className="grid grid-cols-2 gap-2">
+          <Button onClick={onClickReject} size="lg" variant="secondary">
+            거부
+          </Button>
+          <Button onClick={onClickApprove} size="lg" variant="primary">
+            승인
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
