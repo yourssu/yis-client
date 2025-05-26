@@ -10,7 +10,7 @@ export const useFillMockApplicationData = () => {
   const me = useSuspensedMe()
 
   const makeRandomUrl = () => {
-    return `https://${encodeURIComponent(randomMeaninglessString(4))}.${randomMeaninglessString(6)}.com`
+    return `${encodeURIComponent(randomMeaninglessString(4))}.${randomMeaninglessString(6)}.com`
   }
 
   return async () => {
