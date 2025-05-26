@@ -51,7 +51,7 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
   const res = await api
     .post<DeploymentResponseType>('deployments/', {
       json: {
-        link: 'https://www.google.com', // Todo: 아직 승인 링크 안만들어짐
+        link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}`, // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
         deployment: {
           domain_name: props.deployment.domain,
           cpu_requests: CpuResourceValueMap[props.resource.cpuRequest],

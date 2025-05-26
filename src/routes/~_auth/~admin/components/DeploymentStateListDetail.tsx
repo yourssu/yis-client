@@ -60,23 +60,22 @@ export const DeploymentStateListDetail = ({
     },
   ]
 
-  const onClickApprove = async () => {
-    await mutateWithToast({
+  const getReviewResultProps = (type: 'APPROVAL' | 'RETURN') => {
+    return {
       id: deployment.id,
-      state: 'APPROVAL',
-      link: 'https://wow.com', // Todo: 링크 변경해야 함.
+      state: type,
+      link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=${type}&id={id}`,
       comment: comment ? comment : undefined,
-    })
+    }
+  }
+
+  const onClickApprove = async () => {
+    await mutateWithToast(getReviewResultProps('APPROVAL'))
     invalidateDeployments()
   }
 
   const onClickReject = async () => {
-    await mutateWithToast({
-      id: deployment.id,
-      state: 'RETURN',
-      link: 'https://wow.com', // Todo: 링크 변경해야 함.
-      comment: comment ? comment : undefined,
-    })
+    await mutateWithToast(getReviewResultProps('RETURN'))
     invalidateDeployments()
   }
 
