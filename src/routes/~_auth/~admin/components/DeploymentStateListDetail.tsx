@@ -6,8 +6,10 @@ import { Divider } from '@/components/Divider'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
+import { DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
 import { ApplicationType } from '@/types/application'
 import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
+import { formatTemplates } from '@/utils/date'
 
 interface DeploymentStateListDetailProps {
   application: ApplicationType
@@ -30,6 +32,10 @@ export const DeploymentStateListDetail = ({
   const invalidateDeployments = useDeploymentsByStateInvalidation({ state })
 
   const listPairs = [
+    {
+      label: `${DeploymentStateKRNameMap[state]} 시각`,
+      value: formatTemplates['(2024년)? 2월 3일, 오후 10:23'](deployment.updatedAt),
+    },
     {
       label: '도메인',
       value: deployment.domainName,
