@@ -5,6 +5,7 @@ import { Tab } from '@/components/Tab'
 import { useSearchState } from '@/hooks/useSearchState'
 import { useSetStateSelector } from '@/hooks/useSetStateSelector'
 import { DeploymentStateList } from '@/routes/~_auth/~admin/components/DeploymentStateList'
+import { DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
 import { DeploymentStateNames } from '@/types/deployment'
 import { ValueOf } from '@/utils/type'
 
@@ -17,23 +18,23 @@ export const DeploymentStateTable = () => {
     id: useSetStateSelector(setSearch, 'id'),
   }
 
-  const onTabChange = (tab: ValueOf<typeof TabStateNameMap>) => {
-    const nextTab = invert(TabStateNameMap)[tab]
+  const onTabChange = (tab: ValueOf<typeof DeploymentStateKRNameMap>) => {
+    const nextTab = invert(DeploymentStateKRNameMap)[tab]
     setSearch(() => ({ id: undefined, tab: nextTab }))
   }
 
   return (
     <div className="w-full">
       <Tab
-        defaultTab={TabStateNameMap[search.tab]}
+        defaultTab={DeploymentStateKRNameMap[search.tab]}
         onTabChange={onTabChange}
-        tabs={DeploymentStateNames.map((v) => TabStateNameMap[v])}
+        tabs={DeploymentStateNames.map((v) => DeploymentStateKRNameMap[v])}
       >
         {({ tab }) => (
           <Suspense>
             <DeploymentStateList
               setActiveDeploymentId={setters.id}
-              state={invert(TabStateNameMap)[tab]}
+              state={invert(DeploymentStateKRNameMap)[tab]}
             />
           </Suspense>
         )}
@@ -41,9 +42,3 @@ export const DeploymentStateTable = () => {
     </div>
   )
 }
-
-const TabStateNameMap = {
-  REQUEST: '요청',
-  APPROVAL: '승인',
-  RETURN: '거절',
-} as const

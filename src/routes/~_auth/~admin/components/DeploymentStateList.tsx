@@ -6,8 +6,9 @@ import { deploymentKey } from '@/apis/keys'
 import { DetailList } from '@/components/DetailList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { DeploymentStateListDetail } from '@/routes/~_auth/~admin/components/DeploymentStateListDetail'
-import { AdminPageSearchParams } from '@/routes/~_auth/~admin/type'
+import { AdminPageSearchParams, DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
 import { DeploymentStateNames } from '@/types/deployment'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 interface DeploymentStateListProps {
@@ -36,26 +37,39 @@ export const DeploymentStateList = ({ state, setActiveDeploymentId }: Deployment
   return (
     <DetailList>
       <DetailList.List>
-        {sortedDeployments.map((deployment) => (
-          <DetailList.ListItem
-            description={deployment.application.description}
-            footer={<MdKeyboardArrowRight className="size-5" />}
-            header={
-              <div className="flex flex-col items-center gap-1">
-                <ProfileAvatar avatarId={deployment.application.user.avatarId} rounded size={28} />
-                <div className="text-neutralMuted text-xs font-semibold">
-                  {deployment.application.user.nickname}
+        {sortedDeployments.length ? (
+          sortedDeployments.map((deployment) => (
+            <DetailList.ListItem
+              description={deployment.application.description}
+              footer={<MdKeyboardArrowRight className="size-5" />}
+              header={
+                <div className="flex flex-col items-center gap-1">
+                  <ProfileAvatar
+                    avatarId={deployment.application.user.avatarId}
+                    rounded
+                    size={28}
+                  />
+                  <div className="text-neutralMuted text-xs font-semibold">
+                    {deployment.application.user.nickname}
+                  </div>
                 </div>
-              </div>
-            }
-            id={deployment.id}
-            key={deployment.id}
-            onClick={({ close }) => {
-              setActiveDeploymentId(close ? deployment.id.toString() : undefined)
-            }}
-            text={deployment.application.name}
-          />
-        ))}
+              }
+              id={deployment.id}
+              key={deployment.id}
+              onClick={({ close }) => {
+                setActiveDeploymentId(close ? deployment.id.toString() : undefined)
+              }}
+              text={deployment.application.name}
+            />
+          ))
+        ) : (
+          <div className="mx-auto flex flex-col items-center gap-6 pt-10">
+            <DotLottieReact autoplay className="size-14" src="/lotties/empty-list.lottie" />
+            <div className="text-neutralSubtle text-sm font-semibold">
+              {DeploymentStateKRNameMap[state]}된 내역이 없어요
+            </div>
+          </div>
+        )}
       </DetailList.List>
       <DetailList.Detail>
         {({ id }) => {
