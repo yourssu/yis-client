@@ -1,12 +1,12 @@
+// Todo: 백엔드 파트 조회 api로 대체해야 함
 export const PartNames = [
   'HR',
-  'iOS',
+  'IOS',
   'Android',
   'Frontend',
   'Backend',
-  'Design',
-  'Marketing',
-  'Finance',
+  'Designer',
+  'Marketer',
   'PM',
   'Legal',
 ] as const
