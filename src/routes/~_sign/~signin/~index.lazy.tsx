@@ -11,7 +11,7 @@ const Signin = () => {
       <SigninForm />
       <SignFooter>
         아직 YIS 계정이 없으신가요?
-        <InlineLink to="/signup">로그인하기</InlineLink>
+        <InlineLink to="/signup">가입하기</InlineLink>
       </SignFooter>
     </>
   )
