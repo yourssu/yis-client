@@ -1,10 +1,10 @@
 import { Button } from '@/components/Button'
 import { ApplicationListItem } from '@/routes/~_auth/~(index)/components/ApplicationListItem'
 import { useCreateApplicationFunnelDialog } from '@/routes/~_auth/~(index)/hooks/useCreateApplicationFunnelDialog'
-import { ApplicationsWithRecentDeploymentItem } from '@/routes/~_auth/~(index)/type'
+import { FullApplicationType } from '@/types/application'
 
 interface ApplicationListLandingProps {
-  applications: ApplicationsWithRecentDeploymentItem[]
+  applications: FullApplicationType[]
 }
 
 export const ApplicationListLanding = ({ applications }: ApplicationListLandingProps) => {

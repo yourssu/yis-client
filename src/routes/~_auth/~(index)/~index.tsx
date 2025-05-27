@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import { userKey } from '@/apis/keys'
-import { getUserApplicationsWithRecentDeployment } from '@/apis/user'
+import { getUserFullApplications } from '@/apis/user'
 import { GNB } from '@/components/GNB'
 import { useSuspensedMe } from '@/hooks/useMe'
 import { ApplicationListLanding } from '@/routes/~_auth/~(index)/components/ApplicationListLanding'
@@ -13,7 +13,7 @@ const Index = () => {
   const { id: userId } = useSuspensedMe()
   const { data: applications } = useSuspenseQuery({
     queryKey: userKey.applications(userId),
-    queryFn: () => getUserApplicationsWithRecentDeployment({ userId }),
+    queryFn: () => getUserFullApplications({ userId }),
   })
 
   if (applications.length > 0) {

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
-import { getApplicationDeployments } from '@/apis/application'
+import { getApplicationClusterStatus, getApplicationDeployments } from '@/apis/application'
 import { userKey } from '@/apis/keys'
 import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
 import { PartNames } from '@/types/part'
@@ -45,22 +45,27 @@ export const getUserApplications = async ({ userId }: GetUserApplicationsProps) 
   return camelizeSchema(z.array(ApplicationResponseSchema)).parse(res)
 }
 
-export const getUserApplicationsWithRecentDeployment = async ({
-  userId,
-}: GetUserApplicationsProps) => {
+export const getUserFullApplications = async ({ userId }: GetUserApplicationsProps) => {
   const applications = await getUserApplications({ userId })
   const recentDeployments = await Promise.all(
     applications.map(async ({ id }) => {
-      const { data } = await getApplicationDeployments({
-        applicationId: id,
-        orderBy: 'UPDATED_AT_DESC',
-      })
-      return data[0]
+      const [deployments, clusterStatus] = await Promise.all([
+        getApplicationDeployments({
+          applicationId: id,
+          orderBy: 'UPDATED_AT_DESC',
+        }),
+        getApplicationClusterStatus(id),
+      ])
+      return {
+        recentDeployment: deployments.data[0],
+        clusterStatus,
+      }
     })
   )
   return applications.map((application, index) => ({
     ...application,
-    recentDeployment: recentDeployments[index],
+    recentDeployment: recentDeployments[index].recentDeployment,
+    clusterStatus: recentDeployments[index].clusterStatus,
   }))
 }
 
