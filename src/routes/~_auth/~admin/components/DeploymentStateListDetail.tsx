@@ -1,4 +1,7 @@
+import { Suspense } from 'react'
+
 import { Divider } from '@/components/Divider'
+import { DeploymentStateListDetailConversation } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailConversation'
 import { DeploymentStateListDetailFooter } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailFooter'
 import { DeploymentStateListDetailHeader } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailHeader'
 import { DeploymentStateListDetailInformation } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailInformation'
@@ -21,20 +24,13 @@ export const DeploymentStateListDetail = ({
       <DeploymentStateListDetailHeader application={application} />
       <DeploymentStateListDetailInformation deployment={deployment} state={state} />
       <Divider />
-      <div className="text-sm">
-        <div className="text-neutralMuted mb-2">{application.user.nickname}님이 남긴 메시지</div>
-        <div>{deployment.message ? deployment.message : '-'}</div>
-      </div>
-      <Divider />
-      {deployment.adminId && (
-        <div className="text-sm">
-          {/* Todo: 어드민 닉네임으로 수정 */}
-          <div className="text-neutralMuted mb-2">
-            어드민 ID '{deployment.adminId}' 님이 보낸 메시지
-          </div>
-          <div>{deployment.comment ? deployment.comment : '-'}</div>
-        </div>
-      )}
+      <Suspense>
+        <DeploymentStateListDetailConversation
+          application={application}
+          deployment={deployment}
+          state={state}
+        />
+      </Suspense>
       {state === 'REQUEST' && (
         <DeploymentStateListDetailFooter deploymentId={deployment.id} state={state} />
       )}
