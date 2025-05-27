@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants'
 
-import { useApplicationClusterStatus } from '@/hooks/useApplicationClusterStatus'
+import { ApplicationClusterIndicator } from '@/routes/~_auth/~(index)/components/ApplicationClusterIndicator'
 import { DomainLink } from '@/routes/~_auth/~(index)/components/DomainLink'
 import { ResourceChip } from '@/routes/~_auth/~(index)/components/ResourceChip'
 import { FullApplicationType } from '@/types/application'
@@ -12,48 +12,18 @@ interface ApplicationListItemProps {
   application: FullApplicationType
 }
 
-const styles = tv({
-  slots: {
-    clusterIndicator: 'size-2 rounded-full',
-    deploymentReview: 'font-medium',
-  },
+const deploymentReview = tv({
+  base: 'font-medium',
   variants: {
-    clusterStatus: {
-      '배포 성공': {
-        clusterIndicator: 'bg-green500 animate-pulse',
-      },
-      '배포 중': {
-        clusterIndicator: 'bg-orange500 animate-pulse',
-      },
-      '배포 실패': {
-        clusterIndicator: 'bg-red500',
-      },
-      '초기화 중': {
-        clusterIndicator: 'bg-grey500 animate-pulse',
-      },
-      '승인 대기 중': {
-        clusterIndicator: 'bg-grey500',
-      },
-    },
     deploymentState: {
-      REQUEST: {
-        deploymentReview: 'text-orange500',
-      },
-      APPROVAL: {
-        deploymentReview: 'text-green500',
-      },
-      RETURN: {
-        deploymentReview: 'text-red500',
-      },
+      REQUEST: 'text-orange500',
+      APPROVAL: 'text-green500',
+      RETURN: 'text-red500',
     },
   },
 })
 
 export const ApplicationListItem = ({ application }: ApplicationListItemProps) => {
-  const { summary } = useApplicationClusterStatus(application.clusterStatus)
-
-  const { clusterIndicator, deploymentReview } = styles()
-
   return (
     <Link
       params={{ applicationId: application.id.toString() }}
@@ -63,8 +33,8 @@ export const ApplicationListItem = ({ application }: ApplicationListItemProps) =
       <div className="bg-grey50 hover:bg-grey100 ease-ease flex flex-col gap-4 rounded-md px-4 py-3 transition-colors duration-200">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <div className="text-15 flex items-center gap-2 font-medium">
-              <div className={clusterIndicator({ clusterStatus: summary })} />
+            <div className="text-15 -ml-1.5 flex items-center gap-0.5 font-medium">
+              <ApplicationClusterIndicator clusterStatus={application.clusterStatus} />
               {application.name}
             </div>
             <div className="inline-flex">
