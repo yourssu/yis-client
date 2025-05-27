@@ -68,7 +68,7 @@ export const DeploymentStateListDetailConversation = ({
   return (
     <div className={clsx('flex gap-4', state === 'REQUEST' ? 'flex-col-reverse' : 'flex-col')}>
       <Conversation
-        message={deployment.message ?? undefined}
+        message={deployment.message}
         type="요청"
         user={{
           avatarId: application.user.avatarId,
@@ -77,7 +77,7 @@ export const DeploymentStateListDetailConversation = ({
       />
       {admin && (
         <Conversation
-          message={deployment.comment ?? undefined}
+          message={deployment.comment}
           type={
             state === 'REQUEST'
               ? DeploymentStateKRNameMap['RETURN']

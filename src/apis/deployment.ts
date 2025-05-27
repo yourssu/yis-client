@@ -1,20 +1,11 @@
 import { api } from '@/apis/api'
 import { getApplication } from '@/apis/application'
 import { deploymentKey } from '@/apis/keys'
-import {
-  DeploymentResponseSchema,
-  DeploymentResponseType,
-  DeploymentStateNames,
-} from '@/types/deployment'
-import {
-  PaginatedResponseSchema,
-  PaginatedResponseType,
-  PaginationParams,
-} from '@/types/pagination'
+import { DeploymentResponseType, DeploymentSchema, DeploymentStateNames } from '@/types/deployment'
+import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/types/pagination'
 import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/types/resource'
 import { makeManifests } from '@/utils/manifest'
 import { omitByNullish } from '@/utils/misc'
-import { camelizeSchema } from '@/utils/zod'
 import { useQueryClient } from '@tanstack/react-query'
 
 export type CreateDeploymentProps = {
@@ -77,7 +68,7 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
       },
     })
     .json()
-  return camelizeSchema(DeploymentResponseSchema).parse(res)
+  return DeploymentSchema.parse(res)
 }
 
 export const getDeploymentsByState = async ({
@@ -96,7 +87,7 @@ export const getDeploymentsByState = async ({
       }),
     })
     .json()
-  return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
+  return PaginatedSchema(DeploymentSchema).parse(res)
 }
 
 export const getDeploymentsByStateWithApplication = async ({
@@ -142,7 +133,7 @@ export const updateDeploymentState = async ({
       },
     })
     .json()
-  return camelizeSchema(DeploymentResponseSchema).parse(res)
+  return DeploymentSchema.parse(res)
 }
 
 export const useDeploymentsByStateInvalidation = ({ state }: { state: DeploymentStateNames }) => {

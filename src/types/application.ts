@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { DeploymentResponseSchema } from '@/types/deployment'
 import { UserResponseSchema } from '@/types/user'
-import { ambiguousZodEnum, camelizeSchema, zodISODateString } from '@/utils/zod'
+import { ambiguousZodEnum, camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod'
 
 export const ApplicationResponseSchema = z.object({
   description: z.string(),
@@ -20,7 +20,7 @@ export const ApplicationResponseSchema = z.object({
   deleted_at: zodISODateString().nullable(),
 })
 export type ApplicationResponseType = z.infer<typeof ApplicationResponseSchema>
-export const ApplicationSchema = camelizeSchema(ApplicationResponseSchema)
+export const ApplicationSchema = optionalizeSchema(camelizeSchema(ApplicationResponseSchema))
 export type ApplicationType = z.infer<typeof ApplicationSchema>
 
 export const ApplicationClusterPodSchema = z.object({
@@ -69,7 +69,9 @@ export const ApplicationClusterStatusResponseSchema = z.object({
 export type ApplicationClusterStatusResponseType = z.infer<
   typeof ApplicationClusterStatusResponseSchema
 >
-export const ApplicationClusterStatusSchema = camelizeSchema(ApplicationClusterStatusResponseSchema)
+export const ApplicationClusterStatusSchema = optionalizeSchema(
+  camelizeSchema(ApplicationClusterStatusResponseSchema)
+)
 export type ApplicationClusterStatusType = z.infer<typeof ApplicationClusterStatusSchema>
 
 export const FullApplicationResponseSchema = ApplicationResponseSchema.extend({
@@ -77,5 +79,7 @@ export const FullApplicationResponseSchema = ApplicationResponseSchema.extend({
   clusterStatus: ApplicationClusterStatusResponseSchema.optional(),
 })
 export type FullApplicationResponseType = z.infer<typeof FullApplicationResponseSchema>
-export const FullApplicationSchema = camelizeSchema(FullApplicationResponseSchema)
+export const FullApplicationSchema = optionalizeSchema(
+  camelizeSchema(FullApplicationResponseSchema)
+)
 export type FullApplicationType = z.infer<typeof FullApplicationSchema>

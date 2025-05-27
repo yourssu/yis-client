@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { PartNames } from '@/types/part'
-import { camelizeSchema, zodISODateString } from '@/utils/zod'
+import { camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod'
 
 export const userRole = ['USER', 'ADMIN'] as const
 export type UserRoleType = (typeof userRole)[number]
@@ -22,5 +22,5 @@ export const UserResponseSchema = z.object({
 
 export type UserResponseType = z.infer<typeof UserResponseSchema>
 
-export const UserSchema = camelizeSchema(UserResponseSchema)
+export const UserSchema = optionalizeSchema(camelizeSchema(UserResponseSchema))
 export type UserType = z.infer<typeof UserSchema>

@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { camelizeSchema } from '@/utils/zod'
+
 export type PaginationOrder =
   | 'CREATED_AT_ASC'
   | 'CREATED_AT_DESC'
@@ -25,6 +27,10 @@ export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(s: T) => {
   return PaginatedResponseBaseSchema.extend({
     data: z.array(s),
   })
+}
+
+export const PaginatedSchema = <T extends z.ZodTypeAny>(s: T) => {
+  return camelizeSchema(PaginatedResponseSchema(s))
 }
 
 export type PaginatedResponseType<T extends object> = PaginatedResponseBaseType & {

@@ -3,10 +3,9 @@ import { z } from 'zod'
 import { api } from '@/apis/api'
 import { getApplicationClusterStatus, getApplicationDeployments } from '@/apis/application'
 import { userKey } from '@/apis/keys'
-import { ApplicationResponseSchema, ApplicationResponseType } from '@/types/application'
+import { ApplicationResponseType, ApplicationSchema } from '@/types/application'
 import { PartNames } from '@/types/part'
-import { UserResponseSchema, UserResponseType } from '@/types/user'
-import { camelizeSchema } from '@/utils/zod'
+import { UserResponseType, UserSchema } from '@/types/user'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface EditUserProps {
@@ -32,22 +31,22 @@ export const editUser = async (props: EditUserProps) => {
       },
     })
     .json()
-  return camelizeSchema(UserResponseSchema).parse(res)
+  return UserSchema.parse(res)
 }
 
 export const getUser = async (userId: number) => {
   const res = await api.get<UserResponseType>(`users/${userId}`).json()
-  return camelizeSchema(UserResponseSchema).parse(res)
+  return UserSchema.parse(res)
 }
 
 export const getMe = async () => {
   const res = await api.get<UserResponseType>(`auth/me`).json()
-  return camelizeSchema(UserResponseSchema).parse(res)
+  return UserSchema.parse(res)
 }
 
 export const getUserApplications = async ({ userId }: GetUserApplicationsProps) => {
   const res = await api.get<ApplicationResponseType[]>(`users/${userId}/applications`).json()
-  return camelizeSchema(z.array(ApplicationResponseSchema)).parse(res)
+  return z.array(ApplicationSchema).parse(res)
 }
 
 export const getUserFullApplications = async ({ userId }: GetUserApplicationsProps) => {

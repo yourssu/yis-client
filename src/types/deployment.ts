@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { CPUResourceValueNames, MemoryResourceNames } from '@/types/resource'
-import { camelizeSchema, zodISODateString } from '@/utils/zod'
+import { camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod'
 
 export const DeploymentStateNames = ['REQUEST', 'RETURN', 'APPROVAL'] as const
 export type DeploymentStateNames = (typeof DeploymentStateNames)[number]
@@ -30,5 +30,5 @@ export const DeploymentResponseSchema = z.object({
 })
 export type DeploymentResponseType = z.infer<typeof DeploymentResponseSchema>
 
-export const DeploymentSchema = camelizeSchema(DeploymentResponseSchema)
+export const DeploymentSchema = optionalizeSchema(camelizeSchema(DeploymentResponseSchema))
 export type DeploymentType = z.infer<typeof DeploymentSchema>

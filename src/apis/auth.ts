@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 import { api } from '@/apis/api'
 import { TokenResponseSchema } from '@/types/auth'
-import { UserResponseSchema, UserResponseType } from '@/types/user'
+import { UserResponseType, UserSchema } from '@/types/user'
 import { removeAuthTokens } from '@/utils/auth'
-import { camelizeSchema } from '@/utils/zod'
+import { camelizeSchema, optionalizeSchema } from '@/utils/zod'
 
 interface SignupProps {
   avatarId: number
@@ -33,7 +33,7 @@ export const signup = async (props: SignupProps) => {
       },
     })
     .json()
-  return camelizeSchema(UserResponseSchema).parse(res)
+  return UserSchema.parse(res)
 }
 
 export const signin = async (props: SigninProps) => {
@@ -42,7 +42,7 @@ export const signin = async (props: SigninProps) => {
   formData.append('password', props.password)
 
   const res = await api.post<SigninResponse>('auth/login', { body: formData }).json()
-  return camelizeSchema(SigninResponseSchema).parse(res)
+  return optionalizeSchema(camelizeSchema(SigninResponseSchema)).parse(res)
 }
 
 export const signout = () => {

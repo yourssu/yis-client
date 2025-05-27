@@ -2,20 +2,16 @@ import { z } from 'zod'
 
 import { api } from '@/apis/api'
 import {
-  ApplicationClusterStatusResponseSchema,
   ApplicationClusterStatusResponseType,
-  ApplicationResponseSchema,
+  ApplicationClusterStatusSchema,
   ApplicationResponseType,
+  ApplicationSchema,
 } from '@/types/application'
-import { DeploymentResponseSchema, DeploymentResponseType } from '@/types/deployment'
-import {
-  PaginatedResponseSchema,
-  PaginatedResponseType,
-  PaginationParams,
-} from '@/types/pagination'
+import { DeploymentResponseType, DeploymentSchema } from '@/types/deployment'
+import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/types/pagination'
 import { handleError } from '@/utils/error'
 import { omitByNullish } from '@/utils/misc'
-import { camelizeSchema } from '@/utils/zod'
+import { camelizeSchema, optionalizeSchema } from '@/utils/zod'
 
 export type CreateApplicationProps = {
   description?: string
@@ -36,12 +32,12 @@ type CheckApplicationNameUniqueResponseType = z.infer<
 
 export const createApplication = async (props: CreateApplicationProps) => {
   const res = await api.post<ApplicationResponseType>('applications/', { json: props }).json()
-  return camelizeSchema(ApplicationResponseSchema).parse(res)
+  return ApplicationSchema.parse(res)
 }
 
 export const getApplication = async (applicationId: number) => {
   const res = await api.get<ApplicationResponseType>(`applications/${applicationId}`).json()
-  return camelizeSchema(ApplicationResponseSchema).parse(res)
+  return ApplicationSchema.parse(res)
 }
 
 export const getApplicationDeployments = async ({
@@ -62,7 +58,7 @@ export const getApplicationDeployments = async ({
       }
     )
     .json()
-  return camelizeSchema(PaginatedResponseSchema(DeploymentResponseSchema)).parse(res)
+  return PaginatedSchema(DeploymentSchema).parse(res)
 }
 
 export const checkApplicationNameUnique = async (name: string) => {
@@ -71,7 +67,8 @@ export const checkApplicationNameUnique = async (name: string) => {
       json: { name },
     })
     .json()
-  return camelizeSchema(CheckApplicationNameUniqueResponseSchema).parse(res).isUnique
+  return optionalizeSchema(camelizeSchema(CheckApplicationNameUniqueResponseSchema)).parse(res)
+    .isUnique
 }
 
 export const getApplicationClusterStatus = async (applicationId: number) => {
@@ -81,7 +78,7 @@ export const getApplicationClusterStatus = async (applicationId: number) => {
         retry: 0,
       })
       .json()
-    return camelizeSchema(ApplicationClusterStatusResponseSchema).parse(res)
+    return ApplicationClusterStatusSchema.parse(res)
   } catch (e) {
     const { type, message } = await handleError(e)
     if (
