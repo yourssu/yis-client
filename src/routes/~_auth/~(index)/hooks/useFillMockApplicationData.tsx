@@ -22,7 +22,7 @@ export const useFillMockApplicationData = () => {
       deployment: {
         domain: makeRandomUrl(),
         port: 80,
-        imageUrl: 'alexwhen/docker-2048:latest2',
+        imageUrl: 'alexwhen/docker-2048:latest',
         message: '테스트 배포인데 승인해주세요.',
       },
       resource: {
