@@ -1,15 +1,9 @@
-import { useInputState } from 'react-simplikit'
-
-import { updateDeploymentState, useDeploymentsByStateInvalidation } from '@/apis/deployment'
-import { Button } from '@/components/Button'
 import { Divider } from '@/components/Divider'
-import { ProfileAvatar } from '@/components/ProfileAvatar'
-import { TextInput } from '@/components/TextInput/TextInput'
-import { useToastedMutation } from '@/hooks/useToastedMutation'
-import { DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
+import { DeploymentStateListDetailFooter } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailFooter'
+import { DeploymentStateListDetailHeader } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailHeader'
+import { DeploymentStateListDetailInformation } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailInformation'
 import { ApplicationType } from '@/types/application'
 import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
-import { formatTemplates } from '@/utils/date'
 
 interface DeploymentStateListDetailProps {
   application: ApplicationType
@@ -22,89 +16,10 @@ export const DeploymentStateListDetail = ({
   application,
   state,
 }: DeploymentStateListDetailProps) => {
-  const [comment, setComment] = useInputState('')
-
-  const { mutateWithToast } = useToastedMutation({
-    mutationFn: updateDeploymentState,
-    successText: '검토 결과를 보냈어요',
-    errorText: '검토 결과 전송에 실패했어요',
-  })
-  const invalidateDeployments = useDeploymentsByStateInvalidation({ state })
-
-  const listPairs = [
-    {
-      label: `${DeploymentStateKRNameMap[state]} 시각`,
-      value: formatTemplates['(2024년)? 2월 3일, 오후 10:23'](deployment.updatedAt),
-    },
-    {
-      label: '도메인',
-      value: deployment.domainName,
-    },
-    {
-      label: '포트 번호',
-      value: deployment.port,
-    },
-    {
-      label: '도커 이미지 주소',
-      value: deployment.imageUrl,
-    },
-    {
-      label: 'CPU Request',
-      value: deployment.cpuRequests,
-    },
-    {
-      label: 'CPU Limit',
-      value: deployment.cpuLimits,
-    },
-    {
-      label: 'Memory Request',
-      value: deployment.memoryRequests,
-    },
-    {
-      label: 'Memory Limit',
-      value: deployment.memoryLimits,
-    },
-  ]
-
-  const getReviewResultProps = (type: 'APPROVAL' | 'RETURN') => {
-    return {
-      id: deployment.id,
-      state: type,
-      link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=${type}&id={id}`,
-      comment: comment ? comment : undefined,
-    }
-  }
-
-  const onClickApprove = async () => {
-    await mutateWithToast(getReviewResultProps('APPROVAL'))
-    invalidateDeployments()
-  }
-
-  const onClickReject = async () => {
-    await mutateWithToast(getReviewResultProps('RETURN'))
-    invalidateDeployments()
-  }
-
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="mb-1 text-lg font-semibold">{application.name}</div>
-          <div className="text-neutralSubtle text-sm">{application.description}</div>
-        </div>
-        <div className="flex flex-col items-center gap-1.5">
-          <ProfileAvatar avatarId={application.user.avatarId} rounded size={40} />
-          <div className="text-neutralMuted text-15 font-semibold">{application.user.nickname}</div>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4">
-        {listPairs.map(({ label, value }) => (
-          <div className="flex items-center justify-between text-sm" key={label}>
-            <div className="text-neutralMuted">{label}</div>
-            <div>{value}</div>
-          </div>
-        ))}
-      </div>
+      <DeploymentStateListDetailHeader application={application} />
+      <DeploymentStateListDetailInformation deployment={deployment} state={state} />
       <Divider />
       <div className="text-sm">
         <div className="text-neutralMuted mb-2">{application.user.nickname}님이 남긴 메시지</div>
@@ -121,22 +36,7 @@ export const DeploymentStateListDetail = ({
         </div>
       )}
       {state === 'REQUEST' && (
-        <div className="flex flex-col gap-3">
-          {/* Todo: TextField로 변경해야 함 */}
-          <TextInput
-            onChange={setComment}
-            placeholder="작성할 코멘트가 있다면 작성해주세요..."
-            value={comment}
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <Button onClick={onClickReject} size="lg" variant="secondary">
-              거부
-            </Button>
-            <Button onClick={onClickApprove} size="lg" variant="primary">
-              승인
-            </Button>
-          </div>
-        </div>
+        <DeploymentStateListDetailFooter deploymentId={deployment.id} state={state} />
       )}
     </div>
   )
