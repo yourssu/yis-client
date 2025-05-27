@@ -35,6 +35,11 @@ export const editUser = async (props: EditUserProps) => {
   return camelizeSchema(UserResponseSchema).parse(res)
 }
 
+export const getUser = async (userId: number) => {
+  const res = await api.get<UserResponseType>(`users/${userId}`).json()
+  return camelizeSchema(UserResponseSchema).parse(res)
+}
+
 export const getMe = async () => {
   const res = await api.get<UserResponseType>(`auth/me`).json()
   return camelizeSchema(UserResponseSchema).parse(res)

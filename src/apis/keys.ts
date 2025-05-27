@@ -13,6 +13,7 @@ export const applicationKey = {
 export const userKey = {
   all: ['user'] as const,
   me: () => [...userKey.all, 'me'] as const,
+  detail: (userId: number) => [...userKey.all, { userId }] as const,
   applications: (userId: number) => [...userKey.all, 'applications', { userId }] as const,
 }
 
