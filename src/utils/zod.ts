@@ -32,6 +32,27 @@ type CamelCasedPropertiesDeep<
           }
         : Value
 
+type OptionalizeValue<T> = T extends null ? undefined : T
+
+export type OptionalizedObjectValuesDeep<
+  Value,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+> = Value extends Date | Function | RegExp
+  ? Value
+  : Value extends readonly unknown[]
+    ? Value extends readonly [infer First, ...infer Rest]
+      ? [OptionalizedObjectValuesDeep<First>, ...OptionalizedObjectValuesDeep<Rest>]
+      : Value extends readonly []
+        ? []
+        : OptionalizedObjectValuesDeep<Value[number]>[]
+    : Value extends Set<infer U>
+      ? Set<OptionalizedObjectValuesDeep<U>>
+      : Value extends object
+        ? {
+            [K in keyof Value]: OptionalizedObjectValuesDeep<Value[K]>
+          }
+        : OptionalizeValue<Value>
+
 type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never
 
 type LiteralOrFallback<TUnion extends readonly string[], TFallback extends string> =
@@ -42,6 +63,39 @@ export const camelizeSchema = <T extends z.ZodTypeAny>(
   zod: T
 ): z.ZodEffects<z.infer<T>, CamelCasedPropertiesDeep<T['_output']>> =>
   zod.transform((val) => camelcaseKeys(val, { deep: true }) as CamelCasedPropertiesDeep<T>)
+
+export const optionalizeSchema = <T extends z.ZodTypeAny>(
+  zod: T
+): z.ZodEffects<z.infer<T>, OptionalizedObjectValuesDeep<T['_output']>> => {
+  const nullToUndefinedDeep = <T>(obj: T): T => {
+    if (obj === null) {
+      return undefined as any
+    }
+    if (Array.isArray(obj)) {
+      return obj.map((item) => nullToUndefinedDeep(item)) as any
+    }
+    if (obj instanceof Set) {
+      const newSet = new Set<any>()
+      for (const item of obj) {
+        newSet.add(nullToUndefinedDeep(item))
+      }
+      return newSet as any
+    }
+    if (typeof obj === 'object') {
+      const result: any = {}
+      for (const [key, value] of Object.entries(obj)) {
+        if (value === null) {
+          result[key] = undefined
+        } else {
+          result[key] = nullToUndefinedDeep(value)
+        }
+      }
+      return result
+    }
+    return obj as any
+  }
+  return zod.transform((val) => nullToUndefinedDeep(val) as OptionalizedObjectValuesDeep<T>)
+}
 
 export const checkParsedError = <TScheme extends object>(
   error: undefined | z.ZodError<TScheme>,
