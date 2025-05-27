@@ -13,6 +13,7 @@ import {
   PaginatedResponseType,
   PaginationParams,
 } from '@/types/pagination'
+import { handleError } from '@/utils/error'
 import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema } from '@/utils/zod'
 
@@ -74,10 +75,23 @@ export const checkApplicationNameUnique = async (name: string) => {
 }
 
 export const getApplicationClusterStatus = async (applicationId: number) => {
-  const res = await api
-    .get<ApplicationClusterStatusResponseType>(`applications/${applicationId}/cluster/status`)
-    .json()
-  return camelizeSchema(ApplicationClusterStatusResponseSchema).parse(res)
+  try {
+    const res = await api
+      .get<ApplicationClusterStatusResponseType>(`applications/${applicationId}/cluster/status`, {
+        retry: 0,
+      })
+      .json()
+    return camelizeSchema(ApplicationClusterStatusResponseSchema).parse(res)
+  } catch (e) {
+    const { type, message } = await handleError(e)
+    if (
+      type === 'KyHTTPError' &&
+      ['NoneType', 'metadata', 'get deployment status'].every((token) => message.includes(token))
+    ) {
+      return undefined
+    }
+    throw e
+  }
 }
 
 export const getFullApplication = async (applicationId: number) => {

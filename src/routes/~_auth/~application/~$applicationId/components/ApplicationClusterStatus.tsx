@@ -7,7 +7,7 @@ import {
 import { ApplicationClusterStatusType } from '@/types/application'
 
 interface ApplicationClusterStatusProps {
-  clusterStatus: ApplicationClusterStatusType
+  clusterStatus: ApplicationClusterStatusType | undefined
 }
 
 const indicator = tv({
@@ -17,7 +17,8 @@ const indicator = tv({
       '배포 성공': 'bg-green500 animate-pulse',
       '배포 중': 'bg-orange500 animate-pulse',
       '배포 실패': 'bg-red500',
-      '초기화 중': 'bg-grey500',
+      '초기화 중': 'bg-grey500 animate-pulse',
+      '승인 대기 중': 'bg-grey500',
     },
   },
 })
@@ -34,7 +35,7 @@ export const ApplicationClusterStatus = ({ clusterStatus }: ApplicationClusterSt
       <div className="bg-grey300 h-3 w-[1px]" />
       <div className="text-neutralMuted flex items-center gap-1 text-sm font-medium">
         POD {''}
-        {runningPodCount} / {clusterStatus.pods.length}
+        {runningPodCount} / {clusterStatus?.pods.length ?? 0}
       </div>
     </div>
   )
@@ -45,4 +46,5 @@ const statusText: Record<ClusterStatusSummary, string> = {
   '배포 중': '배포 중인 파드가 있어요',
   '배포 실패': '배포에 실패했어요',
   '초기화 중': '파드 초기화 중이에요',
+  '승인 대기 중': '배포 승인 대기 중이에요',
 }

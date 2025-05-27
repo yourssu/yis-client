@@ -1,6 +1,11 @@
 import { ApplicationClusterPodType, ApplicationClusterStatusType } from '@/types/application'
 
-export type ClusterStatusSummary = '배포 성공' | '배포 실패' | '배포 중' | '초기화 중'
+export type ClusterStatusSummary =
+  | '배포 성공'
+  | '배포 실패'
+  | '배포 중'
+  | '승인 대기 중'
+  | '초기화 중'
 
 const PodFailureNames: Array<ApplicationClusterPodType['status']> = [
   'CrashLoopBackOff',
@@ -31,8 +36,12 @@ const getPodStatusCases = (pods: ApplicationClusterPodType[]) => {
 }
 
 const getClusterStatusSummary = (
-  clusterStatus: ApplicationClusterStatusType
+  clusterStatus: ApplicationClusterStatusType | undefined
 ): ClusterStatusSummary => {
+  if (!clusterStatus) {
+    return '승인 대기 중'
+  }
+
   const { conditions, pods } = clusterStatus
 
   const progressing = conditions.find((c) => c.type === 'Progressing')
@@ -68,10 +77,13 @@ const getClusterStatusSummary = (
   return '배포 중'
 }
 
-export const useApplicationClusterStatus = (clusterStatus: ApplicationClusterStatusType) => {
+export const useApplicationClusterStatus = (
+  clusterStatus: ApplicationClusterStatusType | undefined
+) => {
   return {
     summary: getClusterStatusSummary(clusterStatus),
-    runningPodCount: clusterStatus.pods.filter((pod) => pod.status === 'Running' && pod.ready)
-      .length,
+    runningPodCount: clusterStatus
+      ? clusterStatus.pods.filter((pod) => pod.status === 'Running' && pod.ready).length
+      : 0,
   }
 }

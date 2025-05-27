@@ -74,7 +74,7 @@ export type ApplicationClusterStatusType = z.infer<typeof ApplicationClusterStat
 
 export const FullApplicationResponseSchema = ApplicationResponseSchema.extend({
   recentDeployment: DeploymentResponseSchema,
-  clusterStatus: ApplicationClusterStatusResponseSchema,
+  clusterStatus: ApplicationClusterStatusResponseSchema.optional(),
 })
 export type FullApplicationResponseType = z.infer<typeof FullApplicationResponseSchema>
 export const FullApplicationSchema = camelizeSchema(FullApplicationResponseSchema)
