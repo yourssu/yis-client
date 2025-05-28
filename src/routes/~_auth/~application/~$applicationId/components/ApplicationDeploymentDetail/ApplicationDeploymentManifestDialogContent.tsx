@@ -11,6 +11,7 @@ export const ApplicationDeploymentManifestDialogContent = ({
   manifest,
 }: ApplicationDeploymentManifestDialogContentProps) => {
   const manifestExtension = manifest.fileName.split('.').pop() || ''
+  const lines = manifest.content.split('\n').length
 
   return (
     <SyntaxHighlighter
@@ -20,10 +21,13 @@ export const ApplicationDeploymentManifestDialogContent = ({
         background: 'transparent',
         fontSize: 13,
         lineHeight: 1.45,
-        padding: '0 0 20px 0',
+        padding: '10px 0 20px 0',
         margin: 0,
       }}
       language={manifestExtension}
+      lineNumberStyle={{
+        minWidth: `${1 + Math.max(lines.toString().length, 2)}.25em`,
+      }}
       showLineNumbers
       style={prism}
     >
