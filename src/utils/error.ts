@@ -1,5 +1,5 @@
 import { HTTPError } from 'ky'
-import { ZodError } from 'zod'
+import { ZodError } from 'zod/v4'
 
 import { getKyHTTPErrorMessage, isKyHTTPError } from '@/utils/ky'
 import { getZodErrorMessage, isZodError } from '@/utils/zod'

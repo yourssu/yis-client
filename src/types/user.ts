@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { PartNames } from '@/types/part'
 import { camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod'
@@ -19,8 +19,6 @@ export const UserResponseSchema = z.object({
   is_active: z.boolean(),
   avatar_id: z.number(),
 })
-
 export type UserResponseType = z.infer<typeof UserResponseSchema>
-
 export const UserSchema = optionalizeSchema(camelizeSchema(UserResponseSchema))
 export type UserType = z.infer<typeof UserSchema>

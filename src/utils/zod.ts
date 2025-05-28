@@ -1,6 +1,8 @@
 import camelcaseKeys from 'camelcase-keys'
 import { type CamelCase } from 'type-fest'
-import { z } from 'zod'
+import { z } from 'zod/v4'
+
+import { getIn } from '@/utils/misc'
 
 type CamelCaseOptions = {
   preserveConsecutiveUppercase?: boolean
@@ -59,14 +61,17 @@ type LiteralOrFallback<TUnion extends readonly string[], TFallback extends strin
   | TFallback
   | TUnion[number]
 
-export const camelizeSchema = <T extends z.ZodTypeAny>(
+export const camelizeSchema = <T extends z.ZodType>(
   zod: T
-): z.ZodEffects<z.infer<T>, CamelCasedPropertiesDeep<T['_output']>> =>
-  zod.transform((val) => camelcaseKeys(val, { deep: true }) as CamelCasedPropertiesDeep<T>)
+): z.ZodPipe<T, z.ZodTransform<CamelCasedPropertiesDeep<z.output<T>>, z.output<T>>> =>
+  zod.transform(
+    (val) =>
+      camelcaseKeys(val as Record<string, unknown>, { deep: true }) as CamelCasedPropertiesDeep<T>
+  )
 
-export const optionalizeSchema = <T extends z.ZodTypeAny>(
+export const optionalizeSchema = <T extends z.ZodType>(
   zod: T
-): z.ZodEffects<z.infer<T>, OptionalizedObjectValuesDeep<T['_output']>> => {
+): z.ZodPipe<T, z.ZodTransform<OptionalizedObjectValuesDeep<T['_output']>, T['_output']>> => {
   const nullToUndefinedDeep = <T>(obj: T): T => {
     if (obj === null) {
       return undefined as any
@@ -97,11 +102,19 @@ export const optionalizeSchema = <T extends z.ZodTypeAny>(
   return zod.transform((val) => nullToUndefinedDeep(val) as OptionalizedObjectValuesDeep<T>)
 }
 
-export const checkParsedError = <TScheme extends object>(
+export const checkParsedError = <TScheme extends object, TPath extends string = string>(
   error: undefined | z.ZodError<TScheme>,
-  field: keyof TScheme
+  path: TPath
 ) => {
-  return !!error?.formErrors.fieldErrors[field]?.length
+  if (!error) {
+    return false
+  }
+
+  const errorTree = z.treeifyError(error)
+  const errorTreePath = 'properties.' + path.split('.').join('.properties.')
+  const value = getIn(errorTree, errorTreePath) as unknown as z.core.$ZodErrorTree<unknown>
+
+  return !!value?.errors.length
 }
 
 export const isZodError = (e: any): e is z.ZodError =>

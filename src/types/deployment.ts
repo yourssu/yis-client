@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { CPUResourceValueNames, MemoryResourceNames } from '@/types/resource'
 import { camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod'

@@ -1,20 +1,38 @@
 import { mapValues } from 'es-toolkit'
+import { set } from 'es-toolkit/compat'
 import { useState } from 'react'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
-import { getZodErrorMessage } from '@/utils/zod'
+import { checkParsedError, getZodErrorMessage } from '@/utils/zod'
 
-export const useZodFormValidation = <TValue extends Record<string, any>>(
+export const useZodFormValidation = <
+  TValue extends Record<string, any>,
+  TScheme extends z.ZodObject,
+>(
   value: TValue,
-  schema: z.ZodTypeAny
+  schema: TScheme
 ) => {
   const [invalid, setInvalid] = useState<Record<keyof TValue, boolean>>(
     mapValues(value, () => false)
   )
   const [invalidText, setInvalidText] = useState<string | undefined>(undefined)
 
+  const getInitialInvalid = () => {
+    return mapValues(value, () => false)
+  }
+
+  const getInvalid = (error: z.ZodError<TScheme>) => {
+    const res = getInitialInvalid()
+    error.issues.forEach((issue) => {
+      const path = issue.path.join('.')
+      const isError = checkParsedError(error, path)
+      set(res, path, isError)
+    })
+    return res
+  }
+
   const reset = () => {
-    setInvalid(() => mapValues(value, () => false))
+    setInvalid(() => getInitialInvalid())
     setInvalidText(undefined)
   }
 
@@ -22,8 +40,7 @@ export const useZodFormValidation = <TValue extends Record<string, any>>(
     const { error } = schema.safeParse(value)
 
     if (error) {
-      const { fieldErrors } = error.formErrors
-      setInvalid(() => mapValues(value, (_, k) => !!fieldErrors[k]))
+      setInvalid(() => getInvalid(error))
       setInvalidText(getZodErrorMessage(error))
       return false
     }

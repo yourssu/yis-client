@@ -1,7 +1,7 @@
 import { isEqual } from 'es-toolkit'
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { editUser, useMeInvalidation } from '@/apis/user'
 import { Dialog } from '@/components/Dialog'
@@ -118,7 +118,7 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
 
 const ProfileEditDialogFormSchema = z.object({
   nickname: z.string().min(1),
-  email: z.string().email().endsWith('.urssu@gmail.com'),
+  email: z.email().endsWith('.urssu@gmail.com'),
   part: z.enum(PartNames),
   avatarId: z.number(),
 })

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { useApplicationDeploymentsInvalidation } from '@/apis/application'
 import { updateDeploymentAsRequest } from '@/apis/deployment'

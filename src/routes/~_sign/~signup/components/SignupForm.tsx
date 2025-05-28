@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { random } from 'es-toolkit'
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { signup } from '@/apis/auth'
 import { Select } from '@/components/Select'

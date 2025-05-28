@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { signin } from '@/apis/auth'
 import { useNicknameToYourssuEmail } from '@/hooks/useNicknameToYourssuEmail'

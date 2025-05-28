@@ -1,5 +1,5 @@
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { checkApplicationNameUnique } from '@/apis/application'
 import { Dialog } from '@/components/Dialog'

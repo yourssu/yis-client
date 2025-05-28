@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 import { DeploymentResponseSchema } from '@/types/deployment'
 import { UserResponseSchema } from '@/types/user'
