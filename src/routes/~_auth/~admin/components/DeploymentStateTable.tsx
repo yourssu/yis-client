@@ -5,8 +5,7 @@ import { Tab } from '@/components/Tab'
 import { useSearchState } from '@/hooks/useSearchState'
 import { useSetStateSelector } from '@/hooks/useSetStateSelector'
 import { DeploymentStateList } from '@/routes/~_auth/~admin/components/DeploymentStateList'
-import { DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
-import { DeploymentStateNames } from '@/types/deployment'
+import { DeploymentStateKRNameMap, DeploymentStateNames } from '@/types/deployment'
 import { ValueOf } from '@/utils/type'
 
 export const DeploymentStateTable = () => {

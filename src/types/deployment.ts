@@ -6,6 +6,12 @@ import { camelizeSchema, optionalizeSchema, zodISODateString } from '@/utils/zod
 export const DeploymentStateNames = ['REQUEST', 'RETURN', 'APPROVAL'] as const
 export type DeploymentStateNames = (typeof DeploymentStateNames)[number]
 
+export const DeploymentStateKRNameMap = {
+  REQUEST: '요청',
+  APPROVAL: '승인',
+  RETURN: '거절',
+} as const satisfies Record<DeploymentStateNames, string>
+
 export const DeploymentResponseSchema = z.object({
   domain_name: z.string(),
   cpu_requests: z.enum(CPUResourceValueNames),

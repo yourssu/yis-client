@@ -1,5 +1,4 @@
-import { DeploymentStateKRNameMap } from '@/routes/~_auth/~admin/type'
-import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
+import { DeploymentStateKRNameMap, DeploymentStateNames, DeploymentType } from '@/types/deployment'
 import { formatTemplates } from '@/utils/date'
 
 interface DeploymentStateListDetailHeaderProps {
