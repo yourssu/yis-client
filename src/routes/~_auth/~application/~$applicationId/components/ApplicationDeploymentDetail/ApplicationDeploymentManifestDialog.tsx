@@ -26,7 +26,7 @@ export const ApplicationDeploymentManifestDialog = ({
     <Dialog closeableWithOutside onClose={close} open={isOpen}>
       <Dialog.Content className="h-[620px] w-[920px] max-w-full !p-0">
         <div className="flex size-full">
-          <div className="h-full flex-[40_1] px-5 pt-7">
+          <div className="h-full flex-[40_1] pl-5">
             <ApplicationDeploymentManifestDialogSidebar
               manifests={manifests}
               selectedManifest={selectedManifest}

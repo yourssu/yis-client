@@ -25,18 +25,22 @@ export const ApplicationDeploymentManifestDialogSidebar = ({
   setSelectedManifest,
 }: ApplicationDeploymentManifestDialogSidebarProps) => {
   return (
-    <div className="w-full">
-      <div className="text-13 text-neutralSubtle mb-2 font-medium">파일 목록</div>
-      <div className="flex flex-col gap-1">
-        {manifests.map((manifest) => (
-          <button
-            className={button({ selected: selectedManifest?.fileName === manifest.fileName })}
-            key={manifest.fileName}
-            onClick={() => setSelectedManifest(manifest)}
-          >
-            {manifest.fileName}
-          </button>
-        ))}
+    <div className="flex h-full w-full flex-col overflow-y-auto">
+      <div className="text-13 text-neutralSubtle bg-grey100 sticky top-0 pt-7 pb-2 font-medium">
+        파일 목록
+      </div>
+      <div className="flex-[1_1_0]">
+        <div className="flex flex-col gap-1 pr-5">
+          {manifests.map((manifest) => (
+            <button
+              className={button({ selected: selectedManifest?.fileName === manifest.fileName })}
+              key={manifest.fileName}
+              onClick={() => setSelectedManifest(manifest)}
+            >
+              {manifest.fileName}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
