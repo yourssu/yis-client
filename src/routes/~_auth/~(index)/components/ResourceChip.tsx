@@ -1,8 +1,8 @@
-import { CpuResourceValueNames, MemoryResourceNames } from '@/types/resource'
+import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 
 type ResourceType = 'CPU' | 'MEMORY'
 type GetResourceValueNames<TType extends ResourceType> = TType extends 'CPU'
-  ? CpuResourceValueNames
+  ? CpuResourceNames
   : TType extends 'MEMORY'
     ? MemoryResourceNames
     : never

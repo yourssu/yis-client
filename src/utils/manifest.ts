@@ -1,9 +1,9 @@
-import { CpuResourceValueNames, MemoryResourceNames } from '@/types/resource'
+import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 
 interface MakeManifestsProps {
   applicationName: string
-  cpuLimits: CpuResourceValueNames
-  cpuRequests: CpuResourceValueNames
+  cpuLimits: CpuResourceNames
+  cpuRequests: CpuResourceNames
   domainName: string
   imageUrl: string
   memoryLimits: MemoryResourceNames

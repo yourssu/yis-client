@@ -8,12 +8,7 @@ import {
   DeploymentStateNames,
 } from '@/types/deployment'
 import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/types/pagination'
-import {
-  CpuResourceNames,
-  CpuResourceValueMap,
-  CpuResourceValueNames,
-  MemoryResourceNames,
-} from '@/types/resource'
+import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 import { makeManifests } from '@/utils/manifest'
 import { omitByNullish } from '@/utils/misc'
 import { useQueryClient } from '@tanstack/react-query'
@@ -30,10 +25,10 @@ export type CreateDeploymentProps = {
     port: number
   }
   resource: {
-    cpuLimit: CpuResourceNames
-    cpuRequest: CpuResourceNames
-    memoryLimit: MemoryResourceNames
-    memoryRequest: MemoryResourceNames
+    cpuLimits: CpuResourceNames
+    cpuRequests: CpuResourceNames
+    memoryLimits: MemoryResourceNames
+    memoryRequests: MemoryResourceNames
   }
 }
 
@@ -50,8 +45,8 @@ interface UpdateDeploymentStateProps {
 
 interface UpdateDeploymentAsRequestProps {
   deployment: {
-    cpuLimits: CpuResourceValueNames
-    cpuRequests: CpuResourceValueNames
+    cpuLimits: CpuResourceNames
+    cpuRequests: CpuResourceNames
     domainName: string
     imageUrl: string
     memoryLimits: MemoryResourceNames
@@ -70,10 +65,10 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
         link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}`, // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
         deployment: {
           domain_name: props.deployment.domain,
-          cpu_requests: CpuResourceValueMap[props.resource.cpuRequest],
-          memory_requests: props.resource.memoryRequest,
-          cpu_limits: CpuResourceValueMap[props.resource.cpuLimit],
-          memory_limits: props.resource.memoryLimit,
+          cpu_requests: props.resource.cpuRequests,
+          memory_requests: props.resource.memoryRequests,
+          cpu_limits: props.resource.cpuLimits,
+          memory_limits: props.resource.memoryLimits,
           port: props.deployment.port,
           image_url: props.deployment.imageUrl,
           replicas: 1,
@@ -85,10 +80,10 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
           domainName: props.deployment.domain,
           port: props.deployment.port,
           imageUrl: props.deployment.imageUrl,
-          cpuLimits: CpuResourceValueMap[props.resource.cpuLimit],
-          cpuRequests: CpuResourceValueMap[props.resource.cpuRequest],
-          memoryLimits: props.resource.memoryLimit,
-          memoryRequests: props.resource.memoryRequest,
+          cpuLimits: props.resource.cpuLimits,
+          cpuRequests: props.resource.cpuRequests,
+          memoryLimits: props.resource.memoryLimits,
+          memoryRequests: props.resource.memoryRequests,
         }),
       },
     })

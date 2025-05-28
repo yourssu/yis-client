@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
-import { z } from 'zod/v4'
 
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
 import { DeployConfirmedContext, DeployContext } from '@/routes/~_auth/~(index)/type'
+import { DeploymentInfoFormSchema } from '@/types/deployment'
 import { assertNonNullish } from '@/utils/assertion'
-import { regexes } from '@/utils/regex'
 
 interface DeploymentInfoFormProps {
   initialValue?: DeployContext
@@ -35,10 +34,10 @@ export const DeploymentInfoFormStep = ({
 
   const { invalid, invalidText, onChangeWithReset, validate } = useZodFormValidation(
     formData,
-    DeploymentInfoFormSchema.form
+    DeploymentInfoFormSchema.form()
   )
 
-  const { error: buttonError } = DeploymentInfoFormSchema.button.safeParse(formData)
+  const { error: buttonError } = DeploymentInfoFormSchema.base.safeParse(formData)
 
   const onClickNext = () => {
     if (!validate()) {
@@ -100,28 +99,4 @@ export const DeploymentInfoFormStep = ({
       </Dialog.ButtonGroup>
     </>
   )
-}
-
-const baseValidation = {
-  domain: z.string().min(1, { message: '도메인을 입력해주세요.' }),
-  port: z.number(),
-  imageUrl: z.string().min(1, { message: '도커 이미지 링크를 입력해주세요.' }),
-}
-
-const DeploymentInfoFormSchema = {
-  button: z.object(baseValidation),
-  form: z.object({
-    domain: baseValidation.domain
-      .refine((domain) => !(domain.startsWith('http://') || domain.startsWith('https://')), {
-        message: '도메인에 http 또는 https가 포함되어 있어요.',
-      })
-      .refine((domain) => regexes.hostname.test(domain), {
-        message: '도메인 형식이 올바르지 않아요.',
-      }),
-    port: baseValidation.port
-      .min(0, { message: '포트 번호가 올바르지 않아요.' })
-      .max(65535, { message: '포트 번호가 올바르지 않아요.' }),
-    imageUrl: baseValidation.imageUrl,
-    message: z.string().optional(),
-  }),
 }

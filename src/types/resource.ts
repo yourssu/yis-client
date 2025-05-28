@@ -1,25 +1,5 @@
-import { tupleValues } from '@/utils/misc'
-
-export const CpuResourceNames = [
-  '0.1 CPU',
-  '0.25 CPU',
-  '0.5 CPU',
-  '1 CPU',
-  '1.5 CPU',
-  '2 CPU',
-] as const
+export const CpuResourceNames = ['100m', '250m', '500m', '1', '1.5', '2'] as const
 export type CpuResourceNames = (typeof CpuResourceNames)[number]
-
-export const CpuResourceValueMap = {
-  '0.1 CPU': '100m',
-  '0.25 CPU': '250m',
-  '0.5 CPU': '500m',
-  '1 CPU': '1',
-  '1.5 CPU': '1.5',
-  '2 CPU': '2',
-} as const
-export const CPUResourceValueNames = tupleValues(CpuResourceValueMap)
-export type CpuResourceValueNames = (typeof CPUResourceValueNames)[number]
 
 export const MemoryResourceNames = [
   '32Mi',

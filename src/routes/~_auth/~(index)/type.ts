@@ -17,10 +17,10 @@ export type DeployContext = {
 export type DeployConfirmedContext = Merge<Required<DeployContext>, Pick<DeployContext, 'message'>>
 
 export type ResourceContext = {
-  cpuLimit?: CpuResourceNames
-  cpuRequest?: CpuResourceNames
-  memoryLimit?: MemoryResourceNames
-  memoryRequest?: MemoryResourceNames
+  cpuLimits?: CpuResourceNames
+  cpuRequests?: CpuResourceNames
+  memoryLimits?: MemoryResourceNames
+  memoryRequests?: MemoryResourceNames
 }
 export type ResourceConfirmedContext = Required<ResourceContext>
 

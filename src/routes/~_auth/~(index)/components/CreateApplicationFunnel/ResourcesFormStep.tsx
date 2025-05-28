@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { z } from 'zod/v4'
 
 import { Dialog } from '@/components/Dialog'
 import { Label } from '@/components/Label'
 import { Select } from '@/components/Select'
 import { ResourceConfirmedContext, ResourceContext } from '@/routes/~_auth/~(index)/type'
+import { DeploymentResourceFormSchema } from '@/types/deployment'
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 import { assertNonNullish } from '@/utils/assertion'
 import { mutable } from '@/utils/misc'
@@ -16,20 +16,21 @@ interface ResourcesFormProps {
 }
 
 export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: ResourcesFormProps) => {
-  const [cpuRequest, setCpuRequest] = useState(initialValue?.cpuRequest)
-  const [cpuLimit, setCpuLimit] = useState(initialValue?.cpuLimit)
-  const [memoryRequest, setMemoryRequest] = useState(initialValue?.memoryRequest)
-  const [memoryLimit, setMemoryLimit] = useState(initialValue?.memoryLimit)
+  const [cpuRequests, setCpuRequests] = useState(initialValue?.cpuRequests)
+  const [cpuLimits, setCpuLimits] = useState(initialValue?.cpuLimits)
+  const [memoryRequests, setMemoryRequests] = useState(initialValue?.memoryRequests)
+  const [memoryLimits, setMemoryLimits] = useState(initialValue?.memoryLimits)
+
   const [invalid, setInvalid] = useState({
     cpu: false,
     memory: false,
   })
 
-  const { error } = ResourcesFormSchema.safeParse({
-    cpuRequest,
-    cpuLimit,
-    memoryRequest,
-    memoryLimit,
+  const { error } = DeploymentResourceFormSchema.base.safeParse({
+    cpuRequests,
+    cpuLimits,
+    memoryRequests,
+    memoryLimits,
   })
 
   const checkResourceReversed = <T extends string>(values: T[], request: T, limit: T) => {
@@ -51,11 +52,11 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
                 invalid={invalid.cpu}
                 items={CpuResourceNames}
                 onValueChange={(v) => {
-                  setCpuRequest(v)
+                  setCpuRequests(v)
                   setInvalid((prev) => ({ ...prev, cpu: false }))
                 }}
                 placeholder="CPU Request"
-                value={cpuRequest}
+                value={cpuRequests}
                 viewPortBackground="grey200"
               />
               <div>~</div>
@@ -63,11 +64,11 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
                 invalid={invalid.cpu}
                 items={CpuResourceNames}
                 onValueChange={(v) => {
-                  setCpuLimit(v)
+                  setCpuLimits(v)
                   setInvalid((prev) => ({ ...prev, cpu: false }))
                 }}
                 placeholder="CPU Limit"
-                value={cpuLimit}
+                value={cpuLimits}
                 viewPortBackground="grey200"
               />
             </div>
@@ -83,11 +84,11 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
                 invalid={invalid.memory}
                 items={MemoryResourceNames}
                 onValueChange={(v) => {
-                  setMemoryRequest(v)
+                  setMemoryRequests(v)
                   setInvalid((prev) => ({ ...prev, memory: false }))
                 }}
                 placeholder="Memory Request"
-                value={memoryRequest}
+                value={memoryRequests}
                 viewPortBackground="grey200"
               />
               <div>~</div>
@@ -95,11 +96,11 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
                 invalid={invalid.memory}
                 items={MemoryResourceNames}
                 onValueChange={(v) => {
-                  setMemoryLimit(v)
+                  setMemoryLimits(v)
                   setInvalid((prev) => ({ ...prev, memory: false }))
                 }}
                 placeholder="Memory Limit"
-                value={memoryLimit}
+                value={memoryLimits}
                 viewPortBackground="grey200"
               />
             </div>
@@ -122,20 +123,20 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
               return
             }
 
-            assertNonNullish(cpuRequest)
-            assertNonNullish(cpuLimit)
-            assertNonNullish(memoryRequest)
-            assertNonNullish(memoryLimit)
+            assertNonNullish(cpuRequests)
+            assertNonNullish(cpuLimits)
+            assertNonNullish(memoryRequests)
+            assertNonNullish(memoryLimits)
 
             const cpuInvalid = checkResourceReversed(
               mutable(CpuResourceNames),
-              cpuRequest,
-              cpuLimit
+              cpuRequests,
+              cpuLimits
             )
             const memoryInvalid = checkResourceReversed(
               mutable(MemoryResourceNames),
-              memoryRequest,
-              memoryLimit
+              memoryRequests,
+              memoryLimits
             )
 
             if (cpuInvalid || memoryInvalid) {
@@ -147,10 +148,10 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
             }
 
             onNext({
-              cpuRequest,
-              cpuLimit,
-              memoryRequest,
-              memoryLimit,
+              cpuRequests,
+              cpuLimits,
+              memoryRequests,
+              memoryLimits,
             })
           }}
           variant="primary"
@@ -161,10 +162,3 @@ export const ResourcesFormStep = ({ initialValue, onNext, onPrevious }: Resource
     </>
   )
 }
-
-const ResourcesFormSchema = z.object({
-  cpuRequest: z.enum(CpuResourceNames),
-  cpuLimit: z.enum(CpuResourceNames),
-  memoryRequest: z.enum(MemoryResourceNames),
-  memoryLimit: z.enum(MemoryResourceNames),
-})

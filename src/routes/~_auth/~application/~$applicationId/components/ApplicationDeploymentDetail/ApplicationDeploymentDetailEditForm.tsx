@@ -14,7 +14,7 @@ import { VerticalDivider } from '@/components/VerticalDivider'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
 import { DeploymentManifestType } from '@/types/deployment'
-import { CPUResourceValueNames, MemoryResourceNames } from '@/types/resource'
+import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 import { assertNonNullish } from '@/utils/assertion'
 import { mutable } from '@/utils/misc'
 import { regexes } from '@/utils/regex'
@@ -135,7 +135,7 @@ export const ApplicationDeploymentDetailEditForm = ({
                 <div className="flex items-center gap-2">
                   <Select
                     invalid={invalid.cpuRequests}
-                    items={CPUResourceValueNames}
+                    items={CpuResourceNames}
                     onValueChange={(v) => {
                       setCpuRequests(v)
                       reset()
@@ -147,7 +147,7 @@ export const ApplicationDeploymentDetailEditForm = ({
                   <div>~</div>
                   <Select
                     invalid={invalid.cpuLimits}
-                    items={CPUResourceValueNames}
+                    items={CpuResourceNames}
                     onValueChange={(v) => {
                       setCpuLimits(v)
                       reset()
@@ -213,8 +213,8 @@ const baseValidation = {
   domainName: z.string().min(1, { message: '도메인을 입력해주세요.' }),
   port: z.number(),
   imageUrl: z.string().min(1, { message: '도커 이미지 링크를 입력해주세요.' }),
-  cpuRequests: z.enum(CPUResourceValueNames),
-  cpuLimits: z.enum(CPUResourceValueNames),
+  cpuRequests: z.enum(CpuResourceNames),
+  cpuLimits: z.enum(CpuResourceNames),
   memoryRequests: z.enum(MemoryResourceNames),
   memoryLimits: z.enum(MemoryResourceNames),
 }
@@ -265,7 +265,7 @@ const DeploymentEditFormSchema = {
         })
       }
 
-      if (checkResourceReversed(mutable(CPUResourceValueNames), data.cpuRequests, data.cpuLimits)) {
+      if (checkResourceReversed(mutable(CpuResourceNames), data.cpuRequests, data.cpuLimits)) {
         addResourceIssue('cpu', ctx)
       }
       if (

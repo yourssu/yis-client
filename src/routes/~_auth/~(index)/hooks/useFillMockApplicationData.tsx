@@ -26,10 +26,10 @@ export const useFillMockApplicationData = () => {
         message: '테스트 배포인데 승인해주세요.',
       },
       resource: {
-        cpuRequest: '0.1 CPU',
-        cpuLimit: '0.1 CPU',
-        memoryRequest: '32Mi',
-        memoryLimit: '32Mi',
+        cpuRequests: '100m',
+        cpuLimits: '100m',
+        memoryRequests: '32Mi',
+        memoryLimits: '32Mi',
       },
     })
     await qc.invalidateQueries({
