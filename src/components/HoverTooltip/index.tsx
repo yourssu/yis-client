@@ -4,7 +4,7 @@ import { vars } from '@/styles/__generated__/color.gen'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
 interface Props {
-  color: Extract<keyof typeof vars, `grey${string}`>
+  color?: Extract<keyof typeof vars, `grey${string}`>
   content: React.ReactNode
   contentProps?: React.ComponentProps<typeof Tooltip.Content>
 }
@@ -27,13 +27,13 @@ export const HoverTooltip = ({
             className={clsx('bg-grey100 text-13 z-20 max-w-[400px] rounded-lg p-4', className)}
             sideOffset={sideOffset ?? 10}
             style={{
-              backgroundColor: vars[color],
+              backgroundColor: color && vars[color],
             }}
           >
             <Tooltip.Arrow
               className="fill-grey100"
               style={{
-                fill: vars[color],
+                fill: color && vars[color],
               }}
             />
             {content}
