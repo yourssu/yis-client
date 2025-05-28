@@ -93,7 +93,13 @@ export const ApplicationDetailDeployments = ({
             if (!deployment) {
               return undefined
             }
-            return <ApplicationDeploymentDetail application={application} deployment={deployment} />
+            return (
+              <ApplicationDeploymentDetail
+                application={application}
+                deployment={deployment}
+                isRecentApproved={recentApprovedDeployment?.id === deployment.id}
+              />
+            )
           }}
         </DetailList.Detail>
       </DetailList>

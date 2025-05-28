@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { api } from '@/apis/api'
+import { applicationKey } from '@/apis/keys'
 import {
   ApplicationClusterStatusResponseType,
   ApplicationClusterStatusSchema,
@@ -12,6 +13,7 @@ import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/type
 import { handleError } from '@/utils/error'
 import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema, optionalizeSchema } from '@/utils/zod'
+import { useQueryClient } from '@tanstack/react-query'
 
 export type CreateApplicationProps = {
   description?: string
@@ -103,5 +105,14 @@ export const getFullApplication = async (applicationId: number) => {
     ...application,
     recentDeployment: deployments.data[0],
     clusterStatus,
+  }
+}
+
+export const useApplicationDeploymentsInvalidation = (applicationId: number) => {
+  const queryClient = useQueryClient()
+  return () => {
+    queryClient.invalidateQueries({
+      queryKey: applicationKey.deployments(applicationId),
+    })
   }
 }

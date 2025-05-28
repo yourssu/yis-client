@@ -1,9 +1,19 @@
 import { api } from '@/apis/api'
 import { getApplication } from '@/apis/application'
 import { deploymentKey } from '@/apis/keys'
-import { DeploymentResponseType, DeploymentSchema, DeploymentStateNames } from '@/types/deployment'
+import {
+  DeploymentManifestType,
+  DeploymentResponseType,
+  DeploymentSchema,
+  DeploymentStateNames,
+} from '@/types/deployment'
 import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/types/pagination'
-import { CpuResourceNames, CpuResourceValueMap, MemoryResourceNames } from '@/types/resource'
+import {
+  CpuResourceNames,
+  CpuResourceValueMap,
+  CpuResourceValueNames,
+  MemoryResourceNames,
+} from '@/types/resource'
 import { makeManifests } from '@/utils/manifest'
 import { omitByNullish } from '@/utils/misc'
 import { useQueryClient } from '@tanstack/react-query'
@@ -36,6 +46,21 @@ interface UpdateDeploymentStateProps {
   id: number
   link: string
   state: DeploymentStateNames
+}
+
+interface UpdateDeploymentAsRequestProps {
+  deployment: {
+    cpuLimits: CpuResourceValueNames
+    cpuRequests: CpuResourceValueNames
+    domainName: string
+    imageUrl: string
+    memoryLimits: MemoryResourceNames
+    memoryRequests: MemoryResourceNames
+    message?: string
+    port: number
+  }
+  deploymentId: number
+  manifests: DeploymentManifestType[] | undefined
 }
 
 export const createDeployment = async (props: CreateDeploymentProps) => {
@@ -130,6 +155,36 @@ export const updateDeploymentState = async ({
         state,
         comment,
         link,
+      },
+    })
+    .json()
+  return DeploymentSchema.parse(res)
+}
+
+export const updateDeploymentAsRequest = async ({
+  deploymentId,
+  deployment,
+  manifests,
+}: UpdateDeploymentAsRequestProps) => {
+  const res = await api
+    .put<DeploymentResponseType>(`deployments/${deploymentId}`, {
+      json: {
+        deployment: {
+          domain_name: deployment.domainName,
+          cpu_requests: deployment.cpuRequests,
+          memory_requests: deployment.memoryRequests,
+          cpu_limits: deployment.cpuLimits,
+          memory_limits: deployment.memoryLimits,
+          port: deployment.port,
+          image_url: deployment.imageUrl,
+          replicas: 1,
+          message: deployment.message,
+        },
+        manifests: manifests?.map((v) => ({
+          file_name: v.fileName,
+          content: v.content,
+        })),
+        is_request: true,
       },
     })
     .json()
