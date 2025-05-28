@@ -137,7 +137,8 @@ export const vars = {
   brandAdaptiveBgHover: 'var(--brandAdaptiveBgHover)',
   brandAdaptiveBgActive: 'var(--brandAdaptiveBgActive)',
   brandAdaptiveBgDisabled: 'var(--brandAdaptiveBgDisabled)',
-  negative: 'var(--negative)'
+  negative: 'var(--negative)',
+  scrollbarThumb: 'var(--scrollbarThumb)'
 };
 
 export type ColorVars = keyof typeof vars;

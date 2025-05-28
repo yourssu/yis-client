@@ -5,8 +5,11 @@
 @import './shadow.css';
 
 * {
-  box-sizing: border-box;
   outline: 0;
+  box-sizing: border-box;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbarThumb) transparent;
 }
 
 html,

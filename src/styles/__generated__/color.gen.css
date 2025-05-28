@@ -141,4 +141,5 @@
   --color-brandAdaptiveBgActive: var(--brandAdaptiveBgActive);
   --color-brandAdaptiveBgDisabled: var(--brandAdaptiveBgDisabled);
   --color-negative: var(--negative);
+  --color-scrollbarThumb: var(--scrollbarThumb);
 }

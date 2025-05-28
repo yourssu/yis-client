@@ -152,4 +152,6 @@
   --brandAdaptiveBgDisabled: rgb(97, 67, 250, 0.11);
 
   --negative: var(--red500);
+
+  --scrollbarThumb: var(--grey300);
 }
