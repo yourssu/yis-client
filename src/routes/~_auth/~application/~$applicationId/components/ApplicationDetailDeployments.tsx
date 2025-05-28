@@ -5,8 +5,9 @@ import { getApplicationDeployments } from '@/apis/application'
 import { applicationKey } from '@/apis/keys'
 import { DetailList } from '@/components/DetailList'
 import { Divider } from '@/components/Divider'
+import { ApplicationDeploymentDetail } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDeploymentDetail'
 import { FullApplicationType } from '@/types/application'
-import { DeploymentStateNames } from '@/types/deployment'
+import { DeploymentStateKRNameMap } from '@/types/deployment'
 import { formatTemplates } from '@/utils/date'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
@@ -44,12 +45,12 @@ export const ApplicationDetailDeployments = ({
   })
 
   const deployments = data.pages.flatMap(({ data }) => data)
-  const deployedId = deployments[0].id // Todo: 실제로 계산해야 함
+  const recentApprovedDeployment = deployments.find((v) => v.isApplied && v.state === 'APPROVAL') // Todo: application > appliedDeploymentId로 변경 필요
 
   return (
     <>
       <Divider />
-      <DetailList defaultSelectedId={deployedId}>
+      <DetailList defaultSelectedId={deployments[0].id}>
         <DetailList.List>
           {deployments.map((deployment) => (
             <DetailList.ListItem
@@ -61,7 +62,7 @@ export const ApplicationDetailDeployments = ({
                   </div>
                   <div className="text-grey200">|</div>
                   <div className={deploymentStatus({ state: deployment.state })}>
-                    {deploymentStatusNameMap[deployment.state]}
+                    배포 {DeploymentStateKRNameMap[deployment.state]}
                   </div>
                 </div>
               }
@@ -75,7 +76,7 @@ export const ApplicationDetailDeployments = ({
               text={
                 <div className="flex items-center gap-2">
                   {deployment.domainName}:{deployment.port}
-                  {deployedId === deployment.id && (
+                  {recentApprovedDeployment?.id === deployment.id && (
                     <div className="bg-violet600 flex items-center gap-1 rounded-full py-0.5 pr-2 pl-1.5 text-[11px]">
                       <MdOutlineArrowCircleUp className="size-4" />
                       배포
@@ -92,22 +93,10 @@ export const ApplicationDetailDeployments = ({
             if (!deployment) {
               return undefined
             }
-
-            return (
-              <div className="flex flex-col gap-2">
-                <div className="text-neutralMuted text-sm font-semibold">배포 ID</div>
-                <div className="text-neutralSubtle text-sm font-semibold">{deployment.id}</div>
-              </div>
-            )
+            return <ApplicationDeploymentDetail deployment={deployment} />
           }}
         </DetailList.Detail>
       </DetailList>
     </>
   )
 }
-
-const deploymentStatusNameMap = {
-  APPROVAL: '배포 승인',
-  REQUEST: '배포 요청',
-  RETURN: '배포 반력',
-} as const satisfies Record<DeploymentStateNames, string>

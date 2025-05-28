@@ -12,6 +12,16 @@ export const DeploymentStateKRNameMap = {
   RETURN: '거절',
 } as const satisfies Record<DeploymentStateNames, string>
 
+export const DeploymentManifestResponseSchema = z.object({
+  file_name: z.string(),
+  content: z.string(),
+})
+export type DeploymentManifestResponseType = z.infer<typeof DeploymentManifestResponseSchema>
+export const DeploymentManifestSchema = optionalizeSchema(
+  camelizeSchema(DeploymentManifestResponseSchema)
+)
+export type DeploymentManifestType = z.infer<typeof DeploymentManifestSchema>
+
 export const DeploymentResponseSchema = z.object({
   domain_name: z.string(),
   cpu_requests: z.enum(CPUResourceValueNames),
@@ -29,7 +39,7 @@ export const DeploymentResponseSchema = z.object({
   state: z.enum(DeploymentStateNames),
   user_id: z.number(),
   admin_id: z.number().nullable(),
-  // manifests: z.array() // Todo: 메니페스트 타입 구현하기
+  manifests: z.array(DeploymentManifestResponseSchema).nullable(),
   created_at: zodISODateString(),
   updated_at: zodISODateString(),
   deleted_at: zodISODateString().nullable(),
