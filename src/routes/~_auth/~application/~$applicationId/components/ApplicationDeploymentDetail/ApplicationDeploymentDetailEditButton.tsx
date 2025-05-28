@@ -12,9 +12,11 @@ export const ApplicationDeploymentDetailEditButton = ({
 }: ApplicationDeploymentDetailEditButtonProps) => {
   const openEditDialog = useAlertDialog()
 
+  const isReturned = deployment.state === 'RETURN'
+
   const onClick = () => {
     openEditDialog({
-      title: '배포 수정',
+      title: `배포 ${isReturned ? '재요청' : '수정'}`,
       closeButton: true,
       closeableWithOutside: false,
       content: (
@@ -30,6 +32,7 @@ export const ApplicationDeploymentDetailEditButton = ({
             memoryLimits: deployment.memoryLimits,
           }}
           deploymentId={deployment.id}
+          isRequestResend={isReturned}
           manifests={deployment.manifests}
         />
       ),
@@ -37,8 +40,8 @@ export const ApplicationDeploymentDetailEditButton = ({
   }
 
   return (
-    <Button onClick={onClick} size="md" variant="secondary">
-      수정하기
+    <Button onClick={onClick} size="md" variant={isReturned ? 'primary' : 'secondary'}>
+      {isReturned ? '재요청하기' : '수정하기'}
     </Button>
   )
 }

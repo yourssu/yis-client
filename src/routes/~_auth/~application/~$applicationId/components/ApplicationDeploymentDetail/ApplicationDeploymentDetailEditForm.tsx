@@ -23,6 +23,7 @@ interface DeploymentEditFormProps {
   applicationId: number
   defaultValue: Omit<z.infer<typeof DeploymentEditFormSchema.form>, 'message'>
   deploymentId: number
+  isRequestResend: boolean
   manifests: DeploymentManifestType[] | undefined
 }
 
@@ -31,6 +32,7 @@ export const ApplicationDeploymentDetailEditForm = ({
   deploymentId,
   defaultValue,
   manifests,
+  isRequestResend,
 }: DeploymentEditFormProps) => {
   const [domainName, setDomainName] = useInputState(defaultValue.domainName)
   const [imageUrl, setImageUrl] = useInputState(defaultValue.imageUrl)
@@ -60,8 +62,8 @@ export const ApplicationDeploymentDetailEditForm = ({
 
   const { mutateWithToast } = useToastedMutation({
     mutationFn: updateDeploymentAsRequest,
-    successText: '배포 정보를 수정했어요.',
-    errorText: '배포 정보 수정에 실패했어요.',
+    successText: isRequestResend ? '배포를 재요청했어요.' : '배포 정보를 수정했어요.',
+    errorText: isRequestResend ? '배포 재요청에 실패했어요.' : '배포 정보 수정에 실패했어요.',
   })
   const invalidateApplicationDeployments = useApplicationDeploymentsInvalidation(applicationId)
 
