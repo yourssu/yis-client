@@ -3,11 +3,10 @@ import { tv } from 'tailwind-variants'
 
 import { userKey } from '@/apis/keys'
 import { getUser } from '@/apis/user'
-import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { Conversation } from '@/components/Conversation'
 import { ApplicationType } from '@/types/application'
 import { DeploymentStateKRNameMap, DeploymentStateNames, DeploymentType } from '@/types/deployment'
 import { preventSuspenseRequest } from '@/utils/query'
-import { ValueOf } from '@/utils/type'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 interface DeplouymentStateListDetailConversationProps {
@@ -16,14 +15,7 @@ interface DeplouymentStateListDetailConversationProps {
   state: DeploymentStateNames
 }
 
-interface ConversationProps {
-  message: string | undefined
-  type: ValueOf<typeof DeploymentStateKRNameMap>
-  user: Pick<ApplicationType['user'], 'avatarId' | 'nickname'>
-}
-
 const conversationLabel = tv({
-  base: '!text-13 font-semibold',
   variants: {
     type: {
       승인: 'text-green800',
@@ -32,25 +24,6 @@ const conversationLabel = tv({
     },
   },
 })
-
-const Conversation = ({ user, message, type }: ConversationProps) => {
-  return (
-    <div className="flex gap-3">
-      <div className="flex w-fit flex-col items-center gap-1">
-        <div className="flex size-9 shrink-0 items-center justify-center">
-          <ProfileAvatar avatarId={user.avatarId} rounded size={32} />
-        </div>
-        <div className={conversationLabel({ type })}>{type}</div>
-      </div>
-      <div className="flex grow flex-col">
-        <div className="mb-1 flex h-9 items-center">
-          <div className="text-15 font-semibold">{user.nickname}</div>
-        </div>
-        <div className="text-neutralMuted text-15">{message ? message : '-'}</div>
-      </div>
-    </div>
-  )
-}
 
 export const DeploymentStateListDetailConversation = ({
   application,
@@ -68,7 +41,7 @@ export const DeploymentStateListDetailConversation = ({
     <div className={clsx('flex gap-4', state === 'REQUEST' ? 'flex-col-reverse' : 'flex-col')}>
       <Conversation
         message={deployment.message}
-        type="요청"
+        profileLabel={<span className={conversationLabel({ type: '요청' })}>요청</span>}
         user={{
           avatarId: application.user.avatarId,
           nickname: application.user.nickname,
@@ -77,10 +50,12 @@ export const DeploymentStateListDetailConversation = ({
       {admin && (
         <Conversation
           message={deployment.comment}
-          type={
-            state === 'REQUEST'
-              ? DeploymentStateKRNameMap['RETURN']
-              : DeploymentStateKRNameMap[state]
+          profileLabel={
+            <span className={conversationLabel({ type: '요청' })}>
+              {state === 'REQUEST'
+                ? DeploymentStateKRNameMap['RETURN']
+                : DeploymentStateKRNameMap[state]}
+            </span>
           }
           user={{
             avatarId: admin.avatarId,
