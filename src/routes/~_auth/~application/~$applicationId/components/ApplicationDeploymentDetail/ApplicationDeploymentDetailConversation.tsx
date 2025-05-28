@@ -5,31 +5,29 @@ import { userKey } from '@/apis/keys'
 import { getUser } from '@/apis/user'
 import { Conversation } from '@/components/Conversation'
 import { ApplicationType } from '@/types/application'
-import { DeploymentStateKRNameMap, DeploymentStateNames, DeploymentType } from '@/types/deployment'
+import { DeploymentStateKRNameMap, DeploymentType } from '@/types/deployment'
 import { preventSuspenseRequest } from '@/utils/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-interface DeploymentStateListDetailConversationProps {
-  application: ApplicationType
+interface ApplicationDeploymentDetailConversationProps {
+  applicationUser: Pick<ApplicationType['user'], 'avatarId' | 'nickname'>
   deployment: DeploymentType
-  state: DeploymentStateNames
 }
 
 const conversationLabel = tv({
   variants: {
     type: {
-      승인: 'text-green800',
-      요청: 'text-yellow800',
-      거절: 'text-red700',
+      APPROVAL: 'text-green800',
+      REQUEST: 'text-yellow800',
+      RETURN: 'text-red700',
     },
   },
 })
 
-export const DeploymentStateListDetailConversation = ({
-  application,
+export const ApplicationDeploymentDetailConversation = ({
+  applicationUser,
   deployment,
-  state,
-}: DeploymentStateListDetailConversationProps) => {
+}: ApplicationDeploymentDetailConversationProps) => {
   const { data: admin } = useSuspenseQuery({
     queryKey: userKey.detail(deployment.adminId ?? -1),
     queryFn: deployment.adminId
@@ -38,31 +36,30 @@ export const DeploymentStateListDetailConversation = ({
   })
 
   const getAdminConversationState = () => {
-    return state === 'REQUEST'
-      ? DeploymentStateKRNameMap['RETURN']
-      : DeploymentStateKRNameMap[state]
+    return deployment.state === 'REQUEST' ? 'RETURN' : deployment.state
   }
 
   return (
-    <div className={clsx('flex gap-4', state === 'REQUEST' ? 'flex-col-reverse' : 'flex-col')}>
+    <div
+      className={clsx(
+        'flex gap-4',
+        deployment.state === 'REQUEST' ? 'flex-col-reverse' : 'flex-col'
+      )}
+    >
       <Conversation
         message={deployment.message}
-        profileLabel={<span className={conversationLabel({ type: '요청' })}>요청</span>}
+        profileLabel={<span className={conversationLabel({ type: 'REQUEST' })}>요청</span>}
         user={{
-          avatarId: application.user.avatarId,
-          nickname: application.user.nickname,
+          avatarId: applicationUser.avatarId,
+          nickname: applicationUser.nickname,
         }}
       />
       {admin && (
         <Conversation
           message={deployment.comment}
           profileLabel={
-            <span
-              className={conversationLabel({
-                type: getAdminConversationState(),
-              })}
-            >
-              {getAdminConversationState()}
+            <span className={conversationLabel({ type: getAdminConversationState() })}>
+              {DeploymentStateKRNameMap[getAdminConversationState()]}
             </span>
           }
           user={{

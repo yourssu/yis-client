@@ -93,7 +93,7 @@ export const ApplicationDetailDeployments = ({
             if (!deployment) {
               return undefined
             }
-            return <ApplicationDeploymentDetail deployment={deployment} />
+            return <ApplicationDeploymentDetail application={application} deployment={deployment} />
           }}
         </DetailList.Detail>
       </DetailList>
