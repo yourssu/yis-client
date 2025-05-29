@@ -1,4 +1,4 @@
-import { userKey } from '@/apis/keys'
+import { applicationKey, userKey } from '@/apis/keys'
 import {
   ApplicationPlaceholder,
   useCreateDeploymentMutation,
@@ -40,7 +40,9 @@ export const useFillMockDeploymentData = ({ application }: FillMockDeploymentDat
       },
     })
     await qc.invalidateQueries({
-      queryKey: userKey.applications(me.id),
+      queryKey: application
+        ? applicationKey.deployments(application.id)
+        : userKey.applications(me.id),
     })
   }
 }

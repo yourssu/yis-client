@@ -1,50 +1,45 @@
-import { ApplicationFormStep } from '@/components/CreateDeploymentFunnelStep/ApplicationFormStep'
 import { DeploymentCompleteStep } from '@/components/CreateDeploymentFunnelStep/DeploymentCompleteStep'
 import { DeploymentInfoFormStep } from '@/components/CreateDeploymentFunnelStep/DeploymentInfoFormStep'
+import { ApplicationPlaceholder } from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
 import { ResourcesFormStep } from '@/components/CreateDeploymentFunnelStep/ResourcesFormStep'
-import { CreateApplicationFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
+import { CreateDeploymentFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 
-export const useCreateApplicationFunnelDialog = () => {
-  const openCreateApplicationFunnelDialog = useFunnelDialog<CreateApplicationFunnelSteps>({
-    id: 'create-application',
+interface UseCreateDeploymentFunnelDialogProps {
+  application: ApplicationPlaceholder
+}
+
+export const useCreateDeploymentFunnelDialog = ({
+  application,
+}: UseCreateDeploymentFunnelDialogProps) => {
+  const openCreateDeploymentFunnelDialog = useFunnelDialog<CreateDeploymentFunnelSteps>({
+    id: 'create-deployment',
     initial: {
-      step: '어플리케이션_정보입력',
-      context: { application: {} },
+      step: '배포_정보입력',
+      context: {
+        application,
+        deploy: {},
+      },
     },
   })
 
   return () => {
-    return openCreateApplicationFunnelDialog({
+    return openCreateDeploymentFunnelDialog({
       closeableWithOutside: false,
       closeButton: true,
       render: ({ dialog: { closeAsTrue } }) => ({
-        어플리케이션_정보입력: {
-          title: '서비스 이름을 알려주세요',
-          content: ({ history, context }) => {
-            return (
-              <ApplicationFormStep
-                close={closeAsTrue}
-                initialValue={context.application}
-                onNext={(c) => {
-                  history.replace('어플리케이션_정보입력', { application: c })
-                  history.push('배포_정보입력', { application: c, deploy: {} })
-                }}
-              />
-            )
-          },
-        },
         배포_정보입력: {
           title: '배포에 필요한 정보를 입력해주세요',
           content: ({ history, context }) => {
             return (
               <DeploymentInfoFormStep
+                application={context.application}
+                close={closeAsTrue}
                 initialValue={context.deploy}
                 onNext={(c) => {
                   history.replace('배포_정보입력', { deploy: c })
                   history.push('리소스_정보입력', { ...context, deploy: c, resource: {} })
                 }}
-                onPrevious={history.back}
               />
             )
           },

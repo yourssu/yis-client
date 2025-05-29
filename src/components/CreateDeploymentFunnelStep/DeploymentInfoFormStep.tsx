@@ -1,25 +1,33 @@
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 
+import { ApplicationPlaceholder } from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
+import { useFillMockDeploymentData } from '@/components/CreateDeploymentFunnelStep/hooks/useFillMockDeploymentData'
 import { DeployConfirmedContext, DeployContext } from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
+import { STAGE } from '@/config'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
 import { DeploymentInfoFormSchema } from '@/types/deployment'
 import { assertNonNullish } from '@/utils/assertion'
 
-interface DeploymentInfoFormProps {
-  initialValue?: DeployContext
-  onNext: (c: DeployConfirmedContext) => void
-  onPrevious: () => void
-}
+type DeploymentInfoFormProps<TApplication extends ApplicationPlaceholder | undefined> =
+  (TApplication extends ApplicationPlaceholder
+    ? { close: () => void; onPrevious?: never }
+    : { close?: never; onPrevious: () => void }) & {
+    application?: TApplication
+    initialValue?: DeployContext
+    onNext: (c: DeployConfirmedContext) => void
+  }
 
-export const DeploymentInfoFormStep = ({
+export const DeploymentInfoFormStep = <TApplication extends ApplicationPlaceholder | undefined>({
   initialValue,
+  application,
   onNext,
   onPrevious,
-}: DeploymentInfoFormProps) => {
+  close,
+}: DeploymentInfoFormProps<TApplication>) => {
   const [domainName, setDomainName] = useInputState(initialValue?.domainName ?? '')
   const [imageUrl, setImageUrl] = useInputState(initialValue?.imageUrl ?? '')
   const [port, setPort] = useState<number | undefined>(initialValue?.port)
@@ -36,8 +44,9 @@ export const DeploymentInfoFormStep = ({
     formData,
     DeploymentInfoFormSchema.form()
   )
-
   const { error: buttonError } = DeploymentInfoFormSchema.base.safeParse(formData)
+
+  const fillMockDeploymentData = useFillMockDeploymentData({ application })
 
   const onClickNext = () => {
     if (!validate().success) {
@@ -85,14 +94,22 @@ export const DeploymentInfoFormStep = ({
         </div>
       </Dialog.Content>
       <Dialog.ButtonGroup>
-        <Dialog.Button
-          onClick={() => {
-            onPrevious()
-          }}
-          variant="subPrimary"
-        >
-          이전
-        </Dialog.Button>
+        {STAGE === 'dev' && close && (
+          <Dialog.Button
+            onClick={async () => {
+              await fillMockDeploymentData()
+              close()
+            }}
+            variant="secondary"
+          >
+            테스트 데이터 채우기 (개발)
+          </Dialog.Button>
+        )}
+        {onPrevious && (
+          <Dialog.Button onClick={onPrevious} variant="subPrimary">
+            이전
+          </Dialog.Button>
+        )}
         <Dialog.Button disabled={!!buttonError} onClick={onClickNext} variant="primary">
           다음
         </Dialog.Button>
