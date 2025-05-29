@@ -1,10 +1,16 @@
 import { mapValues } from 'es-toolkit'
-import { set } from 'es-toolkit/compat'
+import { get, isObjectLike, set } from 'es-toolkit/compat'
 import { useState } from 'react'
 import { z } from 'zod/v4'
 
-import { checkParsedError, getZodErrorMessage } from '@/utils/zod'
+import { NonGenericDeep } from '@/utils/type'
+import { getZodErrorMessage } from '@/utils/zod'
 
+type StringOptionalDeep<T> = NonGenericDeep<T, string | undefined>
+
+/**
+  주의: invalidTexts 값은 원본 스키마의 구조를 유지하기 위해 배열이나 객체의 에러는 감지하지 않아요. 스키마를 구성할 때 주의해주세요.
+*/
 export const useZodFormValidation = <
   TValue extends Record<string, any>,
   TScheme extends z.ZodObject,
@@ -12,41 +18,47 @@ export const useZodFormValidation = <
   value: TValue,
   schema: TScheme
 ) => {
-  const [invalid, setInvalid] = useState<Record<keyof TValue, boolean>>(
-    mapValues(value, () => false)
-  )
-  const [invalidText, setInvalidText] = useState<string | undefined>(undefined)
-
-  const getInitialInvalid = () => {
-    return mapValues(value, () => false)
+  const getInitialInvalidTexts = () => {
+    return mapValues(value, () => undefined) as StringOptionalDeep<TValue>
   }
 
-  const getInvalid = (error: z.ZodError<TScheme>) => {
-    const res = getInitialInvalid()
+  const [invalidMessage, setInvalidMessage] = useState<string | undefined>(undefined)
+  const [invalidTexts, setInvalidTexts] =
+    useState<StringOptionalDeep<TValue>>(getInitialInvalidTexts())
+
+  const getInvalidTexts = (error: z.ZodError<TScheme>) => {
+    const res = getInitialInvalidTexts()
     error.issues.forEach((issue) => {
       const path = issue.path.join('.')
-      const isError = checkParsedError(error, path)
-      set(res, path, isError)
+      const target = get(res, path)
+      if (!isObjectLike(target)) {
+        set(res, path, issue.message)
+      }
     })
     return res
   }
 
   const reset = () => {
-    setInvalid(() => getInitialInvalid())
-    setInvalidText(undefined)
+    setInvalidTexts(() => getInitialInvalidTexts())
+    setInvalidMessage(undefined)
   }
 
   const validate = () => {
     const { error } = schema.safeParse(value)
 
     if (error) {
-      setInvalid(() => getInvalid(error))
-      setInvalidText(getZodErrorMessage(error))
-      return false
+      setInvalidTexts(() => getInvalidTexts(error))
+      setInvalidMessage(getZodErrorMessage(error))
+      return {
+        success: false,
+        error,
+      } as const
     }
 
     reset()
-    return true
+    return {
+      success: true,
+    } as const
   }
 
   const onChangeWithReset = <TAmbiguous>(fn: (v: TAmbiguous) => void) => {
@@ -57,10 +69,10 @@ export const useZodFormValidation = <
   }
 
   return {
-    invalid,
-    invalidText,
-    setInvalid,
-    setInvalidText,
+    invalidTexts,
+    invalidMessage,
+    setInvalidTexts,
+    setInvalidMessage,
     reset,
     validate,
     onChangeWithReset,

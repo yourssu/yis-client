@@ -1,59 +1,8 @@
 import camelcaseKeys from 'camelcase-keys'
-import { type CamelCase } from 'type-fest'
+import { get } from 'es-toolkit/compat'
 import { z } from 'zod/v4'
 
-import { getIn } from '@/utils/misc'
-
-type CamelCaseOptions = {
-  preserveConsecutiveUppercase?: boolean
-}
-
-/* 
-  https://github.com/colinhacks/zod/issues/486
-*/
-type CamelCasedPropertiesDeep<
-  Value,
-  Options extends CamelCaseOptions = { preserveConsecutiveUppercase: true },
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-> = Value extends Date | Function | RegExp
-  ? Value
-  : Value extends readonly unknown[]
-    ? Value extends readonly [infer First, ...infer Rest]
-      ? [CamelCasedPropertiesDeep<First, Options>, ...CamelCasedPropertiesDeep<Rest, Options>]
-      : Value extends readonly []
-        ? []
-        : CamelCasedPropertiesDeep<Value[number], Options>[]
-    : Value extends Set<infer U>
-      ? Set<CamelCasedPropertiesDeep<U, Options>>
-      : Value extends object
-        ? {
-            [K in keyof Value as CamelCase<K & string, Options>]: CamelCasedPropertiesDeep<
-              Value[K],
-              Options
-            >
-          }
-        : Value
-
-type OptionalizeValue<T> = T extends null ? undefined : T
-
-export type OptionalizedObjectValuesDeep<
-  Value,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-> = Value extends Date | Function | RegExp
-  ? Value
-  : Value extends readonly unknown[]
-    ? Value extends readonly [infer First, ...infer Rest]
-      ? [OptionalizedObjectValuesDeep<First>, ...OptionalizedObjectValuesDeep<Rest>]
-      : Value extends readonly []
-        ? []
-        : OptionalizedObjectValuesDeep<Value[number]>[]
-    : Value extends Set<infer U>
-      ? Set<OptionalizedObjectValuesDeep<U>>
-      : Value extends object
-        ? {
-            [K in keyof Value]: OptionalizedObjectValuesDeep<Value[K]>
-          }
-        : OptionalizeValue<Value>
+import { CamelCasedPropertiesDeep, OptionalizeDeep } from '@/utils/type'
 
 type StringLiteral<T> = T extends string ? (string extends T ? never : T) : never
 
@@ -71,7 +20,7 @@ export const camelizeSchema = <T extends z.ZodType>(
 
 export const optionalizeSchema = <T extends z.ZodType>(
   zod: T
-): z.ZodPipe<T, z.ZodTransform<OptionalizedObjectValuesDeep<T['_output']>, T['_output']>> => {
+): z.ZodPipe<T, z.ZodTransform<OptionalizeDeep<T['_output']>, T['_output']>> => {
   const nullToUndefinedDeep = <T>(obj: T): T => {
     if (obj === null) {
       return undefined as any
@@ -99,7 +48,17 @@ export const optionalizeSchema = <T extends z.ZodType>(
     }
     return obj as any
   }
-  return zod.transform((val) => nullToUndefinedDeep(val) as OptionalizedObjectValuesDeep<T>)
+  return zod.transform((val) => nullToUndefinedDeep(val) as OptionalizeDeep<T>)
+}
+
+export const getZodErrorsIn = <TScheme extends object, TPath extends string = string>(
+  error: z.ZodError<TScheme>,
+  path: TPath
+) => {
+  const errorTree = z.treeifyError(error)
+  const errorTreePath = 'properties.' + path.split('.').join('.properties.')
+  const value = get(errorTree, errorTreePath) as undefined | z.core.$ZodErrorTree<unknown>
+  return value?.errors
 }
 
 export const checkParsedError = <TScheme extends object, TPath extends string = string>(
@@ -109,12 +68,7 @@ export const checkParsedError = <TScheme extends object, TPath extends string = 
   if (!error) {
     return false
   }
-
-  const errorTree = z.treeifyError(error)
-  const errorTreePath = 'properties.' + path.split('.').join('.properties.')
-  const value = getIn(errorTree, errorTreePath) as unknown as z.core.$ZodErrorTree<unknown>
-
-  return !!value?.errors.length
+  return !!getZodErrorsIn(error, path)?.length
 }
 
 export const isZodError = (e: any): e is z.ZodError =>

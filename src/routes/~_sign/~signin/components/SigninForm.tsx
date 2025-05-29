@@ -20,7 +20,7 @@ export const SigninForm = () => {
     email: nickname,
     password,
   })
-  const { invalidText, setInvalidText, validate, onChangeWithReset } = useZodFormValidation(
+  const { invalidMessage, setInvalidMessage, validate, onChangeWithReset } = useZodFormValidation(
     { email, password },
     SigninFormSchema.form
   )
@@ -34,7 +34,7 @@ export const SigninForm = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!validate()) {
+    if (!validate().success) {
       return
     }
 
@@ -47,7 +47,7 @@ export const SigninForm = () => {
       toast.success('로그인에 성공했어요.')
       navigate({ to: '/' })
     } catch {
-      setInvalidText('이메일 또는 비밀번호를 확인해주세요.')
+      setInvalidMessage('이메일 또는 비밀번호를 확인해주세요.')
     }
   }
 
@@ -55,7 +55,7 @@ export const SigninForm = () => {
     <SignForm onSubmit={onSubmit}>
       <div className="flex items-center gap-2">
         <SignForm.Input
-          invalid={!!invalidText}
+          invalid={!!invalidMessage}
           onChange={onChangeWithReset(setNickname)}
           placeholder="이메일"
           value={nickname}
@@ -64,14 +64,14 @@ export const SigninForm = () => {
       </div>
       <SignForm.Input
         autoComplete="off"
-        invalid={!!invalidText}
+        invalid={!!invalidMessage}
         onChange={onChangeWithReset(setPassword)}
         placeholder="비밀번호"
         type="password"
         value={password}
       />
-      {!!invalidText && (
-        <div className={clsx('text-negative w-full text-center text-sm')}>{invalidText}</div>
+      {!!invalidMessage && (
+        <div className={clsx('text-negative w-full text-center text-sm')}>{invalidMessage}</div>
       )}
       <SignForm.Button disabled={!!buttonError || isPending} type="submit">
         로그인

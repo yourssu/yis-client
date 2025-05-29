@@ -32,7 +32,7 @@ export const DeploymentInfoFormStep = ({
     message,
   }
 
-  const { invalid, invalidText, onChangeWithReset, validate } = useZodFormValidation(
+  const { invalidMessage, invalidTexts, onChangeWithReset, validate } = useZodFormValidation(
     formData,
     DeploymentInfoFormSchema.form()
   )
@@ -40,7 +40,7 @@ export const DeploymentInfoFormStep = ({
   const { error: buttonError } = DeploymentInfoFormSchema.base.safeParse(formData)
 
   const onClickNext = () => {
-    if (!validate()) {
+    if (!validate().success) {
       return
     }
 
@@ -54,33 +54,33 @@ export const DeploymentInfoFormStep = ({
         <div className="flex flex-col gap-4 pb-8">
           <TextInput
             description="http, https 없이 입력해주세요."
-            invalid={invalid.domain}
+            invalid={!!invalidTexts.domain}
             onChange={onChangeWithReset(setDomain)}
             placeholder="도메인 (예: www.example.com)"
             value={domain}
           />
           <NumberInput
-            invalid={invalid.port}
+            invalid={!!invalidTexts.port}
             onChange={onChangeWithReset(setPort)}
             placeholder="포트 번호"
             value={port}
           />
           <TextInput
             description="ex) alexwhen/docker-2048:latest2"
-            invalid={invalid.imageUrl}
+            invalid={!!invalidTexts.imageUrl}
             onChange={onChangeWithReset(setImageUrl)}
             placeholder="도커 이미지 링크"
             value={imageUrl}
           />
           <TextInput
             description="관리자가 추가로 알아야 할 사항이 있다면 적어주세요."
-            invalid={invalid.message}
+            invalid={!!invalidTexts.message}
             onChange={onChangeWithReset(setMessage)}
             placeholder="남길 메시지 (선택)"
             value={message}
           />
-          {invalidText && (
-            <div className="text-negative mx-auto text-center text-sm">{invalidText}</div>
+          {!!invalidMessage && (
+            <div className="text-negative mx-auto text-center text-sm">{invalidMessage}</div>
           )}
         </div>
       </Dialog.Content>

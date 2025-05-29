@@ -22,7 +22,7 @@ export const SignupForm = () => {
   const [part, setPart] = useState<PartNames | undefined>(undefined)
   const fullEmail = useNicknameToYourssuEmail(email)
 
-  const { invalid, invalidText, onChangeWithReset, validate } = useZodFormValidation(
+  const { invalidMessage, invalidTexts, onChangeWithReset, validate } = useZodFormValidation(
     {
       email: fullEmail,
       password,
@@ -51,7 +51,7 @@ export const SignupForm = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!validate()) {
+    if (!validate().success) {
       return
     }
 
@@ -73,7 +73,7 @@ export const SignupForm = () => {
     <SignForm onSubmit={onSubmit}>
       <div className="flex items-center gap-2">
         <SignForm.Input
-          invalid={invalid.email}
+          invalid={!!invalidTexts.email}
           onChange={onChangeWithReset(setEmail)}
           placeholder="이메일"
           value={email}
@@ -82,7 +82,7 @@ export const SignupForm = () => {
       </div>
       <SignForm.Input
         autoComplete="off"
-        invalid={invalid.password}
+        invalid={!!invalidTexts.password}
         onChange={onChangeWithReset(setPassword)}
         placeholder="비밀번호"
         type="password"
@@ -90,27 +90,27 @@ export const SignupForm = () => {
       />
       <SignForm.Input
         autoComplete="off"
-        invalid={invalid.repliedPassword}
+        invalid={!!invalidTexts.repliedPassword}
         onChange={onChangeWithReset(setRepliedPassword)}
         placeholder="비밀번호 확인"
         type="password"
         value={repliedPassword}
       />
       <SignForm.Input
-        invalid={invalid.nickname}
+        invalid={!!invalidTexts.nickname}
         onChange={onChangeWithReset(setNickname)}
         placeholder="닉네임"
         value={nickname}
       />
       <Select
-        invalid={invalid.part}
+        invalid={!!invalidTexts.part}
         items={PartNames}
         onValueChange={onChangeWithReset(setPart)}
         placeholder="소속 파트"
         value={part}
       />
-      {!!invalidText && (
-        <div className={clsx('text-negative w-full text-center text-sm')}>{invalidText}</div>
+      {!!invalidMessage && (
+        <div className={clsx('text-negative w-full text-center text-sm')}>{invalidMessage}</div>
       )}
       <SignForm.Button disabled={!!buttonError || isPending} type="submit">
         회원가입

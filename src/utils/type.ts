@@ -1,3 +1,5 @@
+import { CamelCase } from 'type-fest/source/camel-case'
+
 export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
@@ -79,3 +81,68 @@ export type TuplifyUnion<T, L = LastOf<T>, N = [T] extends [never] ? true : fals
 export type StartsWith<T extends string, U extends string> = T extends `${U}${string}`
   ? true
   : false
+
+/* 
+  https://github.com/colinhacks/zod/issues/486
+*/
+export type CamelCasedPropertiesDeep<
+  Value,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+> = Value extends Date | Function | RegExp
+  ? Value
+  : Value extends readonly unknown[]
+    ? Value extends readonly [infer First, ...infer Rest]
+      ? [CamelCasedPropertiesDeep<First>, ...CamelCasedPropertiesDeep<Rest>]
+      : Value extends readonly []
+        ? []
+        : CamelCasedPropertiesDeep<Value[number]>[]
+    : Value extends Set<infer U>
+      ? Set<CamelCasedPropertiesDeep<U>>
+      : Value extends object
+        ? {
+            [K in keyof Value as CamelCase<
+              K & string,
+              { preserveConsecutiveUppercase: true }
+            >]: CamelCasedPropertiesDeep<Value[K]>
+          }
+        : Value
+
+type OptionalizeValue<T> = T extends null ? undefined : T
+export type OptionalizeDeep<
+  Value,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+> = Value extends Date | Function | RegExp
+  ? Value
+  : Value extends readonly unknown[]
+    ? Value extends readonly [infer First, ...infer Rest]
+      ? [OptionalizeDeep<First>, ...OptionalizeDeep<Rest>]
+      : Value extends readonly []
+        ? []
+        : OptionalizeDeep<Value[number]>[]
+    : Value extends Set<infer U>
+      ? Set<OptionalizeDeep<U>>
+      : Value extends object
+        ? {
+            [K in keyof Value]: OptionalizeDeep<Value[K]>
+          }
+        : OptionalizeValue<Value>
+
+export type NonGenericDeep<
+  Value,
+  MapValue,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+> = Value extends Date | Function | RegExp
+  ? Value
+  : Value extends readonly unknown[]
+    ? Value extends readonly [infer First, ...infer Rest]
+      ? [NonGenericDeep<First, MapValue>, ...NonGenericDeep<Rest, MapValue>]
+      : Value extends readonly []
+        ? []
+        : NonGenericDeep<Value[number], MapValue>[]
+    : Value extends Set<infer U>
+      ? Set<NonGenericDeep<U, MapValue>>
+      : Value extends object
+        ? {
+            [K in keyof Value]: NonGenericDeep<Value[K], MapValue>
+          }
+        : MapValue

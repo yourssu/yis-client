@@ -21,8 +21,14 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
   const [name, setName] = useInputState(initialValue?.name ?? '')
   const [description, setDescription] = useInputState(initialValue?.description ?? '')
 
-  const { invalid, setInvalid, invalidText, setInvalidText, validate, onChangeWithReset } =
-    useZodFormValidation({ name, description }, ApplicationFormSchema)
+  const {
+    invalidMessage,
+    invalidTexts,
+    setInvalidMessage,
+    setInvalidTexts,
+    validate,
+    onChangeWithReset,
+  } = useZodFormValidation({ name, description }, ApplicationFormSchema)
 
   const fillMockApplicationData = useFillMockApplicationData()
   const { mutateAsync } = useMutation({
@@ -30,14 +36,15 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
   })
 
   const onClick = async () => {
-    if (!validate()) {
+    if (!validate().success) {
       return
     }
 
     const isUnique = await mutateAsync(name)
     if (!isUnique) {
-      setInvalid((prev) => ({ ...prev, name: true }))
-      setInvalidText('이미 중복된 서비스 이름이 있어요.')
+      const message = '이미 중복된 서비스 이름이 있어요.'
+      setInvalidTexts((prev) => ({ ...prev, name: message }))
+      setInvalidMessage(message)
       return
     }
 
@@ -53,20 +60,20 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
         <div className="flex flex-col gap-6 pb-8">
           <TextInput
             description="서비스 이름은 고유해야해요."
-            invalid={invalid.name}
+            invalid={!!invalidTexts.name}
             onChange={onChangeWithReset(setName)}
             placeholder="서비스 이름"
             value={name}
           />
           <TextInput
-            invalid={invalid.description}
+            invalid={!!invalidTexts.description}
             onChange={setDescription}
             placeholder="서비스 설명 (선택)"
             value={description}
           />
-          {!!invalidText && (
+          {!!invalidMessage && (
             <div className="text-negative text-center text-sm whitespace-pre-wrap">
-              {invalidText}
+              {invalidMessage}
             </div>
           )}
         </div>

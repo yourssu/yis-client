@@ -54,7 +54,7 @@ export const ApplicationDeploymentDetailEditForm = ({
     memoryLimits,
   }
 
-  const { invalid, invalidText, validate, onChangeWithReset, reset } = useZodFormValidation(
+  const { invalidMessage, invalidTexts, validate, onChangeWithReset, reset } = useZodFormValidation(
     formValue,
     DeploymentEditFormSchema.form
   )
@@ -68,7 +68,7 @@ export const ApplicationDeploymentDetailEditForm = ({
   const invalidateApplicationDeployments = useApplicationDeploymentsInvalidation(applicationId)
 
   const onClick = async () => {
-    if (!validate()) {
+    if (!validate().success) {
       return
     }
 
@@ -102,14 +102,14 @@ export const ApplicationDeploymentDetailEditForm = ({
               <div className="text-sm font-semibold">배포 정보</div>
               <TextInput
                 description="http, https 없이 입력해주세요."
-                invalid={invalid.domainName}
+                invalid={!!invalidTexts.domainName}
                 label="도메인"
                 onChange={onChangeWithReset(setDomainName)}
                 placeholder="도메인 (예: www.example.com)"
                 value={domainName}
               />
               <NumberInput
-                invalid={invalid.port}
+                invalid={!!invalidTexts.port}
                 label="포트 번호"
                 onChange={onChangeWithReset(setPort)}
                 placeholder="포트 번호"
@@ -117,7 +117,7 @@ export const ApplicationDeploymentDetailEditForm = ({
               />
               <TextInput
                 description="ex) alexwhen/docker-2048:latest2"
-                invalid={invalid.imageUrl}
+                invalid={!!invalidTexts.imageUrl}
                 label="도커 이미지 링크"
                 onChange={onChangeWithReset(setImageUrl)}
                 placeholder="도커 이미지 링크"
@@ -134,7 +134,7 @@ export const ApplicationDeploymentDetailEditForm = ({
               <Label content="CPU">
                 <div className="flex items-center gap-2">
                   <Select
-                    invalid={invalid.cpuRequests}
+                    invalid={!!invalidTexts.cpuRequests}
                     items={CpuResourceNames}
                     onValueChange={(v) => {
                       setCpuRequests(v)
@@ -146,7 +146,7 @@ export const ApplicationDeploymentDetailEditForm = ({
                   />
                   <div>~</div>
                   <Select
-                    invalid={invalid.cpuLimits}
+                    invalid={!!invalidTexts.cpuLimits}
                     items={CpuResourceNames}
                     onValueChange={(v) => {
                       setCpuLimits(v)
@@ -161,7 +161,7 @@ export const ApplicationDeploymentDetailEditForm = ({
               <Label content="메모리">
                 <div className="flex items-center gap-2">
                   <Select
-                    invalid={invalid.memoryRequests}
+                    invalid={!!invalidTexts.memoryRequests}
                     items={MemoryResourceNames}
                     onValueChange={(v) => {
                       setMemoryRequests(v)
@@ -173,7 +173,7 @@ export const ApplicationDeploymentDetailEditForm = ({
                   />
                   <div>~</div>
                   <Select
-                    invalid={invalid.memoryLimits}
+                    invalid={!!invalidTexts.memoryLimits}
                     items={MemoryResourceNames}
                     onValueChange={(v) => {
                       setMemoryLimits(v)
@@ -190,13 +190,13 @@ export const ApplicationDeploymentDetailEditForm = ({
           <Divider className="mb-5" />
           <TextInput
             description="관리자가 추가로 알아야 할 사항이 있다면 적어주세요."
-            invalid={invalid.message}
+            invalid={!!invalidTexts.message}
             onChange={onChangeWithReset(setMessage)}
             placeholder="남길 메시지 (선택)"
             value={message}
           />
-          {invalidText && (
-            <div className="text-negative mx-auto mt-6 text-center text-sm">{invalidText}</div>
+          {invalidMessage && (
+            <div className="text-negative mx-auto mt-6 text-center text-sm">{invalidMessage}</div>
           )}
         </div>
       </Dialog.Content>
