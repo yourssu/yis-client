@@ -1,21 +1,25 @@
 import { LayoutGroup, motion } from 'motion/react'
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 
 interface ChipTabProps<TTab extends string> {
   children: (p: { tab: TTab }) => React.ReactNode
-  defaultTab: TTab
   onTabChange: (value: TTab) => void
+  tab: TTab
   tabs: TTab[]
 }
 
 export const ChipTab = <TTab extends string>({
-  defaultTab,
+  tab: externalOrDefaultTab,
   onTabChange,
   tabs,
   children,
 }: ChipTabProps<TTab>) => {
   const id = useId()
-  const [tab, setTab] = useState(defaultTab)
+  const [tab, setTab] = useState(externalOrDefaultTab)
+
+  useEffect(() => {
+    setTab(externalOrDefaultTab)
+  }, [externalOrDefaultTab])
 
   return (
     <div className="w-full">

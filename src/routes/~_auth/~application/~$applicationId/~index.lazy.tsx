@@ -4,6 +4,8 @@ import { getFullApplication } from '@/apis/application'
 import { applicationKey } from '@/apis/keys'
 import { GNB } from '@/components/GNB'
 import { PageValidator } from '@/components/PageValidator'
+import { useSearchState } from '@/hooks/useSearchState'
+import { useSetStateSelector } from '@/hooks/useSetStateSelector'
 import { ApplicationDetailHeader } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailHeader'
 import { ApplicationDetailTab } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailTab'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -16,13 +18,18 @@ const Application = () => {
     queryFn: () => getFullApplication(applicationId),
   })
 
+  const [search, setSearch] = useSearchState({
+    from: '/_auth/application/$applicationId/',
+  })
+  const setTab = useSetStateSelector(setSearch, 'tab')
+
   return (
     // <PageValidator validate={({ email }) => email !== application.user.email}>
     <PageValidator validate={() => true}>
       <div className="mx-auto w-full max-w-[1200px]">
-        <ApplicationDetailHeader application={application} />
+        <ApplicationDetailHeader application={application} setTab={setTab} />
         <div className="h-4" />
-        <ApplicationDetailTab application={application} />
+        <ApplicationDetailTab application={application} setTab={setTab} tab={search.tab} />
       </div>
     </PageValidator>
   )

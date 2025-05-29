@@ -1,9 +1,8 @@
 import { invert } from 'es-toolkit'
-import { Suspense } from 'react'
+import { Dispatch, SetStateAction, Suspense } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
 import { ChipTab } from '@/components/ChipTab'
-import { useSearchState } from '@/hooks/useSearchState'
 import { ApplicationDetailDeployments } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailDeployments'
 import { ApplicationDetailOverview } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailOverview'
 import { ApplicationDetailPageSearchParams } from '@/routes/~_auth/~application/~$applicationId/type'
@@ -11,19 +10,17 @@ import { FullApplicationType } from '@/types/application'
 
 interface ApplicationDetailTabProps {
   application: FullApplicationType
+  setTab: Dispatch<SetStateAction<ApplicationDetailPageSearchParams['tab']>>
+  tab: ApplicationDetailPageSearchParams['tab']
 }
 
-export const ApplicationDetailTab = ({ application }: ApplicationDetailTabProps) => {
-  const [search, setSearch] = useSearchState({
-    from: '/_auth/application/$applicationId/',
-  })
-
+export const ApplicationDetailTab = ({ application, tab, setTab }: ApplicationDetailTabProps) => {
   return (
     <ChipTab
-      defaultTab={tabStateNameMap[search.tab]}
       onTabChange={(v) => {
-        setSearch(() => ({ tab: invert(tabStateNameMap)[v] }))
+        setTab(() => invert(tabStateNameMap)[v])
       }}
+      tab={tabStateNameMap[tab]}
       tabs={Object.values(tabStateNameMap)}
     >
       {({ tab }) => (
