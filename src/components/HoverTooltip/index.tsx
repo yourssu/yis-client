@@ -7,6 +7,8 @@ interface Props {
   color?: Extract<keyof typeof vars, `grey${string}`>
   content: React.ReactNode
   contentProps?: React.ComponentProps<typeof Tooltip.Content>
+  disableHoverableContent?: boolean
+  noArrow?: boolean
 }
 
 export const HoverTooltip = ({
@@ -14,11 +16,17 @@ export const HoverTooltip = ({
   content,
   color,
   contentProps,
+  noArrow,
+  disableHoverableContent,
 }: React.PropsWithChildren<Props>) => {
   const { className, sideOffset, ...otherContentProps } = contentProps ?? {}
 
   return (
-    <Tooltip.Provider delayDuration={0} skipDelayDuration={0}>
+    <Tooltip.Provider
+      delayDuration={0}
+      disableHoverableContent={disableHoverableContent}
+      skipDelayDuration={0}
+    >
       <Tooltip.Root>
         <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
         <Tooltip.Portal>
@@ -30,12 +38,14 @@ export const HoverTooltip = ({
               backgroundColor: color && vars[color],
             }}
           >
-            <Tooltip.Arrow
-              className="fill-grey100"
-              style={{
-                fill: color && vars[color],
-              }}
-            />
+            {!noArrow && (
+              <Tooltip.Arrow
+                className="fill-grey100"
+                style={{
+                  fill: color && vars[color],
+                }}
+              />
+            )}
             {content}
           </Tooltip.Content>
         </Tooltip.Portal>

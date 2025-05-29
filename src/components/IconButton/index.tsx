@@ -1,9 +1,12 @@
 import clsx from 'clsx'
 import { tv } from 'tailwind-variants'
 
+import { HoverTooltip } from '@/components/HoverTooltip'
+
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactElement
   size: 'lg' | 'md' | 'sm'
+  tooltipContent?: React.ReactNode
 }
 
 const button = tv({
@@ -17,10 +20,35 @@ const button = tv({
   },
 })
 
-export const IconButton = ({ children, size, className, ...props }: IconButtonProps) => {
-  return (
+export const IconButton = ({
+  children,
+  size,
+  className,
+  tooltipContent,
+  ...props
+}: IconButtonProps) => {
+  const renderedButton = (
     <button className={clsx(button({ size }), className)} {...props}>
       {children}
     </button>
   )
+
+  if (tooltipContent) {
+    return (
+      <HoverTooltip
+        color="grey200"
+        content={tooltipContent}
+        contentProps={{
+          side: 'bottom',
+          sideOffset: 2,
+          className: '!py-1 !px-2',
+        }}
+        disableHoverableContent
+        noArrow
+      >
+        {renderedButton}
+      </HoverTooltip>
+    )
+  }
+  return renderedButton
 }
