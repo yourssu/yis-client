@@ -1,4 +1,4 @@
-import { isEqual } from 'es-toolkit'
+import { isEqual, range } from 'es-toolkit'
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 import { z } from 'zod/v4'
@@ -63,7 +63,7 @@ export const ProfileEditDialogForm = ({ onSuccess, user }: ProfileEditDialogForm
                 <ProfileAvatar avatarId={avatarId} draggable={false} rounded size={80} />
               </div>
               <div className="grid grid-cols-[repeat(4,44px)] gap-2">
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((id) => (
+                {range(12).map((id) => (
                   <div
                     className={`size-11 cursor-pointer overflow-hidden rounded-full border-2 p-1 ${
                       avatarId === id ? 'border-brandPrimary' : 'border-transparent'

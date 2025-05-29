@@ -1,6 +1,6 @@
 import { Button } from '@/components/Button'
+import { useCreateApplicationFunnelDialog } from '@/hooks/useCreateApplicationFunnelDialog'
 import { ApplicationListItem } from '@/routes/~_auth/~(index)/components/ApplicationListItem'
-import { useCreateApplicationFunnelDialog } from '@/routes/~_auth/~(index)/hooks/useCreateApplicationFunnelDialog'
 import { FullApplicationType } from '@/types/application'
 
 interface ApplicationListLandingProps {

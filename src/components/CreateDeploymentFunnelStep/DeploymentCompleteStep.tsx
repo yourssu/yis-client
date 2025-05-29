@@ -2,14 +2,20 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
+import { useCreateDeploymentMutation } from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
+import {
+  CreateApplicationFunnelSteps,
+  CreateDeploymentFunnelSteps,
+} from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { useEffectOnce } from '@/hooks/useEffectOnce'
-import { useCreateFirstDeploymentMutation } from '@/routes/~_auth/~(index)/hooks/useCreateFirstDeploymentMutation'
-import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
 import { DotLottie, DotLottieReact, DotLottieReactProps } from '@lottiefiles/dotlottie-react'
+
 interface DeploymentCompleteStepProps {
   close: () => void
-  context: CreateApplicationFunnelSteps['배포요청_완료']
+  context:
+    | CreateApplicationFunnelSteps['배포요청_완료']
+    | CreateDeploymentFunnelSteps['배포요청_완료']
 }
 
 interface ResultProps {
@@ -57,7 +63,7 @@ const Result = ({ lottieProps, description, title }: ResultProps) => {
 
 export const DeploymentCompleteStep = ({ context, close }: DeploymentCompleteStepProps) => {
   const [result, setResult] = useState<ResultType>('loading')
-  const mutateResult = useCreateFirstDeploymentMutation()
+  const mutateResult = useCreateDeploymentMutation()
 
   useEffectOnce(() => {
     const process = async () => {

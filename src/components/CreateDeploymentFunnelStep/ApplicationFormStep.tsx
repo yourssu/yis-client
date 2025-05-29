@@ -2,12 +2,15 @@ import { useInputState } from 'react-simplikit'
 import { z } from 'zod/v4'
 
 import { checkApplicationNameUnique } from '@/apis/application'
+import { useFillMockDeploymentData } from '@/components/CreateDeploymentFunnelStep/hooks/useFillMockDeploymentData'
+import {
+  ApplicationConfirmedContext,
+  ApplicationContext,
+} from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { STAGE } from '@/config'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
-import { useFillMockApplicationData } from '@/routes/~_auth/~(index)/hooks/useFillMockApplicationData'
-import { ApplicationConfirmedContext, ApplicationContext } from '@/routes/~_auth/~(index)/type'
 import { regexes } from '@/utils/regex'
 import { useMutation } from '@tanstack/react-query'
 
@@ -30,7 +33,7 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
     onChangeWithReset,
   } = useZodFormValidation({ name, description }, ApplicationFormSchema)
 
-  const fillMockApplicationData = useFillMockApplicationData()
+  const fillMockDeploymentData = useFillMockDeploymentData()
   const { mutateAsync } = useMutation({
     mutationFn: checkApplicationNameUnique,
   })
@@ -82,7 +85,7 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
         {STAGE === 'dev' && (
           <Dialog.Button
             onClick={async () => {
-              await fillMockApplicationData()
+              await fillMockDeploymentData()
               close()
             }}
             variant="secondary"

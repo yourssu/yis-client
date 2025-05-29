@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useInputState } from 'react-simplikit'
 
+import { DeployConfirmedContext, DeployContext } from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { NumberInput } from '@/components/TextInput/NumberInput'
 import { TextInput } from '@/components/TextInput/TextInput'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
-import { DeployConfirmedContext, DeployContext } from '@/routes/~_auth/~(index)/type'
 import { DeploymentInfoFormSchema } from '@/types/deployment'
 import { assertNonNullish } from '@/utils/assertion'
 

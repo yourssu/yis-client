@@ -1,11 +1,18 @@
 import { userKey } from '@/apis/keys'
+import {
+  ApplicationPlaceholder,
+  useCreateDeploymentMutation,
+} from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
 import { useSuspensedMe } from '@/hooks/useMe'
-import { useCreateFirstDeploymentMutation } from '@/routes/~_auth/~(index)/hooks/useCreateFirstDeploymentMutation'
 import { randomMeaninglessString } from '@/utils/random'
 import { useQueryClient } from '@tanstack/react-query'
 
-export const useFillMockApplicationData = () => {
-  const mutateResult = useCreateFirstDeploymentMutation()
+interface FillMockDeploymentData {
+  application?: ApplicationPlaceholder
+}
+
+export const useFillMockDeploymentData = ({ application }: FillMockDeploymentData = {}) => {
+  const mutateResult = useCreateDeploymentMutation()
   const qc = useQueryClient()
   const me = useSuspensedMe()
 
@@ -15,7 +22,7 @@ export const useFillMockApplicationData = () => {
 
   return async () => {
     await mutateResult({
-      application: {
+      application: application ?? {
         name: `a${crypto.randomUUID()}`,
         description: '재판의 전심절차로서 행정심판을 할 수 있다.',
       },

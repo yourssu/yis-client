@@ -1,9 +1,9 @@
+import { ApplicationFormStep } from '@/components/CreateDeploymentFunnelStep/ApplicationFormStep'
+import { DeploymentCompleteStep } from '@/components/CreateDeploymentFunnelStep/DeploymentCompleteStep'
+import { DeploymentInfoFormStep } from '@/components/CreateDeploymentFunnelStep/DeploymentInfoFormStep'
+import { ResourcesFormStep } from '@/components/CreateDeploymentFunnelStep/ResourcesFormStep'
+import { CreateApplicationFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
-import { ApplicationFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ApplicationFormStep'
-import { DeploymentCompleteStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentCompleteStep'
-import { DeploymentInfoFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/DeploymentInfoFormStep'
-import { ResourcesFormStep } from '@/routes/~_auth/~(index)/components/CreateApplicationFunnel/ResourcesFormStep'
-import { CreateApplicationFunnelSteps } from '@/routes/~_auth/~(index)/type'
 
 export const useCreateApplicationFunnelDialog = () => {
   const openCreateApplicationFunnelDialog = useFunnelDialog<CreateApplicationFunnelSteps>({

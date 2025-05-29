@@ -1,5 +1,5 @@
 import { Button } from '@/components/Button'
-import { useCreateApplicationFunnelDialog } from '@/routes/~_auth/~(index)/hooks/useCreateApplicationFunnelDialog'
+import { useCreateApplicationFunnelDialog } from '@/hooks/useCreateApplicationFunnelDialog'
 
 export const NoApplicationLanding = () => {
   const openCreateApplicationFunnelDialog = useCreateApplicationFunnelDialog()

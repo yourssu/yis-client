@@ -1,9 +1,12 @@
 import { useState } from 'react'
 
+import {
+  ResourceConfirmedContext,
+  ResourceContext,
+} from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { Label } from '@/components/Label'
 import { Select } from '@/components/Select'
-import { ResourceConfirmedContext, ResourceContext } from '@/routes/~_auth/~(index)/type'
 import { DeploymentResourceFormSchema } from '@/types/deployment'
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 import { assertNonNullish } from '@/utils/assertion'
