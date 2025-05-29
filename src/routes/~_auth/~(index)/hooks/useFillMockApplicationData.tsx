@@ -20,7 +20,7 @@ export const useFillMockApplicationData = () => {
         description: '재판의 전심절차로서 행정심판을 할 수 있다.',
       },
       deployment: {
-        domain: makeRandomUrl(),
+        domainName: makeRandomUrl(),
         port: 80,
         imageUrl: 'alexwhen/docker-2048:latest',
         message: '테스트 배포인데 승인해주세요.',

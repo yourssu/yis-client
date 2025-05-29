@@ -9,7 +9,7 @@ export type ApplicationContext = {
 export type ApplicationConfirmedContext = Required<ApplicationContext>
 
 export type DeployContext = {
-  domain?: string
+  domainName?: string
   imageUrl?: string
   message?: string
   port?: number

@@ -19,7 +19,7 @@ export type CreateDeploymentProps = {
     name: string
   }
   deployment: {
-    domain: string
+    domainName: string
     imageUrl: string
     message?: string
     port: number
@@ -64,7 +64,7 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
       json: {
         link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}`, // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
         deployment: {
-          domain_name: props.deployment.domain,
+          domain_name: props.deployment.domainName,
           cpu_requests: props.resource.cpuRequests,
           memory_requests: props.resource.memoryRequests,
           cpu_limits: props.resource.cpuLimits,
@@ -77,7 +77,7 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
         },
         manifests: makeManifests({
           applicationName: props.application.name,
-          domainName: props.deployment.domain,
+          domainName: props.deployment.domainName,
           port: props.deployment.port,
           imageUrl: props.deployment.imageUrl,
           cpuLimits: props.resource.cpuLimits,

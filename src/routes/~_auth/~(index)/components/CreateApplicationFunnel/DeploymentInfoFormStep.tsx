@@ -20,13 +20,13 @@ export const DeploymentInfoFormStep = ({
   onNext,
   onPrevious,
 }: DeploymentInfoFormProps) => {
-  const [domain, setDomain] = useInputState(initialValue?.domain ?? '')
+  const [domainName, setDomainName] = useInputState(initialValue?.domainName ?? '')
   const [imageUrl, setImageUrl] = useInputState(initialValue?.imageUrl ?? '')
   const [port, setPort] = useState<number | undefined>(initialValue?.port)
   const [message, setMessage] = useInputState(initialValue?.message ?? '')
 
   const formData = {
-    domain,
+    domainName,
     imageUrl,
     port,
     message,
@@ -45,7 +45,7 @@ export const DeploymentInfoFormStep = ({
     }
 
     assertNonNullish(port)
-    onNext({ domain, imageUrl, port, message })
+    onNext({ domainName, imageUrl, port, message })
   }
 
   return (
@@ -54,10 +54,10 @@ export const DeploymentInfoFormStep = ({
         <div className="flex flex-col gap-4 pb-8">
           <TextInput
             description="http, https 없이 입력해주세요."
-            invalid={!!invalidTexts.domain}
-            onChange={onChangeWithReset(setDomain)}
+            invalid={!!invalidTexts.domainName}
+            onChange={onChangeWithReset(setDomainName)}
             placeholder="도메인 (예: www.example.com)"
-            value={domain}
+            value={domainName}
           />
           <NumberInput
             invalid={!!invalidTexts.port}
