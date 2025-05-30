@@ -26,7 +26,7 @@ export const signup = async (props: SignupProps) => {
   const { avatarId, ...others } = props
 
   const res = await api
-    .post<UserResponseType>('auth', {
+    .post<UserResponseType>('auth/', {
       json: {
         ...others,
         avatar_id: avatarId,
