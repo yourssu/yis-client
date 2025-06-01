@@ -49,7 +49,6 @@ interface UpdateDeploymentAsRequestProps {
     cpuRequests: CpuResourceNames
     domainName: string
     imageUrl: string
-    link: string
     memoryLimits: MemoryResourceNames
     memoryRequests: MemoryResourceNames
     message?: string
