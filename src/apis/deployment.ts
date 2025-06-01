@@ -190,6 +190,11 @@ export const updateDeploymentAsRequest = async ({
   return DeploymentSchema.parse(res)
 }
 
+export const rollbackDeployment = async (deploymentId: number) => {
+  const res = await api.post<DeploymentResponseType>(`deployments/${deploymentId}/rollback`).json()
+  return DeploymentSchema.parse(res)
+}
+
 export const useDeploymentsByStateInvalidation = ({ state }: { state: DeploymentStateNames }) => {
   const queryClient = useQueryClient()
   return () => {
