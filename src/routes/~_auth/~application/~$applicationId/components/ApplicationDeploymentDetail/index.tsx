@@ -36,7 +36,11 @@ export const ApplicationDeploymentDetail = ({
       </Suspense>
       <Divider />
       {deployment.state === 'APPROVAL' ? (
-        <ApplicationDeploymentDetailRollbackButton isRecentApproved={isRecentApproved} />
+        <ApplicationDeploymentDetailRollbackButton
+          applicationId={application.id}
+          isRecentApproved={isRecentApproved}
+          rollbackDeploymentId={deployment.id}
+        />
       ) : (
         <ApplicationDeploymentDetailEditButton deployment={deployment} />
       )}
