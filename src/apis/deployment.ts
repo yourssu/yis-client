@@ -49,6 +49,7 @@ interface UpdateDeploymentAsRequestProps {
     cpuRequests: CpuResourceNames
     domainName: string
     imageUrl: string
+    link: string
     memoryLimits: MemoryResourceNames
     memoryRequests: MemoryResourceNames
     message?: string
@@ -58,11 +59,13 @@ interface UpdateDeploymentAsRequestProps {
   manifests: DeploymentManifestType[] | undefined
 }
 
+const linkTemplate = `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}` // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
+
 export const createDeployment = async (props: CreateDeploymentProps) => {
   const res = await api
     .post<DeploymentResponseType>('deployments/', {
       json: {
-        link: `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}`, // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
+        link: linkTemplate,
         deployment: {
           domain_name: props.deployment.domainName,
           cpu_requests: props.resource.cpuRequests,
@@ -174,6 +177,7 @@ export const updateDeploymentAsRequest = async ({
           image_url: deployment.imageUrl,
           replicas: 1,
           message: deployment.message,
+          link: linkTemplate, // is_request가 true일 때만 사용해요.
         },
         manifests: manifests?.map((v) => ({
           file_name: v.fileName,
