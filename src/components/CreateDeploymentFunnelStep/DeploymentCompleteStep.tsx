@@ -3,10 +3,7 @@ import { useEffect, useState } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
 import { useCreateDeploymentMutation } from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
-import {
-  CreateApplicationFunnelSteps,
-  CreateDeploymentFunnelSteps,
-} from '@/components/CreateDeploymentFunnelStep/type'
+import { CreateDeploymentFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
 import { Dialog } from '@/components/Dialog'
 import { useEffectOnce } from '@/hooks/useEffectOnce'
 import { DotLottie, DotLottieReact, DotLottieReactProps } from '@lottiefiles/dotlottie-react'
@@ -14,8 +11,8 @@ import { DotLottie, DotLottieReact, DotLottieReactProps } from '@lottiefiles/dot
 interface DeploymentCompleteStepProps {
   close: () => void
   context:
-    | CreateApplicationFunnelSteps['배포요청_완료']
-    | CreateDeploymentFunnelSteps['배포요청_완료']
+    | CreateDeploymentFunnelSteps<'onlyCreateDeployment'>['배포요청_완료']
+    | CreateDeploymentFunnelSteps<'withCreateApplication'>['배포요청_완료']
 }
 
 interface ResultProps {

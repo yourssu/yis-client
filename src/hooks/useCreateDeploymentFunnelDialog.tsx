@@ -12,7 +12,9 @@ interface UseCreateDeploymentFunnelDialogProps {
 export const useCreateDeploymentFunnelDialog = ({
   application,
 }: UseCreateDeploymentFunnelDialogProps) => {
-  const openCreateDeploymentFunnelDialog = useFunnelDialog<CreateDeploymentFunnelSteps>({
+  const openCreateDeploymentFunnelDialog = useFunnelDialog<
+    CreateDeploymentFunnelSteps<'onlyCreateDeployment'>
+  >({
     id: 'create-deployment',
     initial: {
       step: '배포_정보입력',

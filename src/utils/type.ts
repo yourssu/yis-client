@@ -146,3 +146,12 @@ export type NonGenericDeep<
             [K in keyof Value]: NonGenericDeep<Value[K], MapValue>
           }
         : MapValue
+
+const emptyObjectSymbol: unique symbol = Symbol('emptyObjectSymbol')
+export type EmptyObjectType = { [emptyObjectSymbol]?: never }
+
+export type If<TValue, TCondition> = TValue extends TCondition ? true : false
+
+export type MergeIf<TCondition, TObject, TTrue, TFalse = EmptyObjectType> = Prettify<
+  TCondition extends true ? Merge<TObject, TTrue> : Merge<TObject, TFalse>
+>

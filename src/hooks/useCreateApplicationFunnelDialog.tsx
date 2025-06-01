@@ -2,11 +2,13 @@ import { ApplicationFormStep } from '@/components/CreateDeploymentFunnelStep/App
 import { DeploymentCompleteStep } from '@/components/CreateDeploymentFunnelStep/DeploymentCompleteStep'
 import { DeploymentInfoFormStep } from '@/components/CreateDeploymentFunnelStep/DeploymentInfoFormStep'
 import { ResourcesFormStep } from '@/components/CreateDeploymentFunnelStep/ResourcesFormStep'
-import { CreateApplicationFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
+import { CreateDeploymentFunnelSteps } from '@/components/CreateDeploymentFunnelStep/type'
 import { useFunnelDialog } from '@/hooks/useFunnelDialog'
 
 export const useCreateApplicationFunnelDialog = () => {
-  const openCreateApplicationFunnelDialog = useFunnelDialog<CreateApplicationFunnelSteps>({
+  const openCreateApplicationFunnelDialog = useFunnelDialog<
+    CreateDeploymentFunnelSteps<'withCreateApplication'>
+  >({
     id: 'create-application',
     initial: {
       step: '어플리케이션_정보입력',

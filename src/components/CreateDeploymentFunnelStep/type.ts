@@ -1,6 +1,10 @@
-import { ApplicationPlaceholder } from '@/components/CreateDeploymentFunnelStep/hooks/useCreateDeploymentMutation'
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
-import { Merge } from '@/utils/type'
+import { If, Merge, MergeIf } from '@/utils/type'
+
+export type ApplicationPlaceholder = {
+  id: number
+  name: string
+}
 
 export type ApplicationContext = {
   description?: string
@@ -24,39 +28,32 @@ export type ResourceContext = {
 }
 export type ResourceConfirmedContext = Required<ResourceContext>
 
-export type CreateDeploymentFunnelSteps = {
-  리소스_정보입력: {
-    application: ApplicationPlaceholder
-    deploy: DeployConfirmedContext
-    resource: ResourceContext
+export type CreateDeploymentFunnelSteps<
+  TFunnelType extends 'onlyCreateDeployment' | 'withCreateApplication',
+  TApplicationType = TFunnelType extends 'onlyCreateDeployment'
+    ? ApplicationPlaceholder
+    : ApplicationConfirmedContext,
+> = MergeIf<
+  If<TFunnelType, 'withCreateApplication'>,
+  {
+    리소스_정보입력: {
+      application: TApplicationType
+      deploy: DeployConfirmedContext
+      resource: ResourceContext
+    }
+    배포_정보입력: {
+      application: TApplicationType
+      deploy: DeployContext
+    }
+    배포요청_완료: {
+      application: TApplicationType
+      deploy: DeployConfirmedContext
+      resource: ResourceConfirmedContext
+    }
+  },
+  {
+    어플리케이션_정보입력: {
+      application: ApplicationContext
+    }
   }
-  배포_정보입력: {
-    application: ApplicationPlaceholder
-    deploy: DeployContext
-  }
-  배포요청_완료: {
-    application: ApplicationPlaceholder
-    deploy: DeployConfirmedContext
-    resource: ResourceConfirmedContext
-  }
-}
-
-export type CreateApplicationFunnelSteps = {
-  리소스_정보입력: {
-    application: ApplicationConfirmedContext
-    deploy: DeployConfirmedContext
-    resource: ResourceContext
-  }
-  배포_정보입력: {
-    application: ApplicationConfirmedContext
-    deploy: DeployContext
-  }
-  배포요청_완료: {
-    application: ApplicationConfirmedContext
-    deploy: DeployConfirmedContext
-    resource: ResourceConfirmedContext
-  }
-  어플리케이션_정보입력: {
-    application: ApplicationContext
-  }
-}
+>

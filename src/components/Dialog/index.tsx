@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'motion/react'
 import { MdClose } from 'react-icons/md'
-import { Merge } from 'type-fest'
 
 import { ButtonProps, Button as StyledButton } from '@/components/Button'
+import { Merge } from '@/utils/type'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
