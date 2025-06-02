@@ -17,7 +17,7 @@ const button = tv({
       subPrimary:
         'bg-brandAdaptiveBg disabled:!text-brandDisabled !text-brandAdaptive hover:bg-brandAdaptiveBgHover focus:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
       transparent:
-        '!text-neutralSubtle hover:bg-grey100 active:bg-grey200 focus:bg-grey200 disabled:!text-neutralDisabled bg-transparent disabled:bg-transparent',
+        '!text-greyOpacity800 hover:bg-grey100 active:bg-grey200 focus:bg-grey200 disabled:!text-neutralDisabled bg-transparent disabled:bg-transparent',
     },
     size: {
       sm: 'rounded-lg px-4 py-1.5 text-sm font-medium',
