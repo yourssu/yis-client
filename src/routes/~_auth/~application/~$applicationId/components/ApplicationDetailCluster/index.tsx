@@ -5,6 +5,7 @@ import { ClusterPodContent } from '@/routes/~_auth/~application/~$applicationId/
 import { ClusterStatusContent } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster/ClusterStatusContent'
 import { ClusterTabButton } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster/ClusterTabButton'
 import { ApplicationClusterStatusType } from '@/types/application'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
 type ClusterTab = '상태' | '파드 현황'
 
@@ -16,7 +17,12 @@ export const ApplicationDetailCluster = ({ clusterStatus }: ApplicationDetailClu
   const [tab, setTab] = useState<ClusterTab>('상태')
 
   if (!clusterStatus) {
-    return <div className="text-grey500 text-center">클러스터 정보가 없습니다.</div>
+    return (
+      <div className="mx-auto flex flex-col items-center gap-6 pt-10">
+        <DotLottieReact autoplay className="size-14" src="/lotties/empty-list.lottie" />
+        <div className="text-neutralSubtle text-sm font-semibold">먼저 배포를 승인받아주세요.</div>
+      </div>
+    )
   }
 
   return (
