@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction, Suspense } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
 import { ChipTab } from '@/components/ChipTab'
+import { ApplicationDetailCluster } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster'
 import { ApplicationDetailDeployments } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailDeployments'
 import { ApplicationDetailOverview } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailOverview'
 import { ApplicationDetailPageSearchParams } from '@/routes/~_auth/~application/~$applicationId/type'
@@ -33,7 +34,9 @@ export const ApplicationDetailTab = ({ application, tab, setTab }: ApplicationDe
                   <ApplicationDetailDeployments application={application} />
                 </Suspense>
               ),
-              클러스터: () => <div />,
+              클러스터: () => (
+                <ApplicationDetailCluster clusterStatus={application.clusterStatus} />
+              ),
             }}
             value={tab}
           />
