@@ -126,6 +126,7 @@
   --color-greyBackground: var(--greyBackground);
   --color-background: var(--background);
   --color-noiseBackgroundInverted: var(--noiseBackgroundInverted);
+  --color-tableBackground: var(--tableBackground);
   --color-neutral: var(--neutral);
   --color-neutralMuted: var(--neutralMuted);
   --color-neutralSubtle: var(--neutralSubtle);

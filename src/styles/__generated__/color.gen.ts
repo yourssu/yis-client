@@ -123,6 +123,7 @@ export const vars = {
   greyBackground: 'var(--greyBackground)',
   background: 'var(--background)',
   noiseBackgroundInverted: 'var(--noiseBackgroundInverted)',
+  tableBackground: 'var(--tableBackground)',
   neutral: 'var(--neutral)',
   neutralMuted: 'var(--neutralMuted)',
   neutralSubtle: 'var(--neutralSubtle)',
