@@ -13,15 +13,11 @@ import { ApplicationClusterStatusType } from '@/types/application'
 import { formatTemplates } from '@/utils/date'
 
 interface ClusterStatusContentProps {
-  clusterStatus: ApplicationClusterStatusType | undefined
+  clusterStatus: ApplicationClusterStatusType
 }
 
 export const ClusterStatusContent = ({ clusterStatus }: ClusterStatusContentProps) => {
   const openReasonAlertDialog = useAlertDialog()
-
-  if (!clusterStatus) {
-    return <div className="text-neutralMuted">아직 배포된 적이 없어요. 먼저 배포해주세요.</div>
-  }
 
   const pairs = [
     {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { SwitchCase } from 'react-simplikit'
 
+import { ClusterPodContent } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster/ClusterPodContent'
 import { ClusterStatusContent } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster/ClusterStatusContent'
 import { ClusterTabButton } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDetailCluster/ClusterTabButton'
 import { ApplicationClusterStatusType } from '@/types/application'
@@ -13,6 +14,10 @@ interface ApplicationDetailClusterProps {
 
 export const ApplicationDetailCluster = ({ clusterStatus }: ApplicationDetailClusterProps) => {
   const [tab, setTab] = useState<ClusterTab>('상태')
+
+  if (!clusterStatus) {
+    return <div className="text-grey500 text-center">클러스터 정보가 없습니다.</div>
+  }
 
   return (
     <div className="bg-grey50 rounded-2xl p-4">
@@ -28,7 +33,7 @@ export const ApplicationDetailCluster = ({ clusterStatus }: ApplicationDetailClu
         <div className="grow px-4 py-2">
           <SwitchCase
             caseBy={{
-              '파드 현황': () => <div>파드 현황 컴포넌트</div>,
+              '파드 현황': () => <ClusterPodContent clusterStatus={clusterStatus} />,
               상태: () => <ClusterStatusContent clusterStatus={clusterStatus} />,
             }}
             value={tab}
