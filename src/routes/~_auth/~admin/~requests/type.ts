@@ -1,6 +1,6 @@
 import { DeploymentStateNames } from '@/types/deployment'
 
-export type AdminPageSearchParams = {
+export type AdminRequestsPageSearchParams = {
   id?: string
   tab: DeploymentStateNames
 }

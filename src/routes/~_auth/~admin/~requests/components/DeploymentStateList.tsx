@@ -6,13 +6,13 @@ import { deploymentKey } from '@/apis/keys'
 import { DetailList } from '@/components/DetailList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { DeploymentStateListDetail } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateListDetail'
-import { AdminPageSearchParams } from '@/routes/~_auth/~admin/~requests/type'
+import { AdminRequestsPageSearchParams } from '@/routes/~_auth/~admin/~requests/type'
 import { DeploymentStateKRNameMap, DeploymentStateNames } from '@/types/deployment'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 interface DeploymentStateListProps {
-  setActiveDeploymentId: Dispatch<SetStateAction<AdminPageSearchParams['id']>>
+  setActiveDeploymentId: Dispatch<SetStateAction<AdminRequestsPageSearchParams['id']>>
   state: DeploymentStateNames
 }
 
