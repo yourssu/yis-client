@@ -28,7 +28,7 @@ export const Select = <TValue extends string>({
       <SelectPrimitive.Trigger asChild>
         <button
           className={clsx(
-            'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease data-[placeholder]:text-neutralPlaceholder flex w-full cursor-pointer items-center justify-between rounded-lg border py-2 pl-4 transition-colors duration-200',
+            'border-grey200 focus-visible:border-brandPrimary hover:border-brandDisabled ease-ease data-[placeholder]:text-neutralPlaceholder flex w-full cursor-pointer items-center justify-between rounded-lg border py-2 pl-4 transition-colors duration-200',
             invalid && '!border-negative',
             className
           )}

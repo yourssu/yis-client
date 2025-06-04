@@ -13,7 +13,7 @@ export const TextInput = ({ className, description, invalid, label, ...props }: 
     <div className="flex flex-col gap-1.5">
       <input
         className={clsx(
-          'border-grey200 focus:border-brandPrimary hover:border-brandDisabled ease-ease w-full rounded-lg border px-4 py-2 transition-colors duration-200',
+          'border-grey200 focus-visible:border-brandPrimary hover:border-brandDisabled ease-ease w-full rounded-lg border px-4 py-2 transition-colors duration-200',
           invalid && '!border-negative',
           className
         )}

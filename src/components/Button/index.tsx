@@ -11,13 +11,13 @@ const button = tv({
   variants: {
     variant: {
       primary:
-        '!text-neutral disabled:!text-neutralDisabled bg-brandPrimary hover:bg-brandHover focus:bg-brandActive active:bg-brandActive disabled:bg-brandDisabled',
+        '!text-neutral disabled:!text-neutralDisabled bg-brandPrimary hover:bg-brandHover focus-visible:bg-brandActive active:bg-brandActive disabled:bg-brandDisabled',
       secondary:
-        '!text-neutral disabled:!text-neutralDisabled bg-grey200 hover:bg-grey300 active:bg-grey400 focus:bg-grey400 disabled:bg-greyOpacity500',
+        '!text-neutral disabled:!text-neutralDisabled bg-grey200 hover:bg-grey300 active:bg-grey400 focus-visible:bg-grey400 disabled:bg-greyOpacity500',
       subPrimary:
-        'bg-brandAdaptiveBg disabled:!text-brandDisabled !text-brandAdaptive hover:bg-brandAdaptiveBgHover focus:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
+        'bg-brandAdaptiveBg disabled:!text-brandDisabled !text-brandAdaptive hover:bg-brandAdaptiveBgHover focus-visible:bg-brandAdaptiveBgActive active:bg-brandAdaptiveBgActive disabled:bg-brandAdaptiveBgDisabled',
       transparent:
-        '!text-greyOpacity800 hover:bg-grey100 active:bg-grey200 focus:bg-grey200 disabled:!text-neutralDisabled bg-transparent disabled:bg-transparent',
+        '!text-greyOpacity800 hover:bg-grey100 active:bg-grey200 focus-visible:bg-grey200 disabled:!text-neutralDisabled bg-transparent disabled:bg-transparent',
     },
     size: {
       sm: 'rounded-lg px-4 py-1.5 text-sm font-medium',
