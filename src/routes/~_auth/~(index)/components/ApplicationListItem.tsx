@@ -1,7 +1,7 @@
+import { MdLink } from 'react-icons/md'
 import { tv } from 'tailwind-variants'
 
 import { ApplicationClusterIndicator } from '@/routes/~_auth/~(index)/components/ApplicationClusterIndicator'
-import { DomainLink } from '@/routes/~_auth/~(index)/components/DomainLink'
 import { ResourceChip } from '@/routes/~_auth/~(index)/components/ResourceChip'
 import { FullApplicationType } from '@/types/application'
 import { DeploymentStateNames } from '@/types/deployment'
@@ -38,10 +38,10 @@ export const ApplicationListItem = ({ application }: ApplicationListItemProps) =
               {application.name}
             </div>
             <div className="inline-flex">
-              <DomainLink
-                domainName={application.recentDeployment.domainName}
-                port={application.recentDeployment.port}
-              />
+              <div className="text-neutralMuted flex items-center gap-1.5 text-xs">
+                <MdLink className="size-4" />
+                {application.recentDeployment.domainName}:{application.recentDeployment.port}
+              </div>
             </div>
           </div>
 
