@@ -1,13 +1,16 @@
 import { Button } from '@/components/Button'
 import { useAlertDialog } from '@/hooks/useAlertDialog'
 import { ApplicationDeploymentDetailEditForm } from '@/routes/~_auth/~application/~$applicationId/components/ApplicationDeploymentDetail/ApplicationDeploymentDetailEditForm'
+import { FullApplicationType } from '@/types/application'
 import { DeploymentType } from '@/types/deployment'
 
 interface ApplicationDeploymentDetailEditButtonProps {
+  application: FullApplicationType
   deployment: DeploymentType
 }
 
 export const ApplicationDeploymentDetailEditButton = ({
+  application,
   deployment,
 }: ApplicationDeploymentDetailEditButtonProps) => {
   const openEditDialog = useAlertDialog()
@@ -21,7 +24,7 @@ export const ApplicationDeploymentDetailEditButton = ({
       closeableWithOutside: false,
       content: ({ closeAsTrue }) => (
         <ApplicationDeploymentDetailEditForm
-          applicationId={deployment.applicationId}
+          application={application}
           closeDialog={closeAsTrue}
           defaultValue={{
             domainName: deployment.domainName,
@@ -34,7 +37,6 @@ export const ApplicationDeploymentDetailEditButton = ({
           }}
           deploymentId={deployment.id}
           isRequestResend={isReturned}
-          manifests={deployment.manifests}
         />
       ),
     })

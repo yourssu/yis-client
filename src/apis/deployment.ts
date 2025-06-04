@@ -88,7 +88,10 @@ export const createDeployment = async (props: CreateDeploymentProps) => {
           cpuRequests: props.resource.cpuRequests,
           memoryLimits: props.resource.memoryLimits,
           memoryRequests: props.resource.memoryRequests,
-        }),
+        }).map((v) => ({
+          file_name: v.fileName,
+          content: v.content,
+        })),
       },
     })
     .json()

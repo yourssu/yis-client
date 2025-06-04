@@ -13,26 +13,25 @@ import { TextInput } from '@/components/TextInput/TextInput'
 import { VerticalDivider } from '@/components/VerticalDivider'
 import { useToastedMutation } from '@/hooks/useToastedMutation'
 import { useZodFormValidation } from '@/hooks/useZodFormValidation'
-import { DeploymentManifestType } from '@/types/deployment'
+import { FullApplicationType } from '@/types/application'
 import { CpuResourceNames, MemoryResourceNames } from '@/types/resource'
 import { assertNonNullish } from '@/utils/assertion'
+import { makeManifests } from '@/utils/manifest'
 import { mutable } from '@/utils/misc'
 import { regexes } from '@/utils/regex'
 
 interface DeploymentEditFormProps {
-  applicationId: number
+  application: FullApplicationType
   closeDialog: () => void
   defaultValue: Omit<z.infer<typeof DeploymentEditFormSchema.form>, 'message'>
   deploymentId: number
   isRequestResend: boolean
-  manifests: DeploymentManifestType[] | undefined
 }
 
 export const ApplicationDeploymentDetailEditForm = ({
-  applicationId,
+  application,
   deploymentId,
   defaultValue,
-  manifests,
   isRequestResend,
   closeDialog,
 }: DeploymentEditFormProps) => {
@@ -67,7 +66,7 @@ export const ApplicationDeploymentDetailEditForm = ({
     successText: isRequestResend ? '배포를 재요청했어요.' : '배포 정보를 수정했어요.',
     errorText: isRequestResend ? '배포 재요청에 실패했어요.' : '배포 정보 수정에 실패했어요.',
   })
-  const invalidateApplicationDeployments = useApplicationDeploymentsInvalidation(applicationId)
+  const invalidateApplicationDeployments = useApplicationDeploymentsInvalidation(application.id)
 
   const onClick = async () => {
     if (!validate().success) {
@@ -78,7 +77,16 @@ export const ApplicationDeploymentDetailEditForm = ({
 
     const res = await mutateWithToast({
       deploymentId,
-      manifests,
+      manifests: makeManifests({
+        applicationName: application.name,
+        domainName,
+        port,
+        cpuLimits,
+        cpuRequests,
+        memoryLimits,
+        memoryRequests,
+        imageUrl,
+      }),
       deployment: {
         domainName,
         imageUrl,

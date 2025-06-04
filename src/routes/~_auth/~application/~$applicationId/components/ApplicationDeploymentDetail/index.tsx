@@ -42,7 +42,7 @@ export const ApplicationDeploymentDetail = ({
           rollbackDeploymentId={deployment.id}
         />
       ) : (
-        <ApplicationDeploymentDetailEditButton deployment={deployment} />
+        <ApplicationDeploymentDetailEditButton application={application} deployment={deployment} />
       )}
     </div>
   )
