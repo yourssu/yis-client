@@ -38,37 +38,39 @@ const AdminApplications = () => {
         <Table.Head
           headers={[`서비스 · ${data.pages[0].totalCount}개`, '사용자', '생성일', '수정일']}
         />
-        {applications.map((application, index) => (
-          <Table.Row
-            className="hover:bg-grey100 cursor-pointer"
-            index={index}
-            key={application.id}
-            onClick={() =>
-              navigate({
-                to: '/application/$applicationId',
-                params: { applicationId: application.id.toString() },
-                search: { tab: 'overview' },
-              })
-            }
-          >
-            <Table.Cell>
-              <div className="flex items-center gap-1">
-                <div className="text-brandPrimary flex min-w-[32px] items-center justify-center font-semibold">
-                  {application.id}
+        <Table.Body>
+          {applications.map((application, index) => (
+            <Table.Row
+              className="hover:bg-grey100 cursor-pointer"
+              index={index}
+              key={application.id}
+              onClick={() =>
+                navigate({
+                  to: '/application/$applicationId',
+                  params: { applicationId: application.id.toString() },
+                  search: { tab: 'overview' },
+                })
+              }
+            >
+              <Table.Cell>
+                <div className="flex items-center gap-1">
+                  <div className="text-brandPrimary flex min-w-[32px] items-center justify-center font-semibold">
+                    {application.id}
+                  </div>
+                  <div>{application.name}</div>
                 </div>
-                <div>{application.name}</div>
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div className="flex items-center gap-2">
-                <ProfileAvatar avatarId={application.user.avatarId} rounded size={20} />
-                <div className="font-medium">{application.user.nickname}</div>
-              </div>
-            </Table.Cell>
-            <Table.Cell>{formatTemplates['24.01.01 23:00'](application.createdAt)}</Table.Cell>
-            <Table.Cell>{formatTemplates['24.01.01 23:00'](application.updatedAt)}</Table.Cell>
-          </Table.Row>
-        ))}
+              </Table.Cell>
+              <Table.Cell>
+                <div className="flex items-center gap-2">
+                  <ProfileAvatar avatarId={application.user.avatarId} rounded size={20} />
+                  <div className="font-medium">{application.user.nickname}</div>
+                </div>
+              </Table.Cell>
+              <Table.Cell>{formatTemplates['24.01.01 23:00'](application.createdAt)}</Table.Cell>
+              <Table.Cell>{formatTemplates['24.01.01 23:00'](application.updatedAt)}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
       </Table>
       <div className="h-10 w-full" ref={refetcherRef} />
     </>

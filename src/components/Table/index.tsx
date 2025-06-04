@@ -113,6 +113,10 @@ export const Head = ({ headers }: HeadProps) => {
   )
 }
 
+export const Body = ({ children }: React.PropsWithChildren<unknown>) => {
+  return <tbody>{children}</tbody>
+}
+
 export const Table = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
     <div className="w-full overflow-auto">
@@ -122,5 +126,6 @@ export const Table = ({ children }: React.PropsWithChildren<unknown>) => {
 }
 
 Table.Head = Head
+Table.Body = Body
 Table.Row = Row
 Table.Cell = Cell

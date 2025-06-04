@@ -69,28 +69,30 @@ export const ClusterStatusContent = ({ clusterStatus }: ClusterStatusContentProp
       <ContentSection title="클러스터 상태">
         <Table>
           <Table.Head headers={['유형', '상태', '원인', '변경 시각']} />
-          {clusterStatus.conditions.map((condition, index) => (
-            <Table.Row index={index} key={condition.type}>
-              <Table.Cell className="font-medium">{condition.type}</Table.Cell>
-              <Table.Cell>{condition.status}</Table.Cell>
-              <Table.Cell className="text-blue500">
-                <InlineButton
-                  onClick={() =>
-                    onClickReason({
-                      message: condition.message,
-                      reason: condition.reason,
-                    })
-                  }
-                >
-                  <div className="flex items-center gap-1">
-                    <MdChatBubble className="size-3" />
-                    {condition.reason}
-                  </div>
-                </InlineButton>
-              </Table.Cell>
-              <Table.Cell>{formatTemplates['24.01.01 23:00'](condition.lastUpdate)}</Table.Cell>
-            </Table.Row>
-          ))}
+          <Table.Body>
+            {clusterStatus.conditions.map((condition, index) => (
+              <Table.Row index={index} key={condition.type}>
+                <Table.Cell className="font-medium">{condition.type}</Table.Cell>
+                <Table.Cell>{condition.status}</Table.Cell>
+                <Table.Cell className="text-blue500">
+                  <InlineButton
+                    onClick={() =>
+                      onClickReason({
+                        message: condition.message,
+                        reason: condition.reason,
+                      })
+                    }
+                  >
+                    <div className="flex items-center gap-1">
+                      <MdChatBubble className="size-3" />
+                      {condition.reason}
+                    </div>
+                  </InlineButton>
+                </Table.Cell>
+                <Table.Cell>{formatTemplates['24.01.01 23:00'](condition.lastUpdate)}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
         </Table>
       </ContentSection>
     </div>

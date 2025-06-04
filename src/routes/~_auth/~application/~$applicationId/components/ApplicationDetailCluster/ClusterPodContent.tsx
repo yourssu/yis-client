@@ -56,19 +56,21 @@ export const ClusterPodContent = ({ clusterStatus }: ClusterPodContentProps) => 
     <ContentSection description={`총 ${pods.length}개의 파드가 있어요.`} title="파드 현황">
       <Table>
         <Table.Head headers={['이름', '준비', '상태', '나이', '재시작 수']} />
-        {pods.map((pod, index) => (
-          <Table.Row index={index} key={pod.name}>
-            <Table.Cell className="font-medium">{pod.name}</Table.Cell>
-            <Table.Cell className={ready({ ready: pod.ready })}>
-              {pod.ready ? '준비 완료' : '준비 중'}
-            </Table.Cell>
-            <Table.Cell className={status({ status: pod.status })}>
-              {PodStatusNameMap[pod.status]}
-            </Table.Cell>
-            <Table.Cell>{pod.age}</Table.Cell>
-            <Table.Cell>{pod.restarts}</Table.Cell>
-          </Table.Row>
-        ))}
+        <Table.Body>
+          {pods.map((pod, index) => (
+            <Table.Row index={index} key={pod.name}>
+              <Table.Cell className="font-medium">{pod.name}</Table.Cell>
+              <Table.Cell className={ready({ ready: pod.ready })}>
+                {pod.ready ? '준비 완료' : '준비 중'}
+              </Table.Cell>
+              <Table.Cell className={status({ status: pod.status })}>
+                {PodStatusNameMap[pod.status]}
+              </Table.Cell>
+              <Table.Cell>{pod.age}</Table.Cell>
+              <Table.Cell>{pod.restarts}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
       </Table>
     </ContentSection>
   )
