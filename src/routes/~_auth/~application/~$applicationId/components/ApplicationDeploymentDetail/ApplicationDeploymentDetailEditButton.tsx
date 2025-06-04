@@ -19,9 +19,10 @@ export const ApplicationDeploymentDetailEditButton = ({
       title: `배포 ${isReturned ? '재요청' : '수정'}`,
       closeButton: true,
       closeableWithOutside: false,
-      content: (
+      content: ({ closeAsTrue }) => (
         <ApplicationDeploymentDetailEditForm
           applicationId={deployment.applicationId}
+          closeDialog={closeAsTrue}
           defaultValue={{
             domainName: deployment.domainName,
             imageUrl: deployment.imageUrl,

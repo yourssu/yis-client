@@ -1,3 +1,4 @@
+import { trimEnd } from 'es-toolkit'
 import { useInputState } from 'react-simplikit'
 
 import { updateDeploymentState, useDeploymentsByStateInvalidation } from '@/apis/deployment'
@@ -14,7 +15,7 @@ interface DeploymentStateListDetailFooterProps {
 }
 
 const getReviewOpenLinkUrl = (type: ReviewType) => {
-  return `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=${type}&id={id}` // 백엔드에서 {id}에 실제 배포 아이디를 넣어줘요.
+  return `${trimEnd(import.meta.env.VITE_APP_PROD_URL, '/')}/admin?tab=${type}&id={id}` // 백엔드에서 {id}에 실제 배포 아이디를 넣어줘요.
 }
 
 export const DeploymentStateListDetailFooter = ({

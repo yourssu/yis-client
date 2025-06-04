@@ -21,6 +21,7 @@ import { regexes } from '@/utils/regex'
 
 interface DeploymentEditFormProps {
   applicationId: number
+  closeDialog: () => void
   defaultValue: Omit<z.infer<typeof DeploymentEditFormSchema.form>, 'message'>
   deploymentId: number
   isRequestResend: boolean
@@ -33,6 +34,7 @@ export const ApplicationDeploymentDetailEditForm = ({
   defaultValue,
   manifests,
   isRequestResend,
+  closeDialog,
 }: DeploymentEditFormProps) => {
   const [domainName, setDomainName] = useInputState(defaultValue.domainName)
   const [imageUrl, setImageUrl] = useInputState(defaultValue.imageUrl)
@@ -90,6 +92,7 @@ export const ApplicationDeploymentDetailEditForm = ({
     })
     if (res) {
       invalidateApplicationDeployments()
+      closeDialog()
     }
   }
 

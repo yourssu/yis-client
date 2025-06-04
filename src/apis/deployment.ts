@@ -1,3 +1,5 @@
+import { trimEnd } from 'es-toolkit'
+
 import { api } from '@/apis/api'
 import { getApplication } from '@/apis/application'
 import { deploymentKey } from '@/apis/keys'
@@ -58,7 +60,7 @@ interface UpdateDeploymentAsRequestProps {
   manifests: DeploymentManifestType[] | undefined
 }
 
-const linkTemplate = `${import.meta.env.VITE_APP_PROD_URL}/admin?tab=REQUEST&id={id}` // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
+const linkTemplate = `${trimEnd(import.meta.env.VITE_APP_PROD_URL, '/')}/admin?tab=REQUEST&id={id}` // 백엔드에서 {id}에 실제 deployment ID로 치환시켜요.
 
 export const createDeployment = async (props: CreateDeploymentProps) => {
   const res = await api
