@@ -108,6 +108,11 @@ export const getFullApplication = async (applicationId: number) => {
   }
 }
 
+export const deleteApplication = async (applicationId: number) => {
+  const res = await api.delete(`applications/${applicationId}`).json()
+  return ApplicationSchema.parse(res)
+}
+
 export const useApplicationDeploymentsInvalidation = (applicationId: number) => {
   const queryClient = useQueryClient()
   return () => {
