@@ -5,11 +5,17 @@ import { applicationKey } from '@/apis/keys'
 import {
   ApplicationClusterStatusResponseType,
   ApplicationClusterStatusSchema,
+  ApplicationResponseSchema,
   ApplicationResponseType,
   ApplicationSchema,
 } from '@/types/application'
 import { DeploymentResponseType, DeploymentSchema } from '@/types/deployment'
-import { PaginatedResponseType, PaginatedSchema, PaginationParams } from '@/types/pagination'
+import {
+  PaginatedResponseSchema,
+  PaginatedResponseType,
+  PaginatedSchema,
+  PaginationParams,
+} from '@/types/pagination'
 import { handleError } from '@/utils/error'
 import { omitByNullish } from '@/utils/misc'
 import { camelizeSchema, optionalizeSchema } from '@/utils/zod'
@@ -31,6 +37,24 @@ const CheckApplicationNameUniqueResponseSchema = z.object({
 type CheckApplicationNameUniqueResponseType = z.infer<
   typeof CheckApplicationNameUniqueResponseSchema
 >
+
+const AllApplicationStateCountResponseSchema = z.object({
+  state_count: z.object({
+    request_count: z.number(),
+    check_count: z.number(),
+    return_count: z.number(),
+    approval_count: z.number(),
+  }),
+})
+
+type AllApplicationStateCountResponseType = z.infer<typeof AllApplicationStateCountResponseSchema>
+
+const PaginatedAllApplicationsSchema = camelizeSchema(
+  z.object({
+    ...AllApplicationStateCountResponseSchema.shape,
+    ...PaginatedResponseSchema(ApplicationResponseSchema).shape,
+  })
+)
 
 export const createApplication = async (props: CreateApplicationProps) => {
   const res = await api.post<ApplicationResponseType>('applications/', { json: props }).json()
@@ -120,4 +144,20 @@ export const useApplicationDeploymentsInvalidation = (applicationId: number) => 
       queryKey: applicationKey.deployments(applicationId),
     })
   }
+}
+
+export const getAllApplications = async ({ limit = 100, skip = 0, orderBy }: PaginationParams) => {
+  const res = await api
+    .get<AllApplicationStateCountResponseType & PaginatedResponseType<ApplicationResponseType[]>>(
+      `applications/`,
+      {
+        searchParams: omitByNullish({
+          limit,
+          skip,
+          orderBy,
+        }),
+      }
+    )
+    .json()
+  return PaginatedAllApplicationsSchema.parse(res)
 }

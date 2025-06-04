@@ -7,7 +7,7 @@ interface HeadProps {
   headers: React.ReactNode[]
 }
 
-interface RowProps {
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   index: number
 }
 
@@ -32,8 +32,8 @@ const th = tv({
 const td = tv({
   variants: {
     edge: {
-      left: 'rounded-l-2 pl-3',
-      right: 'rounded-r-2 pr-3',
+      left: 'rounded-l-md pl-3',
+      right: 'rounded-r-md pr-3',
       normal: '',
     },
   },
@@ -69,10 +69,17 @@ export const Cell = ({
   )
 }
 
-export const Row = ({ children, index }: React.PropsWithChildren<RowProps>) => {
+export const Row = ({ children, index, className, ...props }: RowProps) => {
   const childrenLength = Children.count(children)
   return (
-    <tr className={clsx(`h-12 rounded-sm text-sm`, index % 2 === 0 && 'bg-tableBackground')}>
+    <tr
+      className={clsx(
+        `h-12 rounded-sm text-sm`,
+        index % 2 === 0 && 'bg-tableBackground',
+        className
+      )}
+      {...props}
+    >
       {Children.map(children, (child, index) => {
         if (!isValidElement(child)) {
           return child
