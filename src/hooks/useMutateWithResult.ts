@@ -16,7 +16,7 @@ export const useMutateWithResult = <
       await mutation.mutateAsync(payload)
       return true
     } catch (e: unknown) {
-      console.error(await handleError(e)) // Todo: 센트리 이관
+      await handleError(e, { reportToSentry: true })
       return false
     }
   }

@@ -45,7 +45,7 @@ export const ApplicationDetailDeployments = ({
   })
 
   const deployments = data.pages.flatMap(({ data }) => data)
-  const recentApprovedDeployment = deployments.find((v) => v.isApplied && v.state === 'APPROVAL') // Todo: application > appliedDeploymentId로 변경 필요
+  const recentApprovedDeployment = deployments.find((v) => v.isApplied && v.state === 'APPROVAL')
 
   return (
     <>

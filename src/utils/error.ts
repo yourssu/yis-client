@@ -3,9 +3,14 @@ import { ZodError } from 'zod/v4'
 
 import { getKyHTTPErrorMessage, isKyHTTPError } from '@/utils/ky'
 import { getZodErrorMessage, isZodError } from '@/utils/zod'
+import { captureException } from '@sentry/react'
 
 export const isError = (error: unknown): error is Error => {
   return error instanceof Error
+}
+
+type Option = {
+  reportToSentry?: boolean
 }
 
 type ErrorResult<TError = unknown> =
@@ -68,6 +73,16 @@ const errorToResult = async <TError = unknown>(error: TError): Promise<ErrorResu
   }
 }
 
-export const handleError = async <TError = unknown>(error: TError) => {
-  return await errorToResult(error)
+export const handleError = async <TError = unknown>(error: TError, option?: Option) => {
+  const res = await errorToResult(error)
+
+  if (option?.reportToSentry) {
+    captureException(error, {
+      tags: {
+        errorMessage: res.message,
+      },
+    })
+  }
+
+  return res
 }

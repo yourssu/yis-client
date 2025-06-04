@@ -43,7 +43,7 @@ export const useCreateDeploymentMutation = () => {
       })
       return createDeploymentResult
     } catch (e: unknown) {
-      console.error(await handleError(e)) // Todo: 센트리 이관
+      await handleError(e, { reportToSentry: true })
       return false
     }
   }
