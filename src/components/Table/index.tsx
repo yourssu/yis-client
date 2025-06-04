@@ -13,6 +13,7 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 
 interface CellProps extends React.HTMLAttributes<HTMLTableCellElement> {
   edge?: 'left' | 'right'
+  innerClassName?: string
 }
 
 const th = tv({
@@ -50,6 +51,7 @@ export const Cell = ({
   children,
   edge,
   className,
+  innerClassName,
   ...props
 }: React.PropsWithChildren<CellProps>) => {
   return (
@@ -62,7 +64,13 @@ export const Cell = ({
       )}
       {...props}
     >
-      <div className={clsx('flex min-w-16 items-center', edge !== 'left' && 'justify-end')}>
+      <div
+        className={clsx(
+          'flex min-w-16 items-center',
+          edge !== 'left' && 'justify-end',
+          innerClassName
+        )}
+      >
         {children}
       </div>
     </td>

@@ -26,6 +26,7 @@ import { Route as AuthAdminRequestsIndexImport } from './routes/~_auth/~admin/~r
 const SignSignupIndexLazyImport = createFileRoute('/_sign/signup/')()
 const SignSigninIndexLazyImport = createFileRoute('/_sign/signin/')()
 const AuthProfileIndexLazyImport = createFileRoute('/_auth/profile/')()
+const AuthAdminUsersIndexLazyImport = createFileRoute('/_auth/admin/users/')()
 const AuthAdminApplicationsIndexLazyImport = createFileRoute(
   '/_auth/admin/applications/',
 )()
@@ -83,6 +84,14 @@ const AuthindexIndexRoute = AuthindexIndexImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
+
+const AuthAdminUsersIndexLazyRoute = AuthAdminUsersIndexLazyImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthAdminRoute,
+} as any).lazy(() =>
+  import('./routes/~_auth/~admin/~users/~index.lazy').then((d) => d.Route),
+)
 
 const AuthAdminApplicationsIndexLazyRoute =
   AuthAdminApplicationsIndexLazyImport.update({
@@ -195,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminApplicationsIndexLazyImport
       parentRoute: typeof AuthAdminImport
     }
+    '/_auth/admin/users/': {
+      id: '/_auth/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthAdminUsersIndexLazyImport
+      parentRoute: typeof AuthAdminImport
+    }
   }
 }
 
@@ -203,11 +219,13 @@ declare module '@tanstack/react-router' {
 interface AuthAdminRouteChildren {
   AuthAdminRequestsIndexRoute: typeof AuthAdminRequestsIndexRoute
   AuthAdminApplicationsIndexLazyRoute: typeof AuthAdminApplicationsIndexLazyRoute
+  AuthAdminUsersIndexLazyRoute: typeof AuthAdminUsersIndexLazyRoute
 }
 
 const AuthAdminRouteChildren: AuthAdminRouteChildren = {
   AuthAdminRequestsIndexRoute: AuthAdminRequestsIndexRoute,
   AuthAdminApplicationsIndexLazyRoute: AuthAdminApplicationsIndexLazyRoute,
+  AuthAdminUsersIndexLazyRoute: AuthAdminUsersIndexLazyRoute,
 }
 
 const AuthAdminRouteWithChildren = AuthAdminRoute._addFileChildren(
@@ -254,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/admin/requests': typeof AuthAdminRequestsIndexRoute
   '/application/$applicationId': typeof AuthApplicationApplicationIdIndexRoute
   '/admin/applications': typeof AuthAdminApplicationsIndexLazyRoute
+  '/admin/users': typeof AuthAdminUsersIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -267,6 +286,7 @@ export interface FileRoutesByTo {
   '/admin/requests': typeof AuthAdminRequestsIndexRoute
   '/application/$applicationId': typeof AuthApplicationApplicationIdIndexRoute
   '/admin/applications': typeof AuthAdminApplicationsIndexLazyRoute
+  '/admin/users': typeof AuthAdminUsersIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -282,6 +302,7 @@ export interface FileRoutesById {
   '/_auth/admin/requests/': typeof AuthAdminRequestsIndexRoute
   '/_auth/application/$applicationId/': typeof AuthApplicationApplicationIdIndexRoute
   '/_auth/admin/applications/': typeof AuthAdminApplicationsIndexLazyRoute
+  '/_auth/admin/users/': typeof AuthAdminUsersIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -297,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/requests'
     | '/application/$applicationId'
     | '/admin/applications'
+    | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/404'
@@ -309,6 +331,7 @@ export interface FileRouteTypes {
     | '/admin/requests'
     | '/application/$applicationId'
     | '/admin/applications'
+    | '/admin/users'
   id:
     | '__root__'
     | '/404'
@@ -322,6 +345,7 @@ export interface FileRouteTypes {
     | '/_auth/admin/requests/'
     | '/_auth/application/$applicationId/'
     | '/_auth/admin/applications/'
+    | '/_auth/admin/users/'
   fileRoutesById: FileRoutesById
 }
 
@@ -376,7 +400,8 @@ export const routeTree = rootRoute
       "parent": "/_auth",
       "children": [
         "/_auth/admin/requests/",
-        "/_auth/admin/applications/"
+        "/_auth/admin/applications/",
+        "/_auth/admin/users/"
       ]
     },
     "/_auth/(index)/": {
@@ -405,6 +430,10 @@ export const routeTree = rootRoute
     },
     "/_auth/admin/applications/": {
       "filePath": "~_auth/~admin/~applications/~index.lazy.tsx",
+      "parent": "/_auth/admin"
+    },
+    "/_auth/admin/users/": {
+      "filePath": "~_auth/~admin/~users/~index.lazy.tsx",
       "parent": "/_auth/admin"
     }
   }

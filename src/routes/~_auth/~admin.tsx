@@ -11,6 +11,10 @@ const Sidebar = () => {
       to: '/admin/requests',
     },
     {
+      name: '유저 목록',
+      to: '/admin/users',
+    },
+    {
       name: '서비스 목록',
       to: '/admin/applications',
     },

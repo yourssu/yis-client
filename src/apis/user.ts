@@ -4,8 +4,10 @@ import { api } from '@/apis/api'
 import { getApplicationClusterStatus, getApplicationDeployments } from '@/apis/application'
 import { userKey } from '@/apis/keys'
 import { ApplicationResponseType, ApplicationSchema } from '@/types/application'
+import { PaginatedSchema, PaginationParams } from '@/types/pagination'
 import { PartNames } from '@/types/part'
 import { UserResponseType, UserSchema } from '@/types/user'
+import { omitByNullish } from '@/utils/misc'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface EditUserProps {
@@ -73,11 +75,37 @@ export const getUserFullApplications = async ({ userId }: GetUserApplicationsPro
   }))
 }
 
+export const getAllUsers = async ({ limit = 100, skip = 0, orderBy }: PaginationParams) => {
+  const res = await api
+    .get<UserResponseType[]>(`users/`, {
+      searchParams: omitByNullish({
+        limit,
+        skip,
+        orderBy,
+      }),
+    })
+    .json()
+  return PaginatedSchema(UserSchema).parse(res)
+}
+
+export const deleteUser = async (userId: number) => {
+  const res = await api.delete(`users/${userId}`).json()
+  return UserSchema.parse(res)
+}
+
 export const useMeInvalidation = () => {
   const queryClient = useQueryClient()
   return () => {
     queryClient.invalidateQueries({
       queryKey: userKey.me(),
+    })
+  }
+}
+export const useAllUsersInvalidation = () => {
+  const queryClient = useQueryClient()
+  return () => {
+    queryClient.invalidateQueries({
+      queryKey: userKey.all,
     })
   }
 }
