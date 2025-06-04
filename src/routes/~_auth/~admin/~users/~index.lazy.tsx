@@ -71,7 +71,7 @@ const AdminUsers = () => {
                 {user.isActive ? '활성' : '비활성'}
               </Table.Cell>
               <Table.Cell innerClassName="min-w-auto">
-                <UserMenu userId={user.id} />
+                <UserMenu user={user} />
               </Table.Cell>
             </Table.Row>
           ))}
