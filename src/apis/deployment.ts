@@ -176,13 +176,13 @@ export const updateDeploymentAsRequest = async ({
           image_url: deployment.imageUrl,
           replicas: 1,
           message: deployment.message,
-          link: linkTemplate, // is_request가 true일 때만 사용해요.
         },
         manifests: manifests?.map((v) => ({
           file_name: v.fileName,
           content: v.content,
         })),
         is_request: true,
+        link: linkTemplate, // is_request가 true일 때만 사용해요.
       },
     })
     .json()
