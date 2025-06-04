@@ -101,11 +101,21 @@ export const useMeInvalidation = () => {
     })
   }
 }
+
 export const useAllUsersInvalidation = () => {
   const queryClient = useQueryClient()
   return () => {
     queryClient.invalidateQueries({
       queryKey: userKey.all,
+    })
+  }
+}
+
+export const useUserApplicationsInvalidation = (userId: number) => {
+  const queryClient = useQueryClient()
+  return () => {
+    queryClient.invalidateQueries({
+      queryKey: userKey.applications(userId),
     })
   }
 }

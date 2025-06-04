@@ -17,9 +17,9 @@ const Index = () => {
   })
 
   if (applications.length > 0) {
-    return <ApplicationListLanding applications={applications} />
+    return <ApplicationListLanding applications={applications} meId={userId} />
   }
-  return <NoApplicationLanding />
+  return <NoApplicationLanding meId={userId} />
 }
 
 export const Route = createFileRoute('/_auth/(index)/')({

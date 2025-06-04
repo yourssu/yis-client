@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 import { MdRocketLaunch } from 'react-icons/md'
 
+import { useApplicationDeploymentsInvalidation } from '@/apis/application'
 import { IconButton } from '@/components/IconButton'
 import { useCreateDeploymentFunnelDialog } from '@/hooks/useCreateDeploymentFunnelDialog'
 import { useSuspensedMe } from '@/hooks/useMe'
@@ -25,10 +26,11 @@ export const ApplicationDetailHeaderButtonGroup = ({
   const openCreateDeploymentFunnelDialog = useCreateDeploymentFunnelDialog({
     application: { id, name },
   })
+  const invalidateApplicationDeployments = useApplicationDeploymentsInvalidation(application.id)
 
   const showMenu = me.email === application.user.email || me.role === 'ADMIN'
 
-  const onClickDeployButton = () => {
+  const onClickDeployButton = async () => {
     if (recentDeployment.state === 'REQUEST') {
       toast.error('아직 승인되지 않은 배포 내역이 있어요.')
       setTab('deployments')
@@ -39,7 +41,10 @@ export const ApplicationDetailHeaderButtonGroup = ({
       setTab('deployments')
       return
     }
-    openCreateDeploymentFunnelDialog()
+    if (await openCreateDeploymentFunnelDialog()) {
+      invalidateApplicationDeployments()
+      setTab('deployments')
+    }
   }
 
   return (
