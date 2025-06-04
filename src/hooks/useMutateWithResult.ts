@@ -1,3 +1,4 @@
+import { handleError } from '@/utils/error'
 import { DefaultError, useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 export const useMutateWithResult = <
@@ -14,8 +15,8 @@ export const useMutateWithResult = <
     try {
       await mutation.mutateAsync(payload)
       return true
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
-    } catch (e) {
+    } catch (e: unknown) {
+      console.error(await handleError(e)) // Todo: 센트리 이관
       return false
     }
   }

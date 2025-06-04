@@ -2,6 +2,7 @@ import { match, P } from 'ts-pattern'
 
 import { createApplication, CreateApplicationProps } from '@/apis/application'
 import { createDeployment, CreateDeploymentProps } from '@/apis/deployment'
+import { handleError } from '@/utils/error'
 import { Merge, Prettify } from '@/utils/type'
 import { useMutation } from '@tanstack/react-query'
 
@@ -38,7 +39,8 @@ export const useCreateDeploymentMutation = () => {
         },
       })
       return createDeploymentResult
-    } catch {
+    } catch (e: unknown) {
+      console.error(await handleError(e)) // Todo: 센트리 이관
       return false
     }
   }

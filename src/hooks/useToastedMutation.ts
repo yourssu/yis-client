@@ -26,8 +26,9 @@ export const useToastedMutation = <
       }
       return res
     } catch (e: unknown) {
-      const { message } = await handleError(e)
-      toast.error(errorText ?? message)
+      const error = await handleError(e)
+      console.error(error) // Todo: 센트리 이관
+      toast.error(errorText ?? error.message)
     }
   }
 
