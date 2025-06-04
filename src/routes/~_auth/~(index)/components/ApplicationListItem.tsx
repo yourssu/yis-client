@@ -6,7 +6,7 @@ import { ResourceChip } from '@/routes/~_auth/~(index)/components/ResourceChip'
 import { FullApplicationType } from '@/types/application'
 import { DeploymentStateNames } from '@/types/deployment'
 import { formatToKoreanRelativeDate } from '@/utils/date'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 interface ApplicationListItemProps {
   application: FullApplicationType
@@ -24,6 +24,8 @@ const deploymentReview = tv({
 })
 
 export const ApplicationListItem = ({ application }: ApplicationListItemProps) => {
+  const navigate = useNavigate()
+
   return (
     <Link
       params={{ applicationId: application.id.toString() }}
@@ -59,10 +61,23 @@ export const ApplicationListItem = ({ application }: ApplicationListItemProps) =
           </div>
         </div>
 
-        <div className="border-grey200 text-neutralSubtle hover:bg-greyOpacity100 ease-ease flex items-center justify-between rounded-sm border px-2 py-1 text-xs transition-colors duration-200">
+        <div
+          className="border-grey200 text-neutralSubtle hover:bg-greyOpacity100 ease-ease flex items-center justify-between rounded-sm border px-2 py-1 text-xs transition-colors duration-200"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            navigate({
+              to: '/application/$applicationId',
+              params: { applicationId: application.id.toString() },
+              search: { tab: 'deployments' },
+            })
+          }}
+        >
           <div className="flex items-center gap-1.5">
             <div
-              className={deploymentReview({ deploymentState: application.recentDeployment.state })}
+              className={deploymentReview({
+                deploymentState: application.recentDeployment.state,
+              })}
             >
               {deploymentStateNameMap[application.recentDeployment.state]}
             </div>
