@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Suspense } from 'react'
 import { useIntersectionObserver } from 'react-simplikit'
 
 import { userKey } from '@/apis/keys'
@@ -82,5 +83,9 @@ const AdminUsers = () => {
 }
 
 export const Route = createLazyFileRoute('/_auth/admin/users/')({
-  component: AdminUsers,
+  component: () => (
+    <Suspense>
+      <AdminUsers />
+    </Suspense>
+  ),
 })
