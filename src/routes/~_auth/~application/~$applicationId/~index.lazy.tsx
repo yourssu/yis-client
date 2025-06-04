@@ -24,8 +24,9 @@ const Application = () => {
   const setTab = useSetStateSelector(setSearch, 'tab')
 
   return (
-    // <PageValidator validate={({ email }) => email !== application.user.email}>
-    <PageValidator validate={() => true}>
+    <PageValidator
+      validate={({ email, role }) => email === application.user.email || role === 'ADMIN'}
+    >
       <div className="mx-auto w-full max-w-[1200px]">
         <ApplicationDetailHeader application={application} setTab={setTab} />
         <div className="h-4" />
