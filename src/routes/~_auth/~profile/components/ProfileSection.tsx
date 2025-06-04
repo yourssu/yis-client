@@ -1,25 +1,14 @@
 import { UserRoleBadge } from '@/components/Badges/UserRoleBadge'
 import { ItemList } from '@/components/ItemList'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
-import { useAlertDialog } from '@/hooks/useAlertDialog'
+import { useEditUserDialog } from '@/hooks/useEditUserDialog'
 import { useSuspensedMe } from '@/hooks/useMe'
-import { ProfileEditDialogForm } from '@/routes/~_auth/~profile/components/ProfileEditDialogForm'
 import { formatTemplates } from '@/utils/date'
 
 export const ProfileSection = () => {
   const me = useSuspensedMe()
+  const openEditAlertDialog = useEditUserDialog({ type: 'me', user: me })
 
-  const openEditAlertDialog = useAlertDialog()
-
-  const onClickEdit = () => {
-    openEditAlertDialog({
-      title: '내 정보 수정',
-      closeButton: true,
-      content: ({ closeAsTrue }) => {
-        return <ProfileEditDialogForm onSuccess={closeAsTrue} user={me} />
-      },
-    })
-  }
   return (
     <div className="flex w-full flex-col gap-10">
       <div className="flex flex-col items-center gap-4">
@@ -30,7 +19,7 @@ export const ProfileSection = () => {
       <ItemList>
         <ItemList.Header>
           내 정보
-          <ItemList.HeaderButton onClick={onClickEdit}>수정하기</ItemList.HeaderButton>
+          <ItemList.HeaderButton onClick={openEditAlertDialog}>수정하기</ItemList.HeaderButton>
         </ItemList.Header>
         <ItemList.Body>
           <ItemList.Item label="닉네임">{me.nickname}</ItemList.Item>
