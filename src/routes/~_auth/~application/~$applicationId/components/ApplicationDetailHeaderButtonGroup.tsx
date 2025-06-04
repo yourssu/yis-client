@@ -45,7 +45,7 @@ export const ApplicationDetailHeaderButtonGroup = ({
   return (
     <div className="flex items-center gap-1.5">
       <IconButton
-        className="text-neutralMuted bg-greyOpacity100 hover:bg-greyOpacity200"
+        className="text-neutralMuted bg-greyOpacity100 hover:bg-greyOpacity200 focus-visible:bg-greyOpacity200 active:bg-greyOpacity200"
         onClick={onClickDeployButton}
         size="md"
         tooltipContent="배포하기"

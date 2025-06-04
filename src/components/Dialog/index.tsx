@@ -24,7 +24,7 @@ const Header = ({
       {onClickCloseButton && (
         <div className="pt-5 pr-3.5">
           <button
-            className="hover:bg-grey200 active:bg-grey300 focus-visible:bg-grey300 ease-ease inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors duration-200"
+            className="hover:bg-grey200 active:bg-grey200 focus-visible:bg-grey200 ease-ease inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors duration-200"
             onClick={onClickCloseButton}
           >
             <MdClose className="text-neutralSubtle size-5" />

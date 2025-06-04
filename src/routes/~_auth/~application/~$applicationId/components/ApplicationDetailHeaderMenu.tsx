@@ -35,7 +35,7 @@ export const ApplicationDetailHeaderMenu = ({ application }: ApplicationDetailHe
     <Menu>
       <Menu.Target asChild>
         <IconButton
-          className="text-neutralMuted bg-greyOpacity100 hover:bg-greyOpacity200"
+          className="text-neutralMuted bg-greyOpacity100 hover:bg-greyOpacity200 focus-visible:bg-greyOpacity200 active:bg-greyOpacity200"
           size="md"
         >
           <MdMoreHoriz className="size-5" />

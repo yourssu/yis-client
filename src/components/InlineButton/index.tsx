@@ -12,7 +12,7 @@ export const InlineButton = ({ className, children, ...props }: InlineButtonProp
   return (
     <Comp
       className={clsx(
-        'hover:bg-grey100 focus-visible:bg-grey100 active:bg-grey200 ease-ease inline-block cursor-pointer rounded-md px-1.5 transition-colors duration-200',
+        'hover:bg-grey100 focus-visible:bg-grey100 active:bg-grey100 ease-ease inline-block cursor-pointer rounded-md px-1.5 transition-colors duration-200',
         className
       )}
       {...props}

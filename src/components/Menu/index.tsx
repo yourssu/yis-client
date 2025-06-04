@@ -12,7 +12,7 @@ const ButtonItem = ({
     <Popover.Closeable asChild>
       <button
         className={clsx(
-          'hover:bg-grey200 active:hover:bg-grey300 focus-visible:bg-grey300 ease-ease w-full cursor-pointer transition-colors duration-200',
+          'hover:bg-grey200 active:hover:bg-grey200 focus-visible:bg-grey200 ease-ease w-full cursor-pointer transition-colors duration-200',
           className
         )}
         {...props}

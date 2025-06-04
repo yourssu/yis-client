@@ -10,7 +10,7 @@ interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 const button = tv({
-  base: 'hover:bg-grey100 foucs:bg-grey200 active:bg-grey200 disabled:bg-grey200 disabled:text-neutralDisabled ease-ease flex cursor-pointer items-center justify-center transition-colors duration-200 disabled:cursor-not-allowed',
+  base: 'hover:bg-grey100 foucs-visible:bg-grey200 active:bg-grey200 disabled:bg-grey200 disabled:text-neutralDisabled ease-ease flex cursor-pointer items-center justify-center transition-colors duration-200 disabled:cursor-not-allowed',
   variants: {
     size: {
       sm: 'rounded-sm p-1.5',
