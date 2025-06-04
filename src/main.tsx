@@ -11,13 +11,15 @@ import { AuthProvider } from '@/components/Providers/AuthProvider'
 import { useAuth } from '@/components/Providers/AuthProvider/hook'
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider'
 import { ToastProvider } from '@/components/Providers/ToastProvider'
+import { initSentry } from '@/utils/sentry'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-import { routeTree } from './routeTree.gen'
-
 import 'core-js/stable'
 
+import { routeTree } from './routeTree.gen'
+
+initSentry()
 setDefaultDateFnsOptions({ locale: ko })
 
 export const router = createRouter({

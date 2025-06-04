@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
@@ -12,5 +13,14 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
     tailwindcss(),
+    sentryVitePlugin({
+      org: 'yourssu-web',
+      project: 'yis-client',
+      reactComponentAnnotation: { enabled: true },
+    }),
   ],
+
+  build: {
+    sourcemap: true,
+  },
 })
