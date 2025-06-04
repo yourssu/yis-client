@@ -24,7 +24,7 @@ export const DeploymentStateListDetailFooter = ({
 }: DeploymentStateListDetailFooterProps) => {
   const [comment, setComment] = useInputState('')
 
-  const { mutateWithToast } = useToastedMutation({
+  const { mutateWithToast, isPending } = useToastedMutation({
     mutationFn: updateDeploymentState,
     successText: '검토 결과를 보냈어요',
     errorText: '검토 결과 전송에 실패했어요',
@@ -59,10 +59,10 @@ export const DeploymentStateListDetailFooter = ({
         value={comment}
       />
       <div className="grid grid-cols-2 gap-2">
-        <Button onClick={onClickReject} size="lg" variant="secondary">
+        <Button disabled={isPending} onClick={onClickReject} size="lg" variant="secondary">
           거부
         </Button>
-        <Button onClick={onClickApprove} size="lg" variant="primary">
+        <Button disabled={isPending} onClick={onClickApprove} size="lg" variant="primary">
           승인
         </Button>
       </div>

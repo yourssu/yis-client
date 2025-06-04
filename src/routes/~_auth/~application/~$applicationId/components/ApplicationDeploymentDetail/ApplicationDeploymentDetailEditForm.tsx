@@ -61,7 +61,7 @@ export const ApplicationDeploymentDetailEditForm = ({
   )
   const { error: buttonError } = DeploymentEditFormSchema.button.safeParse(formValue)
 
-  const { mutateWithToast } = useToastedMutation({
+  const { mutateWithToast, isPending } = useToastedMutation({
     mutationFn: updateDeploymentAsRequest,
     successText: isRequestResend ? '배포를 재요청했어요.' : '배포 정보를 수정했어요.',
     errorText: isRequestResend ? '배포 재요청에 실패했어요.' : '배포 정보 수정에 실패했어요.',
@@ -212,7 +212,7 @@ export const ApplicationDeploymentDetailEditForm = ({
         </div>
       </Dialog.Content>
       <Dialog.ButtonGroup>
-        <Dialog.Button disabled={!!buttonError} onClick={onClick} variant="primary">
+        <Dialog.Button disabled={!!buttonError || isPending} onClick={onClick} variant="primary">
           수정하기
         </Dialog.Button>
       </Dialog.ButtonGroup>

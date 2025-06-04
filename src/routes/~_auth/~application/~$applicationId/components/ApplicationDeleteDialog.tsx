@@ -16,7 +16,7 @@ export const ApplicationDeleteDialog = ({
   application,
 }: ApplicationDeleteDialogProps) => {
   const [applicationNameReply, setApplicationNameReply] = useInputState('')
-  const { mutateWithToast: mutateDeleteApplication } = useToastedMutation({
+  const { mutateWithToast: mutateDeleteApplication, isPending } = useToastedMutation({
     mutationFn: deleteApplication,
     successText: '서비스를 삭제했어요.',
     errorText: '서비스 삭제에 실패했어요. 잠시 후 다시 시도해주세요.',
@@ -48,7 +48,7 @@ export const ApplicationDeleteDialog = ({
         />
       </Dialog.Content>
       <Dialog.ButtonGroup>
-        <Dialog.Button disabled={!replied} onClick={onClick} variant="primary">
+        <Dialog.Button disabled={!replied || isPending} onClick={onClick} variant="primary">
           삭제하기
         </Dialog.Button>
       </Dialog.ButtonGroup>

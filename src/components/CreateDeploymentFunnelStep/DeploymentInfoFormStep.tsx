@@ -46,7 +46,9 @@ export const DeploymentInfoFormStep = <TApplication extends ApplicationPlacehold
   )
   const { error: buttonError } = DeploymentInfoFormSchema.base.safeParse(formData)
 
-  const fillMockDeploymentData = useFillMockDeploymentData({ application })
+  const [isFillMockDeploymentDataPending, fillMockDeploymentData] = useFillMockDeploymentData({
+    application,
+  })
 
   const onClickNext = () => {
     if (!validate().success) {
@@ -96,6 +98,7 @@ export const DeploymentInfoFormStep = <TApplication extends ApplicationPlacehold
       <Dialog.ButtonGroup>
         {STAGE === 'dev' && close && (
           <Dialog.Button
+            disabled={isFillMockDeploymentDataPending}
             onClick={async () => {
               await fillMockDeploymentData()
               close()
@@ -106,11 +109,19 @@ export const DeploymentInfoFormStep = <TApplication extends ApplicationPlacehold
           </Dialog.Button>
         )}
         {onPrevious && (
-          <Dialog.Button onClick={onPrevious} variant="subPrimary">
+          <Dialog.Button
+            disabled={isFillMockDeploymentDataPending}
+            onClick={onPrevious}
+            variant="subPrimary"
+          >
             이전
           </Dialog.Button>
         )}
-        <Dialog.Button disabled={!!buttonError} onClick={onClickNext} variant="primary">
+        <Dialog.Button
+          disabled={!!buttonError || isFillMockDeploymentDataPending}
+          onClick={onClickNext}
+          variant="primary"
+        >
           다음
         </Dialog.Button>
       </Dialog.ButtonGroup>

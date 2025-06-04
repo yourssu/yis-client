@@ -33,10 +33,12 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
     onChangeWithReset,
   } = useZodFormValidation({ name, description }, ApplicationFormSchema)
 
-  const fillMockDeploymentData = useFillMockDeploymentData()
-  const { mutateAsync } = useMutation({
+  const [isFillMockDeploymentDataPending, fillMockDeploymentData] = useFillMockDeploymentData()
+  const { mutateAsync, isPending: isCheckApplicationNameUniquePending } = useMutation({
     mutationFn: checkApplicationNameUnique,
   })
+
+  const isPending = isFillMockDeploymentDataPending || isCheckApplicationNameUniquePending
 
   const onClick = async () => {
     if (!validate().success) {
@@ -84,6 +86,7 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
       <Dialog.ButtonGroup>
         {STAGE === 'dev' && (
           <Dialog.Button
+            disabled={isPending}
             onClick={async () => {
               await fillMockDeploymentData()
               close()
@@ -93,7 +96,11 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
             테스트 데이터 채우기 (개발)
           </Dialog.Button>
         )}
-        <Dialog.Button disabled={name.length === 0} onClick={onClick} variant="primary">
+        <Dialog.Button
+          disabled={name.length === 0 || isPending}
+          onClick={onClick}
+          variant="primary"
+        >
           다음
         </Dialog.Button>
       </Dialog.ButtonGroup>

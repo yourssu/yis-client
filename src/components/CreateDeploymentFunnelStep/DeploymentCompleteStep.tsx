@@ -60,7 +60,7 @@ const Result = ({ lottieProps, description, title }: ResultProps) => {
 
 export const DeploymentCompleteStep = ({ context, close }: DeploymentCompleteStepProps) => {
   const [result, setResult] = useState<ResultType>('loading')
-  const mutateResult = useCreateDeploymentMutation()
+  const [, mutateResult] = useCreateDeploymentMutation()
 
   useEffectOnce(() => {
     const process = async () => {

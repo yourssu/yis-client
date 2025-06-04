@@ -1,3 +1,4 @@
+import { useLoading } from 'react-simplikit'
 import { match, P } from 'ts-pattern'
 
 import { createApplication, CreateApplicationProps } from '@/apis/application'
@@ -24,6 +25,8 @@ export const useCreateDeploymentMutation = () => {
     mutationFn: createDeployment,
   })
 
+  const [isPending, startPending] = useLoading()
+
   const mutate = async (payload: CreateDeploymentMutationPayload) => {
     try {
       const { id, name } = await match(payload.application)
@@ -45,5 +48,5 @@ export const useCreateDeploymentMutation = () => {
     }
   }
 
-  return mutate
+  return [isPending, (p: CreateDeploymentMutationPayload) => startPending(mutate(p))] as const
 }
