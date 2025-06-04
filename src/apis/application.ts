@@ -118,9 +118,8 @@ export const getApplicationClusterStatus = async (applicationId: number) => {
 }
 
 export const getFullApplication = async (applicationId: number) => {
-  const application = await getApplication(applicationId)
-
-  const [deployments, clusterStatus] = await Promise.all([
+  const [application, deployments, clusterStatus] = await Promise.all([
+    getApplication(applicationId),
     getApplicationDeployments({ applicationId, orderBy: 'UPDATED_AT_DESC' }),
     getApplicationClusterStatus(applicationId),
   ])
