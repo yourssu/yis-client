@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 
 import { Divider } from '@/components/Divider'
-import { DeploymentStateListDetailConversation } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailConversation'
-import { DeploymentStateListDetailFooter } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailFooter'
-import { DeploymentStateListDetailHeader } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailHeader'
-import { DeploymentStateListDetailInformation } from '@/routes/~_auth/~admin/components/DeploymentStateListDetailInformation'
+import { DeploymentStateListDetailConversation } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateListDetailConversation'
+import { DeploymentStateListDetailFooter } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateListDetailFooter'
+import { DeploymentStateListDetailHeader } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateListDetailHeader'
+import { DeploymentStateListDetailInformation } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateListDetailInformation'
 import { ApplicationType } from '@/types/application'
 import { DeploymentStateNames, DeploymentType } from '@/types/deployment'
 

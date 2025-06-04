@@ -60,7 +60,7 @@ export const ProfileMenu = () => {
               <Menu.ButtonItem
                 className={buttonItem()}
                 onClick={() => {
-                  navigate({ to: '/admin', search: { tab: 'REQUEST' } })
+                  navigate({ to: '/admin/requests', search: { tab: 'REQUEST' } })
                 }}
               >
                 <MdLockOutline className={buttonIcon()} />

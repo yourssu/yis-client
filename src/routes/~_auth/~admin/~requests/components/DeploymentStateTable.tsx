@@ -4,13 +4,13 @@ import { Suspense } from 'react'
 import { Tab } from '@/components/Tab'
 import { useSearchState } from '@/hooks/useSearchState'
 import { useSetStateSelector } from '@/hooks/useSetStateSelector'
-import { DeploymentStateList } from '@/routes/~_auth/~admin/components/DeploymentStateList'
+import { DeploymentStateList } from '@/routes/~_auth/~admin/~requests/components/DeploymentStateList'
 import { DeploymentStateKRNameMap, DeploymentStateNames } from '@/types/deployment'
 import { ValueOf } from '@/utils/type'
 
 export const DeploymentStateTable = () => {
   const [search, setSearch] = useSearchState({
-    from: '/_auth/admin/',
+    from: '/_auth/admin/requests/',
   })
 
   const setters = {
