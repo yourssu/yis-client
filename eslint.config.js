@@ -16,6 +16,7 @@ const config = tseslint.config(
       js.configs.recommended,
       ...tseslint.configs.recommended,
       reactCompiler.configs.recommended,
+      reactHooks.configs['recommended-latest'],
       perfectionist.configs['recommended-natural'],
       eslintConfigPrettier,
     ],
@@ -32,7 +33,6 @@ const config = tseslint.config(
     plugins: {
       react,
       'unused-imports': unusedImports,
-      'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
     rules: {
