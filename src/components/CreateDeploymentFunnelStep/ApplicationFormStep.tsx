@@ -45,12 +45,18 @@ export const ApplicationFormStep = ({ initialValue, onNext, close }: Application
       return
     }
 
-    const isUnique = await mutateAsync(name)
-    if (!isUnique) {
-      const message = '이미 중복된 서비스 이름이 있어요.'
+    try {
+      const isUnique = await mutateAsync(name)
+      if (!isUnique) {
+        const message = '이미 중복된 서비스 이름이 있어요.'
+        setInvalidTexts((prev) => ({ ...prev, name: message }))
+        setInvalidMessage(message)
+        return
+      }
+    } catch {
+      const message = '중복 확인에 실패했어요. 잠시후에 다시 시도해주세요.'
       setInvalidTexts((prev) => ({ ...prev, name: message }))
       setInvalidMessage(message)
-      return
     }
 
     onNext({
